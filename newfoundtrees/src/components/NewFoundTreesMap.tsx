@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css" 
-import React, { useRef } from 'react'
+import React from 'react'
 import {
     useLoadScript,
     GoogleMap,
