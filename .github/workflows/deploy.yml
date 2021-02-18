@@ -21,9 +21,12 @@ jobs:
     - name: Install Packages
       run: yarn install
     - name: Build page
-      run: yarn run build
-    - name: Deploy to gh-pages
-      uses: peaceiris/actions-gh-pages@v3
+      run: yarn build
+      env:
+        REACT_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.REACT_APP_GOOGLE_MAPS_API_KEY }}  
+    - name: Deploy to firebase
+      uses: w9jds/firebase-action@master
       with:
-        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        publish_dir: ./build
+          args: deploy --only hosting
+      env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
