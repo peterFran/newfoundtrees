@@ -1,12 +1,13 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import clsx from 'clsx'
+// import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import brushDivider from '../assets/brush-divider.png'
-import activeBg from '../assets/nav-active.png'
-import overviewIcon from '../assets/nav-overview.svg'
-import treesIcon from '../assets/nav-trees.svg'
+// import activeBg from '../assets/nav-active.png'
+// import overviewIcon from '../assets/nav-overview.svg'
+import heartIcon from '../assets/heart.svg'
+import treesIcon from '../assets/mountain.svg'
 import LoginButton from './LoginButton'
 
 const LABELS = {
@@ -15,7 +16,7 @@ const LABELS = {
 }
 
 const ICONS = {
-    projects: overviewIcon,
+    projects: heartIcon,
     tokens: treesIcon,
 }
 
@@ -54,8 +55,8 @@ const useNavItemStyles = makeStyles((theme) => ({
     icon: {
         position: 'relative',
         display: 'block',
-        width: 24,
-        height: 24,
+        width: 28,
+        height: 28,
     },
     activeBg: {
         display: 'none',
@@ -86,11 +87,11 @@ const NavItem = ({ as: Comp = NavLink, name, to }: NavItemProps) => {
     return (
         <Comp className={classes.root} {...{to}}>
             <div className={classes.iconWrapper}>
-                <img
+                {/* <img
                     src={activeBg}
                     className={clsx('nav-icon', classes.activeBg)}
                     alt=""
-                />
+                /> */}
                 <img src={ICONS[name]} alt="" className={classes.icon} />
             </div>
             <div className={classes.label}>{LABELS[name]}</div>
@@ -151,13 +152,20 @@ const useDesktopStyles = makeStyles((theme) => ({
         width: 100,
         paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(4),
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         zIndex: 10,
+    },
+    pill: {
+        backgroundColor: '#fff',
+        borderRadius:15
     },
     top: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius:15,
+        margin: theme.spacing(1)
     },
     logoSmall: {
         display: 'block',
