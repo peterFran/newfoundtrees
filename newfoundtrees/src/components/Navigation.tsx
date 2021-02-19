@@ -4,10 +4,8 @@ import { NavLink } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import brushDivider from '../assets/brush-divider.png'
-// import activeBg from '../assets/nav-active.png'
-// import overviewIcon from '../assets/nav-overview.svg'
-import heartIcon from '../assets/heart.svg'
-import treesIcon from '../assets/mountain.svg'
+import globeIcon from '../assets/location.svg'
+import leavesIcon from '../assets/leaves.svg'
 import LoginButton from './LoginButton'
 
 const LABELS = {
@@ -16,8 +14,8 @@ const LABELS = {
 }
 
 const ICONS = {
-    projects: heartIcon,
-    tokens: treesIcon,
+    projects: globeIcon,
+    tokens: leavesIcon,
 }
 
 const useNavItemStyles = makeStyles((theme) => ({
