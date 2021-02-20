@@ -1,11 +1,12 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 // import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import brushDivider from '../assets/brush-divider.png'
 import globeIcon from '../assets/location.svg'
 import leavesIcon from '../assets/leaves.svg'
+import logoSmall from '../assets/logo_transparent.png'
 import LoginButton from './LoginButton'
 
 const LABELS = {
@@ -74,16 +75,16 @@ const useNavItemStyles = makeStyles((theme) => ({
 }))
 
 interface NavItemProps {
-    as?: typeof NavLink,
-    name: "projects" | "tokens",
-    to: "/projects" | "/tokens"
+    as?: typeof NavLink
+    name: 'projects' | 'tokens'
+    to: '/projects' | '/tokens'
 }
 
 const NavItem = ({ as: Comp = NavLink, name, to }: NavItemProps) => {
     const classes = useNavItemStyles()
 
     return (
-        <Comp className={classes.root} {...{to}}>
+        <Comp className={classes.root} {...{ to }}>
             <div className={classes.iconWrapper}>
                 {/* <img
                     src={activeBg}
@@ -148,27 +149,30 @@ const useDesktopStyles = makeStyles((theme) => ({
         bottom: 0,
         left: 0,
         width: 100,
-        paddingTop: theme.spacing(4),
+        // paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(4),
         // backgroundColor: '#fff',
         zIndex: 10,
     },
     pill: {
         backgroundColor: '#fff',
-        borderRadius:15
+        borderRadius: 15,
     },
     top: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: '#fff',
-        borderRadius:15,
-        margin: theme.spacing(1)
+        // backgroundColor: '#fff',
+        borderRadius: 15,
+        margin: theme.spacing(1),
+        marginLeft: theme.spacing(3)
     },
     logoSmall: {
         display: 'block',
-        width: 60,
-        height: 60,
+        backgroundColor: '#fff',
+        width: 100,
+        height: 100,
+        borderRadius: 15,
         marginBottom: theme.spacing(3),
         '@media (min-height: 700px)': {
             marginBottom: theme.spacing(6),
@@ -213,13 +217,26 @@ const DesktopNavigation = ({ loggedIn }: { loggedIn: boolean }) => {
     const classes = useDesktopStyles()
     return (
         <>
-        <nav className={classes.root}>
-            <div className={classes.top}>
-                <NavItem to={`/projects`} name="projects" />
-                {loggedIn && <NavItem to={`/tokens`} name="tokens" />}
-            </div>
-        <div style={{ padding: 10 }}><LoginButton /></div>
-        </nav>
+            <nav className={classes.root}>
+                <div className={classes.top}>
+                    {/* <div className={classes.pill}> */}
+                        <Link to="/" target="_blank" rel="noopener noreferrer">
+                            <img
+                                src={logoSmall}
+                                className={classes.logoSmall}
+                                alt="logo"
+                            />
+                        </Link>
+                    {/* </div> */}
+                    <div className={classes.pill}>
+                        <NavItem to={`/projects`} name="projects" />
+                        {loggedIn && <NavItem to={`/tokens`} name="tokens" />}
+                    </div>
+                </div>
+                <div style={{ padding: 10 }}>
+                    <LoginButton />
+                </div>
+            </nav>
         </>
     )
 }

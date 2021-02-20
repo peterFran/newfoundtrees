@@ -36,21 +36,6 @@ const useStyles = makeStyles((theme) => {
             justifyContent: 'center',
             backgroundColor: theme.palette.secondary.main,
         },
-        titleWrapper: {
-            paddingTop: theme.spacing(3),
-            position: 'absolute',
-            top: theme.spacing(6),
-            left: 0,
-            right: 0,
-            alignItems: 'center',
-            pointerEvents: 'none',
-            zIndex: 10,
-        },
-        title: {
-            lineHeight: 1,
-            fontFamily: ['sofia-pro', 'sans-serif'].join(','),
-            fontWeight: 600,
-        },
     }
 })
 
@@ -131,11 +116,6 @@ const Projects = () => {
             <Box className={classes.floatingMoney}>
                 <Typography variant="body1">{nbalance} <img src={nearIcon} alt="near icon" style={{ width: 12 }} /></Typography>{' '}
             </Box>)}
-            <div className={classes.titleWrapper}>
-                <div className={classes.title}>
-                    <h1>New Found Trees Prototype</h1>
-                </div>
-            </div>
             <div className={classes.mapContainer}>
                 <NewFoundTreesMap listedTokens={projects} mapType="listed" />
             </div>

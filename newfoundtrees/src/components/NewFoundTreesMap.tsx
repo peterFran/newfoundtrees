@@ -23,7 +23,7 @@ const options = {
     disableDefaultUI: false,
     scrollwheel: true,
     zoomControl: true,
-    minZoom: 3.5,
+    minZoom: 4,
 }
 
 const center = {

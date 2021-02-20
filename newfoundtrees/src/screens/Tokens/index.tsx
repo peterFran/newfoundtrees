@@ -18,21 +18,6 @@ const useStyles = makeStyles((theme) => {
                 height: '100pc',
             },
         },
-        titleWrapper: {
-            paddingTop: theme.spacing(3),
-            position: 'absolute',
-            top: theme.spacing(6),
-            left: 0,
-            right: 0,
-            alignItems: 'center',
-            pointerEvents: 'none',
-            zIndex: 10,
-        },
-        title: {
-            lineHeight: 1,
-            fontFamily: ['sofia-pro', 'sans-serif'].join(','),
-            fontWeight: 600,
-        },
     }
 })
 
@@ -74,11 +59,6 @@ const Tokens = () => {
             <Helmet>
                 <title>Projects</title>
             </Helmet>
-            <div className={classes.titleWrapper}>
-                <div className={classes.title}>
-                    <h1>New Found Trees</h1>
-                </div>
-            </div>
             <div className={classes.mapContainer}>
                 <NewFoundTreesMap ownedTokens={projects} mapType='owned' />
             </div>
