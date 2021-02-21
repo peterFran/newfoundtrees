@@ -1,10 +1,10 @@
-import "bootstrap/dist/css/bootstrap.min.css" 
+import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react'
 import {
-    useLoadScript,
     GoogleMap,
     Marker,
     InfoWindow,
+    useJsApiLoader,
 } from '@react-google-maps/api'
 import mapStyles from './mapStyles'
 import { Button, makeStyles } from '@material-ui/core'
@@ -23,12 +23,12 @@ const options = {
     disableDefaultUI: false,
     scrollwheel: true,
     zoomControl: true,
-    minZoom: 4,
+    minZoom: 3,
 }
 
 const center = {
-    lat: 30.748711,
-    lng: -30.40455,
+    lat: -20.68,
+    lng: -9.16,
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: ['sofia-pro', 'sans-serif'].join(','),
         fontWeight: 600,
         marginTop: theme.spacing(3),
-        padding: theme.spacing(2)
+        padding: theme.spacing(2),
     },
 }))
 
@@ -79,26 +79,35 @@ const NewFoundTreesMap = ({
     const [selected, setSelected] = React.useState<
         OwnedToken | ListedToken | null
     >(null)
-    const { isLoaded, loadError } = useLoadScript({
+
+    const { isLoaded } = useJsApiLoader({
+        id: 'google-map-script',
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '',
     })
 
-    // const mapRef = useRef<GoogleMap>()
+    const [map, setMap] = React.useState<google.maps.Map | null>(null)
 
+    const onLoad = React.useCallback(function callback(map) {
+        // const bounds = new window.google.maps.LatLngBounds({lat: -180, lng: -90},  {lat: 180, lng: 90})
+        // map.fitBounds(bounds)
+        setMap(map)
+    }, [])
 
+    const onUnmount = React.useCallback(function callback(map) {
+        setMap(null)
+    }, [])
 
     return (
         <>
             <title>New Found Trees</title>
-            {loadError ? (
-                'Error'
-            ) : !isLoaded ? null : (
+            {!isLoaded ? null : (
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}
-                    zoom={3}
+                    zoom={2}
                     center={center}
                     options={options}
-                    // ref={mapRef}
+                    onLoad={onLoad}
+                    onUnmount={onUnmount}
                 >
                     {(mapType === 'listed' &&
                         listedTokens.map((project) => (
@@ -125,6 +134,11 @@ const NewFoundTreesMap = ({
                                     ),
                                 }}
                                 onClick={() => {
+                                    console.log(map?.getCenter())
+                                    map?.setZoom(5)
+                                    map?.panTo({lat: project.details.coordinates.latitude, lng: project.details.coordinates.longitude})
+                                    console.log(map?.getCenter())
+
                                     setSelected(project)
                                 }}
                             />
@@ -161,6 +175,8 @@ const NewFoundTreesMap = ({
                                         ),
                                     }}
                                     onClick={() => {
+                                        map?.setZoom(5)
+                                        map?.setCenter({lat: project.details.coordinates.latitude, lng: project.details.coordinates.longitude})
                                         setSelected(project)
                                     }}
                                 />
@@ -218,12 +234,30 @@ const NewFoundTreesMap = ({
                                                         .price
                                                 }
                                             </Button>
-                                            <div style={{ width: '290px', height: '10', marginTop: '5px'}}>
+                                            <div
+                                                style={{
+                                                    width: '290px',
+                                                    height: '10',
+                                                    marginTop: '5px',
+                                                }}
+                                            >
                                                 <ProgressBar
                                                     striped
                                                     variant="success"
-                                                    now={(selected as ListedToken).sold / (selected as ListedToken).batchSize * 100}
-                                                    label={`${(selected as ListedToken).sold} / ${(selected as ListedToken).batchSize} sold`}
+                                                    now={
+                                                        ((selected as ListedToken)
+                                                            .sold /
+                                                            (selected as ListedToken)
+                                                                .batchSize) *
+                                                        100
+                                                    }
+                                                    label={`${
+                                                        (selected as ListedToken)
+                                                            .sold
+                                                    } / ${
+                                                        (selected as ListedToken)
+                                                            .batchSize
+                                                    } sold`}
                                                 />
                                             </div>
                                             {/*  */}
