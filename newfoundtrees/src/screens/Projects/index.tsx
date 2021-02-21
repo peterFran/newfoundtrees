@@ -114,7 +114,7 @@ const Projects = () => {
             </Helmet>
             {accountDetails && (
             <Box className={classes.floatingMoney}>
-                <Typography variant="body1">{nbalance} <img src={nearIcon} alt="near icon" style={{ width: 12 }} /></Typography>{' '}
+                <Typography variant="body1">{nbalance} <img src={nearIcon} alt="near icon" style={{ width: 12, paddingBottom: 3 }} /></Typography>{' '}
             </Box>)}
             <div className={classes.mapContainer}>
                 <NewFoundTreesMap listedTokens={projects} mapType="listed" />
