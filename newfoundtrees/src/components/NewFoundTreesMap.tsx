@@ -13,13 +13,17 @@ import ListedInfoWindow from './ListedInfoWindow'
 import OwnedInfoWindow from './OwnedInfoWindow';
 
 const mapContainerStyle = {
-    height: '100%',
-    width: '100%',
+    maxWidth: '100vw',
+    height: '100vh',
+    width: '100vw',
+    maxHeight: '100vh',
+    margin: 0,
+    overflow: 'hidden'
 }
 
 const options = {
     styles: mapStyles,
-    disableDefaultUI: false,
+    disableDefaultUI: true,
     scrollwheel: true,
     zoomControl: true,
     minZoom: 3,

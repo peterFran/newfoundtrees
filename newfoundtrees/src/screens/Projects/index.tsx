@@ -12,15 +12,12 @@ import AuthContext from '../../context/AuthContext'
 const useStyles = makeStyles((theme) => {
     return {
         mapContainer: {
-            position: 'relative',
-            height: document.documentElement.clientHeight,
-            width: window.innerWidth,
-            marginTop: -theme.spacing(30),
-            marginBottom: theme.spacing(3),
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: '100vh',
+            width: '100vw',
             backgroundColor: '#eee',
-            [theme.breakpoints.up('md')]: {
-                height: '100pc',
-            },
         },
         floatingMoney: {
             position: 'absolute',
@@ -35,6 +32,15 @@ const useStyles = makeStyles((theme) => {
             textAlign: 'center',
             justifyContent: 'center',
             backgroundColor: theme.palette.secondary.main,
+            [theme.breakpoints.down('sm')]: {
+                top: '0.5pc',
+                right: '0.5pc',
+                paddingTop: 5,
+                paddingBottom: 5,
+                paddingLeft: 10,
+                paddingRight: 10,
+                borderRadius: 15,
+            },
         },
     }
 })
