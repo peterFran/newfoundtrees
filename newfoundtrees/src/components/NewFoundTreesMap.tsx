@@ -30,7 +30,7 @@ const options = {
 }
 
 const center = {
-    lat: -20.68,
+    lat: 10.68,
     lng: -9.16,
 }
 
