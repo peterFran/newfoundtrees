@@ -113,6 +113,10 @@ const theme = createMuiTheme({
         MuiButton: {
             root: {
                 padding: '11px 22px',
+                '&:hover': {
+                    color: '#fff',
+                    borderColor: COLORS.secondary,
+                },
             },
             outlined: {
                 padding: '10px 22px',

@@ -8,7 +8,6 @@ import LoginMenu from './LoginMenu'
 const LABELS = {
     projects: 'Projects',
     tokens: 'My tokens',
-    user: 'Account',
 }
 
 const useNavItemStyles = makeStyles((theme) => ({
