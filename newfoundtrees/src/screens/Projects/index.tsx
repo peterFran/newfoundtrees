@@ -1,12 +1,10 @@
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Helmet } from 'react-helmet'
 import { makeStyles } from '@material-ui/core/styles'
 
 import NewFoundTreesMap from '../../components/NewFoundTreesMap'
 import { TokenDetails, ListedToken } from '../../domain/Token'
-
-import AuthContext from '../../context/AuthContext'
 
 const useStyles = makeStyles((theme) => {
     return {
