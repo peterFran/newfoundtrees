@@ -9,8 +9,8 @@ import { near, nearConfig } from './components/NearConfig'
 import Projects from './screens/Projects'
 import Tokens from './screens/Tokens'
 import AuthContext from './context/AuthContext'
-import { AccountBalance } from 'near-api-js/lib/account'
 import Home from './screens/Home/index';
+import AccountDetails, { normaliseBalance } from './domain/AccountDetails';
 
 const scrollTop = () => {
     window.scrollTo(0, 0)
@@ -19,10 +19,7 @@ const App = () => {
     
     const wallet = React.useMemo(() => new WalletAccount(near, null), [])
 
-    const [accountDetails, setAccountDetails] = React.useState<{
-        balance: AccountBalance
-        accountId: string
-    } | null>(null)
+    const [accountDetails, setAccountDetails] = React.useState<AccountDetails | null>(null)
 
     const authContext = React.useMemo(
         () => ({
@@ -35,7 +32,7 @@ const App = () => {
                             .getAccountBalance()
                             .then((balance) => {
                                 setAccountDetails({
-                                    balance: balance,
+                                    balance: normaliseBalance({balance: balance}),
                                     accountId: wallet.getAccountId(),
                                 })
                                 return Promise.resolve('Success')
@@ -66,7 +63,7 @@ const App = () => {
                     .getAccountBalance()
                     .then((balance) => {
                         setAccountDetails({
-                            balance: balance,
+                            balance: normaliseBalance({balance: balance}),
                             accountId: wallet.getAccountId(),
                         })
                         return Promise.resolve('Success')

@@ -101,16 +101,6 @@ const projects: ListedToken[] = [
 
 const Projects = () => {
     const classes = useStyles()
-    const [nbalance, setNbalance] = useState<number | null>(null)
-    const { accountDetails } = React.useContext(AuthContext);
-
-    useEffect(() => {
-        if (accountDetails){
-                const scaled = parseInt(accountDetails.balance.available) as number * 0.000000000000000000000001
-                const numBalance = Math.round((scaled + Number.EPSILON) * 10000) / 10000
-                setNbalance(numBalance)
-        }
-    }, [nbalance, accountDetails])
 
     return (
         <>

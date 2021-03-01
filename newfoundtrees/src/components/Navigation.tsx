@@ -1,10 +1,9 @@
 import React from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
-import userIcon from '../assets/user.svg'
 import logoSmall from '../assets/logo_transparent.png'
 import AuthContext from '../context/AuthContext'
-import { Button } from '@material-ui/core'
+import LoginMenu from './LoginMenu'
 
 const LABELS = {
     projects: 'Projects',
@@ -81,11 +80,6 @@ interface NavItemProps {
     to: '/projects' | '/tokens'
 }
 
-interface NavItemIconProps {
-    as?: typeof NavLink
-    name: 'user'
-    to: '/login'
-}
 
 const NavItem = ({ as: Comp = NavLink, name, to }: NavItemProps) => {
     const classes = useNavItemStyles()
@@ -97,21 +91,6 @@ const NavItem = ({ as: Comp = NavLink, name, to }: NavItemProps) => {
     )
 }
 
-const ICONS = {
-    user: userIcon,
-}
-
-const NavItemIcon = ({ as: Comp = NavLink, name, to }: NavItemIconProps) => {
-    const { signIn, signOut, accountDetails } = React.useContext(AuthContext);
-
-    const classes = useNavItemStyles()
-
-    return (
-        <Button className={classes.iconRoot} variant='text' onClick={() => {accountDetails === null ? signIn() : signOut()}}>
-            <img src={ICONS[name]} alt="" className={classes.icon} />
-        </Button>
-    )
-}
 
 const useHorizontalStyles = makeStyles((theme) => ({
     root: {
@@ -154,13 +133,6 @@ const useHorizontalStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(4),
         display: 'flex',
     },
-    accountPill: {
-        backgroundColor: '#fff',
-        borderRadius: 35,
-        marginTop: theme.spacing(4),
-        marginBottom: theme.spacing(4),
-        display: 'flex',
-    },
     navList: {
         padding: 0,
         margin: 0,
@@ -191,6 +163,8 @@ const HorizontalNavigation = ({
     loggedIn: boolean
     transparent?: boolean
 }) => {
+    const { signIn, signOut, accountDetails } = React.useContext(AuthContext);
+
     const classes = useHorizontalStyles()
     return (
         <>
@@ -220,20 +194,16 @@ const HorizontalNavigation = ({
                                 )}
                             </li>
                         </div>
-                        <div className={classes.accountPill}>
                             <li
                                 style={{
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     display: 'flex',
+                                    paddingRight: 10
                                 }}
                             >
-                                <NavItemIcon
-                                    name="user"
-                                    to="/login"
-                                ></NavItemIcon>
+                                <LoginMenu {...{accountDetails, signIn, signOut}}/>
                             </li>
-                        </div>
                     </div>
                 </ul>
             </nav>
