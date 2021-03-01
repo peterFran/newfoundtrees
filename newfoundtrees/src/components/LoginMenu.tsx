@@ -13,6 +13,7 @@ import { IconButton } from '@material-ui/core'
 
 const StyledMenu = withStyles({
     paper: {
+        marginTop: 5,
         border: '1px solid #d3d4d5',
     },
 })((props: MenuProps) => (
@@ -41,16 +42,16 @@ const StyledMenuItem = withStyles((theme) => ({
         },
     },
     button: {
-        backgroundColor: theme.palette.background.default
-    }
+        backgroundColor: theme.palette.background.default,
+    },
 }))(MenuItem)
 
 const useStyles = makeStyles((theme) => ({
     button: {
         backgroundColor: theme.palette.background.default,
         borderRadius: 30,
-        padding: theme.spacing(2)
-    }
+        padding: theme.spacing(2),
+    },
 }))
 
 interface LoginMenuProps {
@@ -80,7 +81,7 @@ const LoginMenu = ({ accountDetails, signIn, signOut }: LoginMenuProps) => {
                 className={classes.button}
                 onClick={handleClick}
             >
-                <FaceIcon fontSize="large"/>
+                <FaceIcon fontSize="large" />
             </IconButton>
             <StyledMenu
                 id="customized-menu"
@@ -95,7 +96,9 @@ const LoginMenu = ({ accountDetails, signIn, signOut }: LoginMenuProps) => {
                             <ListItemIcon>
                                 <SafeIcon fontSize="small" />
                             </ListItemIcon>
-                            <ListItemText primary={`${accountDetails.balance.available} Ⓝ`} />
+                            <ListItemText
+                                primary={`${accountDetails.balance.available} Ⓝ`}
+                            />
                         </StyledMenuItem>
                         <StyledMenuItem onClick={signOut}>
                             <ListItemIcon>
@@ -105,12 +108,14 @@ const LoginMenu = ({ accountDetails, signIn, signOut }: LoginMenuProps) => {
                         </StyledMenuItem>
                     </>
                 ) : (
-                    <StyledMenuItem onClick={signIn}>
-                        <ListItemIcon>
-                            <ArrowForwardIcon fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText primary="LogIn" />
-                    </StyledMenuItem>
+                    <>
+                        <StyledMenuItem onClick={signIn}>
+                            <ListItemIcon>
+                                <ArrowForwardIcon fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText primary="LogIn" />
+                        </StyledMenuItem>
+                    </>
                 )}
             </StyledMenu>
         </div>
