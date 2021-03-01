@@ -14,10 +14,12 @@ body {
   width: 100vw;
   max-height: 100vh;
   margin: 0;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', 'Nunito', sans-serif
     monospace;
 }
+
+

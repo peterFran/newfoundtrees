@@ -2,7 +2,7 @@ import './App.css'
 import { WalletAccount } from 'near-api-js'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 
 import Navigation from './components/Navigation'
 import { near, nearConfig } from './components/NearConfig'
@@ -10,11 +10,13 @@ import Projects from './screens/Projects'
 import Tokens from './screens/Tokens'
 import AuthContext from './context/AuthContext'
 import { AccountBalance } from 'near-api-js/lib/account'
+import Home from './screens/Home/index';
 
 const scrollTop = () => {
     window.scrollTo(0, 0)
 }
 const App = () => {
+    
     const wallet = React.useMemo(() => new WalletAccount(near, null), [])
 
     const [accountDetails, setAccountDetails] = React.useState<{
@@ -94,9 +96,10 @@ const App = () => {
                     titleTemplate="%s | New Found Trees"
                 />
                 <Navigation loggedIn={accountDetails != null} />
+                
                 <Switch>
                     <Route exact path="/">
-                        <Redirect to="/projects" />{' '}
+                        <Home/>
                     </Route>
 
                     <Route path="/projects" preload={scrollTop}>

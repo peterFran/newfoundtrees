@@ -5,8 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import NewFoundTreesMap from '../../components/NewFoundTreesMap'
 import { TokenDetails, ListedToken } from '../../domain/Token'
-import { Box, Typography } from '@material-ui/core'
-import nearIcon from '../../assets/near-icon.svg'
+
 import AuthContext from '../../context/AuthContext'
 
 const useStyles = makeStyles((theme) => {
@@ -61,7 +60,7 @@ const projects: ListedToken[] = [
                 longitude: -0.06657722663394684,
             },
             cover:
-                'https://mossy-prod-assets.s3.eu-central-1.amazonaws.com/IR_default.jpg',
+                'https://newfoundtrees-prod-assets.s3.eu-central-1.amazonaws.com/IR_default.jpg',
             content: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
             description:
                 'I would like to plant some trees in my garden. Then there will be more birds. I like birds very much. Especially the hawks. They are fearsome creatures',
@@ -79,7 +78,7 @@ const projects: ListedToken[] = [
                     proportion: 1,
                 },
                 {
-                    account: 'mossyearth.near',
+                    account: 'newfoundtreesearth.near',
                     proportion: 1,
                 },
             ],
@@ -89,7 +88,7 @@ const projects: ListedToken[] = [
                 longitude: -4.191054353571119,
             },
             cover:
-                'https://images.prismic.io/mossyearth/32623040-b3da-4c00-a74e-81aa1bf9a0cc_white-tailed+eagle.png',
+                'https://images.prismic.io/newfoundtreesearth/32623040-b3da-4c00-a74e-81aa1bf9a0cc_white-tailed+eagle.png',
             content: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
             description:
                 "By purchasing this token, you are helping to fund a new rewilding project in the Scottish Highlands. \nIn partnership with the Roy Dennis Wildlife Foundation we're building two eagle nest platforms targeting the native golden and white-tailed eagles. \nThese eagles were once extremely rare in Scotland, with white-tailed eagles disappearing altogether. \nThanks to ambitious conservation work, they’re finally making a comeback and it is our hope that these platforms will contribute to this and help safeguard their future in Scotland.",
@@ -118,10 +117,7 @@ const Projects = () => {
             <Helmet>
                 <title>Projects</title>
             </Helmet>
-            {accountDetails && (
-            <Box className={classes.floatingMoney}>
-                <Typography variant="body1">{nbalance} <img src={nearIcon} alt="near icon" style={{ width: 12, paddingBottom: 3 }} /></Typography>{' '}
-            </Box>)}
+
             <div className={classes.mapContainer}>
                 <NewFoundTreesMap listedTokens={projects} mapType="listed" />
             </div>

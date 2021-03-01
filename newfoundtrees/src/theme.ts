@@ -8,7 +8,7 @@ export const COLORS = {
     error: '#E76049',
     text: '#2F3542',
     textSecondary: 'rgba(47, 53, 66, 0.5)',
-    background: '#FBF6F0',
+    background: 'white',
     border: '#DADCE0',
     disabled: '#D5DCDC',
 }
@@ -101,6 +101,7 @@ const theme = createMuiTheme({
                 [defaultTheme.breakpoints.up('md')]: {
                     paddingLeft: defaultTheme.spacing(10),
                     paddingRight: defaultTheme.spacing(10),
+                    // marginTop: defaultTheme.spacing(10)
                 },
             },
         },

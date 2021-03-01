@@ -1,22 +1,15 @@
 import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
-// import clsx from 'clsx'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
-import brushDivider from '../assets/brush-divider.png'
-import globeIcon from '../assets/location.svg'
-import leavesIcon from '../assets/leaves.svg'
+import { Link, NavLink, useLocation } from 'react-router-dom'
+import { makeStyles } from '@material-ui/core/styles'
+import userIcon from '../assets/user.svg'
 import logoSmall from '../assets/logo_transparent.png'
-import LoginButton from './LoginButton'
+import AuthContext from '../context/AuthContext'
+import { Button } from '@material-ui/core'
 
 const LABELS = {
     projects: 'Projects',
     tokens: 'My tokens',
-}
-
-const ICONS = {
-    projects: globeIcon,
-    tokens: leavesIcon,
+    user: 'Account',
 }
 
 const useNavItemStyles = makeStyles((theme) => ({
@@ -27,7 +20,9 @@ const useNavItemStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         flex: 1,
         paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(3),
+        paddingBottom: theme.spacing(2),
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
         fontSize: 12,
         textDecoration: 'none',
         color: theme.palette.text.secondary,
@@ -48,22 +43,28 @@ const useNavItemStyles = makeStyles((theme) => ({
             },
         },
     },
-    iconWrapper: {
-        position: 'relative',
+    iconRoot: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        fontSize: 12,
+        color: theme.palette.text.secondary,
+        '&.active': {
+            fontWeight: 'bold',
+            color: theme.palette.primary.main,
+
+            '& .nav-icon': {
+                display: 'block',
+            },
+        },
     },
     icon: {
-        position: 'relative',
-        display: 'block',
+        display: 'flex',
         width: 28,
         height: 28,
-    },
-    activeBg: {
-        display: 'none',
-        position: 'absolute',
-        top: -3,
-        left: -3,
-        width: 20,
-        height: 21,
     },
     label: {
         marginTop: theme.spacing(1),
@@ -80,146 +81,137 @@ interface NavItemProps {
     to: '/projects' | '/tokens'
 }
 
+interface NavItemIconProps {
+    as?: typeof NavLink
+    name: 'user'
+    to: '/login'
+}
+
 const NavItem = ({ as: Comp = NavLink, name, to }: NavItemProps) => {
     const classes = useNavItemStyles()
 
     return (
         <Comp className={classes.root} {...{ to }}>
-            <div className={classes.iconWrapper}>
-                {/* <img
-                    src={activeBg}
-                    className={clsx('nav-icon', classes.activeBg)}
-                    alt=""
-                /> */}
-                <img src={ICONS[name]} alt="" className={classes.icon} />
-            </div>
             <div className={classes.label}>{LABELS[name]}</div>
         </Comp>
     )
 }
 
-const useMobileStyles = makeStyles(() => ({
-    root: {
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        paddingTop: 24,
-        zIndex: 10,
-    },
-    brush: {
-        display: 'block',
-        position: 'absolute',
-        top: 0,
-        width: '100%',
-        height: 24,
-        backgroundImage: `url(${brushDivider})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-    },
-    inner: {
-        display: 'flex',
-        width: '100%',
-        backgroundColor: '#fff',
-    },
-}))
+const ICONS = {
+    user: userIcon,
+}
 
-const MobileNavigation = ({ loggedIn }: { loggedIn: boolean }) => {
-    const classes = useMobileStyles()
+const NavItemIcon = ({ as: Comp = NavLink, name, to }: NavItemIconProps) => {
+    const { signIn, signOut, accountDetails } = React.useContext(AuthContext);
+
+    const classes = useNavItemStyles()
 
     return (
-        <nav className={classes.root}>
-            <div className={classes.brush} />
-            <div className={classes.inner}>
-                <NavItem to={`/projects`} name="projects" />
-                <NavItem to={`/tokens`} name="tokens" />
-            </div>
-        </nav>
+        <Button className={classes.iconRoot} variant='text' onClick={() => {accountDetails === null ? signIn() : signOut()}}>
+            <img src={ICONS[name]} alt="" className={classes.icon} />
+        </Button>
     )
 }
 
-const useDesktopStyles = makeStyles((theme) => ({
+const useHorizontalStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         justifyContent: 'space-between',
         position: 'fixed',
+        backgroundColor: 'transparent',
         top: 0,
         bottom: 0,
         left: 0,
-        width: 100,
-        // paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(4),
-        // backgroundColor: '#fff',
+        width: '100vw',
+        paddingRight: theme.spacing(3),
+        height: 100,
         zIndex: 10,
+    },
+    narrowRoot: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        position: 'fixed',
+        backgroundColor: 'transparent',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        height: 100,
+        zIndex: 10,
+    },
+    wrapper: {
+        display: 'flex',
+        width: '100pc',
+        alignItems: 'space-between',
+        justifyContent: 'space-between',
+        flexDirection: 'row'
     },
     pill: {
         backgroundColor: '#fff',
         borderRadius: 15,
-    },
-    top: {
+        marginTop: theme.spacing(4),
+        marginBottom: theme.spacing(4),
         display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        // backgroundColor: '#fff',
-        borderRadius: 15,
-        margin: theme.spacing(1),
-        marginLeft: theme.spacing(3)
+    },
+    accountPill: {
+        backgroundColor: '#fff',
+        borderRadius: 35,
+        marginTop: theme.spacing(4),
+        marginBottom: theme.spacing(4),
+        display: 'flex',
+    },
+    navList: {
+        padding: 0,
+        margin: 0,
+        display: 'flex',
+        listStyle: 'none',
+        width: '100%',
+        backgroundColor: theme.palette.background.paper,
+    },
+    transparentNavList: {
+        padding: 0,
+        margin: 0,
+        display: 'flex',
+        listStyle: 'none',
+        width: '100%',
+        backgroundColor: 'transparent',
     },
     logoSmall: {
         display: 'block',
         backgroundColor: '#fff',
-        width: 100,
-        height: 100,
+        width: 85,
+        height: 85,
         borderRadius: 15,
-        marginBottom: theme.spacing(3),
-        '@media (min-height: 700px)': {
-            marginBottom: theme.spacing(6),
-        },
-    },
-    bottom: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    separator: {
-        height: 1,
         marginLeft: theme.spacing(2),
-        marginRight: theme.spacing(2),
-        marginTop: theme.spacing(3),
-        marginBottom: theme.spacing(3),
-        backgroundColor: '#D5DCDC',
+        marginRight: theme.spacing(3),
     },
-    account: {
-        display: 'flex',
-        flexDirection: 'column',
+    center: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingTop: theme.spacing(2),
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-        color: theme.palette.text.secondary,
-        fontSize: 12,
-        lineHeight: 1,
-        textAlign: 'center',
-        textDecoration: 'none',
-        '&.active': {
-            fontWeight: 'bold',
-            color: theme.palette.primary.main,
-        },
-    },
-    avatar: {
-        marginBottom: theme.spacing(1),
+        display: 'flex',
     },
 }))
 
-const DesktopNavigation = ({ loggedIn }: { loggedIn: boolean }) => {
-    const classes = useDesktopStyles()
+const HorizontalNavigation = ({
+    loggedIn,
+    transparent = false,
+}: {
+    loggedIn: boolean
+    transparent?: boolean
+}) => {
+    const classes = useHorizontalStyles()
     return (
         <>
             <nav className={classes.root}>
-                <div className={classes.top}>
-                    {/* <div className={classes.pill}> */}
+                <ul
+                    className={
+                        transparent
+                            ? classes.transparentNavList
+                            : classes.navList
+                    }
+                >
+                    <li className={classes.center}>
                         <Link to="/" target="_blank" rel="noopener noreferrer">
                             <img
                                 src={logoSmall}
@@ -227,29 +219,46 @@ const DesktopNavigation = ({ loggedIn }: { loggedIn: boolean }) => {
                                 alt="logo"
                             />
                         </Link>
-                    {/* </div> */}
-                    <div className={classes.pill}>
-                        <NavItem to={`/projects`} name="projects" />
-                        {loggedIn && <NavItem to={`/tokens`} name="tokens" />}
+                    </li>
+                    <div className={classes.wrapper}>
+                        <div className={classes.pill}>
+                            <li className={classes.center}>
+                                <NavItem to={`/projects`} name="projects" />
+                            </li>
+                            <li className={classes.center}>
+                                {loggedIn && (
+                                    <NavItem to={`/tokens`} name="tokens" />
+                                )}
+                            </li>
+                        </div>
+                        <div className={classes.accountPill}>
+                            <li
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    display: 'flex',
+                                }}
+                            >
+                                <NavItemIcon
+                                    name="user"
+                                    to="/login"
+                                ></NavItemIcon>
+                            </li>
+                        </div>
                     </div>
-                </div>
-                <div style={{ padding: 10 }}>
-                    <LoginButton />
-                </div>
+                </ul>
             </nav>
         </>
     )
 }
 
 const Navigation = ({ loggedIn = false }: { loggedIn: boolean }) => {
-    const theme = useTheme()
-    const matches = useMediaQuery(theme.breakpoints.up('md'), { noSsr: true })
-
-    if (matches) {
-        return <DesktopNavigation {...{ loggedIn }} />
-    }
-
-    return <MobileNavigation {...{ loggedIn }} />
+    const location = useLocation()
+    return (
+        <HorizontalNavigation
+            {...{ loggedIn, transparent: location.pathname !== '/' }}
+        />
+    )
 }
 
 export default Navigation
