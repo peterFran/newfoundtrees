@@ -119,7 +119,7 @@ const useHorizontalStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         justifyContent: 'space-between',
         position: 'fixed',
-        backgroundColor: 'transparent',
+        backgroundColor: theme.palette.background.paper,
         top: 0,
         bottom: 0,
         left: 0,
@@ -167,15 +167,6 @@ const useHorizontalStyles = makeStyles((theme) => ({
         display: 'flex',
         listStyle: 'none',
         width: '100%',
-        backgroundColor: theme.palette.background.paper,
-    },
-    transparentNavList: {
-        padding: 0,
-        margin: 0,
-        display: 'flex',
-        listStyle: 'none',
-        width: '100%',
-        backgroundColor: 'transparent',
     },
     logoSmall: {
         display: 'block',
@@ -203,13 +194,11 @@ const HorizontalNavigation = ({
     const classes = useHorizontalStyles()
     return (
         <>
-            <nav className={classes.root}>
+            <nav className={classes.root} style={transparent ? {
+                        backgroundColor: 'transparent',
+            } : {}}>
                 <ul
-                    className={
-                        transparent
-                            ? classes.transparentNavList
-                            : classes.navList
-                    }
+                    className={classes.navList}
                 >
                     <li className={classes.center}>
                         <Link to="/" target="_blank" rel="noopener noreferrer">
