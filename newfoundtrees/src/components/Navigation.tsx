@@ -1,13 +1,13 @@
 import React from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
-import logoSmall from '../assets/logo_transparent.png'
 import AuthContext from '../context/AuthContext'
 import LoginMenu from './LoginMenu'
 
 const LABELS = {
-    projects: 'Projects',
-    tokens: 'My tokens',
+    projects: 'Tokens',
+    tokens: 'Art',
+    about: 'About',
 }
 
 const useNavItemStyles = makeStyles((theme) => ({
@@ -67,6 +67,18 @@ const useNavItemStyles = makeStyles((theme) => ({
     label: {
         marginTop: theme.spacing(1),
         lineHeight: 1,
+        color: 'rgba(255, 255, 255, 0.7)',
+        [theme.breakpoints.up('md')]: {
+            marginTop: theme.spacing(2),
+        },
+    },
+    title: {
+        marginTop: theme.spacing(1),
+        lineHeight: 1,
+        fontFamily: 'Teko',
+        fontWeight: 700,
+        fontSize: 25,
+        color: 'rgba(255, 255, 255)',
         [theme.breakpoints.up('md')]: {
             marginTop: theme.spacing(2),
         },
@@ -75,10 +87,9 @@ const useNavItemStyles = makeStyles((theme) => ({
 
 interface NavItemProps {
     as?: typeof NavLink
-    name: 'projects' | 'tokens'
-    to: '/projects' | '/tokens'
+    name: 'projects' | 'tokens' | 'about'
+    to: '/projects' | '/tokens' | '/'
 }
-
 
 const NavItem = ({ as: Comp = NavLink, name, to }: NavItemProps) => {
     const classes = useNavItemStyles()
@@ -90,12 +101,22 @@ const NavItem = ({ as: Comp = NavLink, name, to }: NavItemProps) => {
     )
 }
 
+const TitleItem = () => {
+    const classes = useNavItemStyles()
+
+    return (
+        <NavLink className={classes.root} to={'/'}>
+            <div className={classes.title}>NEWFOUNDTREES</div>
+        </NavLink>
+    )
+}
 
 const useHorizontalStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        pointerEvents: 'none',
         position: 'fixed',
         backgroundColor: theme.palette.background.paper,
         top: 0,
@@ -122,36 +143,34 @@ const useHorizontalStyles = makeStyles((theme) => ({
         display: 'flex',
         width: '100pc',
         alignItems: 'space-between',
-        justifyContent: 'space-between',
-        flexDirection: 'row'
+        justifyContent: 'flex-end',
+        justifySelf: 'flex-end',
+        flexDirection: 'row',
+        paddingRight: theme.spacing(2),
     },
     pill: {
-        backgroundColor: '#fff',
         borderRadius: 15,
         marginTop: theme.spacing(4),
         marginBottom: theme.spacing(4),
+        pointerEvents: 'all',
         display: 'flex',
+        color: 'white',
     },
     navList: {
         padding: 0,
         margin: 0,
         display: 'flex',
         listStyle: 'none',
+        pointerEvents: 'none',
+        justifyContent: 'space-between',
         width: '100%',
-    },
-    logoSmall: {
-        display: 'block',
-        backgroundColor: '#fff',
-        width: 85,
-        height: 85,
-        borderRadius: 15,
-        marginLeft: theme.spacing(2),
-        marginRight: theme.spacing(3),
     },
     center: {
         alignItems: 'center',
+        marginLeft: theme.spacing(5),
         justifyContent: 'center',
         display: 'flex',
+        color: 'white',
     },
 }))
 
@@ -162,47 +181,44 @@ const HorizontalNavigation = ({
     loggedIn: boolean
     transparent?: boolean
 }) => {
-    const { signIn, signOut, accountDetails } = React.useContext(AuthContext);
+    const { signIn, signOut, accountDetails } = React.useContext(AuthContext)
 
     const classes = useHorizontalStyles()
     return (
         <>
-            <nav className={classes.root} style={transparent ? {
-                        backgroundColor: 'transparent',
-            } : {}}>
-                <ul
-                    className={classes.navList}
-                >
+            <nav
+                className={classes.root}
+                style={
+                    transparent
+                        ? {
+                              backgroundColor: 'transparent',
+                          }
+                        : {}
+                }
+            >
+                <ul className={classes.navList}>
                     <li className={classes.center}>
                         <Link to="/" target="_blank" rel="noopener noreferrer">
-                            <img
-                                src={logoSmall}
-                                className={classes.logoSmall}
-                                alt="logo"
-                            />
+                            <TitleItem />
                         </Link>
                     </li>
                     <div className={classes.wrapper}>
                         <div className={classes.pill}>
                             <li className={classes.center}>
+                                <LoginMenu
+                                    {...{ accountDetails, signIn, signOut }}
+                                />
+                            </li>
+                            <li className={classes.center}>
                                 <NavItem to={`/projects`} name="projects" />
                             </li>
                             <li className={classes.center}>
-                                {loggedIn && (
-                                    <NavItem to={`/tokens`} name="tokens" />
-                                )}
+                                <NavItem to={`/tokens`} name="tokens" />
+                            </li>
+                            <li className={classes.center}>
+                                <NavItem to={`/`} name="about" />
                             </li>
                         </div>
-                            <li
-                                style={{
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    display: 'flex',
-                                    paddingRight: 10
-                                }}
-                            >
-                                <LoginMenu {...{accountDetails, signIn, signOut}}/>
-                            </li>
                     </div>
                 </ul>
             </nav>

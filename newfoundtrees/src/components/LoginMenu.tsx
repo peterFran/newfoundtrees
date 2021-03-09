@@ -5,11 +5,10 @@ import MenuItem from '@material-ui/core/MenuItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
-import FaceIcon from '@material-ui/icons/PersonRounded'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import SafeIcon from '@material-ui/icons/AccountBalance'
 import AccountDetails from '../domain/AccountDetails'
-import { IconButton } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 
 const StyledMenu = withStyles({
     paper: {
@@ -48,9 +47,17 @@ const StyledMenuItem = withStyles((theme) => ({
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        backgroundColor: theme.palette.background.default,
         borderRadius: 30,
         padding: theme.spacing(2),
+        pointerEvents: 'all',
+        marginTop: theme.spacing(1),
+        lineHeight: 1,
+        color: 'rgba(255, 255, 255, 0.7)',
+        [theme.breakpoints.up('md')]: {
+            marginTop: theme.spacing(2),
+        },
+        fontFamily: 'Arial',
+        fontSize: 12
     },
 }))
 
@@ -74,15 +81,16 @@ const LoginMenu = ({ accountDetails, signIn, signOut }: LoginMenuProps) => {
 
     return (
         <div>
-            <IconButton
+            <Button
                 aria-controls="customized-menu"
                 aria-haspopup="true"
                 size="medium"
+                variant="text"
                 className={classes.button}
                 onClick={handleClick}
             >
-                <FaceIcon fontSize="large" />
-            </IconButton>
+                Wallet
+            </Button>
             <StyledMenu
                 id="customized-menu"
                 anchorEl={anchorEl}

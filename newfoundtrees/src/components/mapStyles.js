@@ -3,8 +3,8 @@ const styles =
     {
       "stylers": [
         {
-          "color": "#3f624c"
-        }
+          "color": "#3f624c",
+        },
       ]
     },
     {
@@ -20,6 +20,9 @@ const styles =
       "stylers": [
         {
           "color": "#523735"
+        },
+        {
+          "visibility": "off"
         }
       ]
     },
@@ -28,6 +31,9 @@ const styles =
       "stylers": [
         {
           "color": "#f5f1e6"
+        },
+        {
+          "visibility": "off"
         }
       ]
     },
@@ -37,6 +43,9 @@ const styles =
       "stylers": [
         {
           "color": "#c9b2a6"
+        },
+        {
+          "visibility": "off"
         }
       ]
     },
@@ -48,7 +57,7 @@ const styles =
           "color": "#3f674c"
         },
         {
-          "visibility": "on"
+          "visibility": "off"
         }
       ]
     },
@@ -57,10 +66,10 @@ const styles =
       "elementType": "geometry.stroke",
       "stylers": [
         {
-          "color": "#dcd2be"
+          "color": "#95EEC8"
         },
         {
-          "visibility": "simplified"
+          "visibility": "off"
         }
       ]
     },
@@ -78,7 +87,7 @@ const styles =
       "elementType": "labels.text.fill",
       "stylers": [
         {
-          "color": "#ae9e90"
+          "color": "#95EEC8"
         }
       ]
     },
@@ -87,7 +96,7 @@ const styles =
       "elementType": "geometry",
       "stylers": [
         {
-          "color": "#dfd2ae"
+          "color": "#95EEC8"
         }
       ]
     },
@@ -96,7 +105,7 @@ const styles =
       "elementType": "geometry.fill",
       "stylers": [
         {
-          "color": "#3f674c"
+          "color": "#95EEC8"
         },
         {
           "saturation": 65
@@ -308,7 +317,7 @@ const styles =
       "elementType": "geometry.fill",
       "stylers": [
         {
-          "color": "#b9d3c2"
+          "color": "#2D0D45"
         }
       ]
     },

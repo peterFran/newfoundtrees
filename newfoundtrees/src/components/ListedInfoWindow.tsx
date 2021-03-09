@@ -42,8 +42,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+
+
 const ListedInfoWindow = ({token, onCloseClick}: ListedInfoWindowProps) => {
     const styles = useStyles()
+
+    const onLoad = React.useCallback(function callback(infoWindow) {
+        infoWindow.setZIndex(3);
+        // const bounds = new window.google.maps.LatLngBounds({lat: -180, lng: -90},  {lat: 180, lng: 90})
+        // map.fitBounds(bounds)
+    }, [])
 
     return (
         <InfoWindow
@@ -51,12 +59,14 @@ const ListedInfoWindow = ({token, onCloseClick}: ListedInfoWindowProps) => {
             lat: token.details.coordinates.latitude,
             lng: token.details.coordinates.longitude,
         }}
+        zIndex={20}
         options={{
             pixelOffset: new window.google.maps.Size(
                 0,
                 -25
             ),
         }}
+        onLoad={onLoad}
         onCloseClick={onCloseClick}
     >
         <div className={styles.tokenSummaryContainer}>

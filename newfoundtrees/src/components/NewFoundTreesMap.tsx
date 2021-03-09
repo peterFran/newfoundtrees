@@ -11,6 +11,7 @@ import reforestationIcon from '../assets/map-pin-reforestation.svg'
 import rewildingIcon from '../assets/map-pin-rewilding.svg'
 import ListedInfoWindow from './ListedInfoWindow'
 import OwnedInfoWindow from './OwnedInfoWindow';
+import { makeStyles } from '@material-ui/core';
 
 const mapContainerStyle = {
     maxWidth: '100vw',
@@ -34,6 +35,16 @@ const center = {
     lng: -9.16,
 }
 
+const useStyles = makeStyles((theme) => ({
+    fader:{
+        pointerEvents: 'none',
+        height: '100vh', 
+        position: 'absolute',   
+        width: '100vw',
+        background: 'linear-gradient(rgba(45,13,69, 40) 0%, transparent 40%)'
+    },
+}))
+
 interface NewFoundTreesMapProps {
     ownedTokens?: OwnedToken[]
     listedTokens?: ListedToken[]
@@ -48,6 +59,8 @@ const NewFoundTreesMap = ({
     const [selected, setSelected] = React.useState<
         OwnedToken | ListedToken | null
     >(null)
+
+    const styles = useStyles()
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -70,6 +83,7 @@ const NewFoundTreesMap = ({
         <>
             <title>New Found Trees</title>
             {!isLoaded ? null : (
+                <div>
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}
                     zoom={2}
@@ -78,8 +92,11 @@ const NewFoundTreesMap = ({
                     onLoad={onLoad}
                     onUnmount={onUnmount}
                 >
+                                    <div className={styles.fader}></div>
+
                     {listedTokens.map((project) => (
                         <Marker
+                            zIndex={5}
                             key={project.details.name}
                             position={{
                                 lat: project.details.coordinates.latitude,
@@ -109,6 +126,7 @@ const NewFoundTreesMap = ({
                     ))}
                     {ownedTokens.map((project) => (
                         <Marker
+                            zIndex={2}
                             key={project.details.name}
                             position={{
                                 lat: project.details.coordinates.latitude,
@@ -139,13 +157,8 @@ const NewFoundTreesMap = ({
                                         {selected && mapType === 'owned' && (
                         <OwnedInfoWindow token={selected as OwnedToken} onCloseClick={() => setSelected(null)}/>
                     )}
-
-                    {/* {(selected && mapType === 'listed' && (
-                        <InfoWindow
-                        </InfoWindow>
-                    )) || (selected && mapType === 'owned' && ()
-                    } */}
                 </GoogleMap>
+                </div>
             )}
         </>
     )
