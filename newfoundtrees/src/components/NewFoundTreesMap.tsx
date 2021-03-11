@@ -3,11 +3,9 @@ import React from 'react'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 // import MarkerWithLabel from "@react-google-maps/lib/component/MarkerWithLabel";
 import mapStyles from './mapStyles'
-import { OwnedToken, ListedToken } from '../domain/Token'
-// import reforestationIcon from '../assets/map-pin-reforestation.svg'
-// import rewildingIcon from '../assets/map-pin-rewilding.svg'
-import ListedInfoWindow from './ListedInfoWindow'
-import OwnedInfoWindow from './OwnedInfoWindow'
+import { Token } from '../domain/Token';
+
+import TokenInfoWindow from './TokenInfoWindow'
 import { makeStyles } from '@material-ui/core'
 
 const mapContainerStyle = {
@@ -54,22 +52,32 @@ const useStyles = makeStyles((theme) => ({
         borderTopLeftRadius:10,
         fontWeight: 700,
         zIndex: -10
+    },
+    borderedBox: {
+        textAlign: 'left',
+        alignSelf: 'flex-end',
+        justifySelf: 'flex-end',
+        backgroundColor: '#2D0D45',
+        color: 'white',
+        transform: 'translateX(50%)',
+        paddingLeft: 3,
+        paddingRight: 3,
+        padding: 2,
+        fontFamily: 'Teko',
+        fontWeight: 700,
+        zIndex: -10
     }
 }))
 
 interface NewFoundTreesMapProps {
-    ownedTokens?: OwnedToken[]
-    listedTokens?: ListedToken[]
-    mapType: 'listed' | 'owned'
+    tokens?: Token[]
 }
 
 const NewFoundTreesMap = ({
-    ownedTokens = [],
-    listedTokens = [],
-    mapType = 'listed',
+    tokens = [],
 }: NewFoundTreesMapProps) => {
     const [selected, setSelected] = React.useState<
-        OwnedToken | ListedToken | null
+        Token | null
     >(null)
 
     const styles = useStyles()
@@ -106,7 +114,7 @@ const NewFoundTreesMap = ({
                     >
                         <div className={styles.fader}></div>
 
-                        {listedTokens.map((project) => (
+                        {tokens.map((project) => (
                             <Marker
                                 zIndex={5}
                                 key={project.details.name}
@@ -115,8 +123,8 @@ const NewFoundTreesMap = ({
                                     lng: project.details.coordinates.longitude,
                                 }}
                                 icon={{
-                                    path: google.maps.SymbolPath.CIRCLE,
-                                    strokeColor: '#2D0D45',
+                                    path: project.ownedEditions.length > 0 ? google.maps.SymbolPath.BACKWARD_CLOSED_ARROW : google.maps.SymbolPath.CIRCLE,
+                                    strokeColor:  '#2D0D45',
                                     fillColor: 'white',
                                     fillOpacity: 1,
                                     strokeWeight: 2,
@@ -130,7 +138,7 @@ const NewFoundTreesMap = ({
                                 label={{
                                     text: project.details.name.toUpperCase(),
                                     color: 'white',   
-                                    className: styles.box,
+                                    className: project.ownedEditions.length > 0 ? styles.borderedBox : styles.box,
                                     
                                 }}
                                 onClick={() => {
@@ -150,55 +158,9 @@ const NewFoundTreesMap = ({
                                 }}
                             />
                         ))}
-                        {ownedTokens.map((project) => (
-                            <Marker
-                                zIndex={2}
-                                key={project.details.name}
-                                position={{
-                                    lat: project.details.coordinates.latitude,
-                                    lng: project.details.coordinates.longitude,
-                                }}
-                                icon={{
-                                    path: google.maps.SymbolPath.CIRCLE,
-                                    strokeColor: '#2D0D45',
-                                    fillColor: 'white',
-                                    fillOpacity: 1,
-                                    strokeWeight: 2,
-                                    labelOrigin: new window.google.maps.Point(
-                                        0,
-                                        2.2
-                                    ),
-                                    scale: 5,
-                                }}
-                                label={{
-                                    text: project.details.name.toUpperCase(),
-                                    color: 'white',   
-                                    className: styles.box,
-                                    
-                                }}
-                                onClick={() => {
-                                    map?.setZoom(5)
-                                    map?.setCenter({
-                                        lat:
-                                            project.details.coordinates
-                                                .latitude,
-                                        lng:
-                                            project.details.coordinates
-                                                .longitude,
-                                    })
-                                    setSelected(project)
-                                }}
-                            />
-                        ))}
-                        {selected && mapType === 'listed' && (
-                            <ListedInfoWindow
-                                token={selected as ListedToken}
-                                onCloseClick={() => setSelected(null)}
-                            />
-                        )}
-                        {selected && mapType === 'owned' && (
-                            <OwnedInfoWindow
-                                token={selected as OwnedToken}
+                        {selected && (
+                            <TokenInfoWindow
+                                token={selected as Token}
                                 onCloseClick={() => setSelected(null)}
                             />
                         )}
@@ -209,4 +171,4 @@ const NewFoundTreesMap = ({
     )
 }
 
-export default NewFoundTreesMap
+export default NewFoundTreesMap 

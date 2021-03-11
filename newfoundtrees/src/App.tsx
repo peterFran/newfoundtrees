@@ -7,19 +7,20 @@ import { Switch, Route } from 'react-router-dom'
 import Navigation from './components/Navigation'
 import { near, nearConfig } from './components/NearConfig'
 import Projects from './screens/Projects'
-import Tokens from './screens/Tokens'
 import AuthContext from './context/AuthContext'
-import Home from './screens/Home/index';
-import AccountDetails, { normaliseBalance } from './domain/AccountDetails';
+import Home from './screens/Home/index'
+import AccountDetails, { normaliseBalance } from './domain/AccountDetails'
 
 const scrollTop = () => {
     window.scrollTo(0, 0)
 }
 const App = () => {
-    
     const wallet = React.useMemo(() => new WalletAccount(near, null), [])
 
-    const [accountDetails, setAccountDetails] = React.useState<AccountDetails | null>(null)
+    const [
+        accountDetails,
+        setAccountDetails,
+    ] = React.useState<AccountDetails | null>(null)
 
     const authContext = React.useMemo(
         () => ({
@@ -32,7 +33,9 @@ const App = () => {
                             .getAccountBalance()
                             .then((balance) => {
                                 setAccountDetails({
-                                    balance: normaliseBalance({balance: balance}),
+                                    balance: normaliseBalance({
+                                        balance: balance,
+                                    }),
                                     accountId: wallet.getAccountId(),
                                 })
                                 return Promise.resolve('Success')
@@ -63,7 +66,7 @@ const App = () => {
                     .getAccountBalance()
                     .then((balance) => {
                         setAccountDetails({
-                            balance: normaliseBalance({balance: balance}),
+                            balance: normaliseBalance({ balance: balance }),
                             accountId: wallet.getAccountId(),
                         })
                         return Promise.resolve('Success')
@@ -93,20 +96,15 @@ const App = () => {
                     titleTemplate="%s | New Found Trees"
                 />
                 <Navigation loggedIn={accountDetails != null} />
-                
+
                 <Switch>
                     <Route exact path="/">
-                        <Home/>
+                        <Home />
                     </Route>
 
                     <Route path="/projects" preload={scrollTop}>
                         <Projects />
                     </Route>
-                    {accountDetails && (
-                        <Route path="/tokens" preload={scrollTop}>
-                            <Tokens />
-                        </Route>
-                    )}
                 </Switch>
             </AuthContext.Provider>
         </div>

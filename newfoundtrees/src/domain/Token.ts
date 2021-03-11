@@ -1,13 +1,8 @@
-export interface ListedToken {
+export interface Token {
     details: TokenDetails
     batchSize: number
     sold: number,
     price: number,
-}
-
-export interface OwnedToken {
-    details: TokenDetails
-    batchSize: number
     ownedEditions: number[]
     updates: TokenUpdate[]
 }
