@@ -6,7 +6,7 @@ export const nearConfig = {
     nodeUrl: 'https://rpc.testnet.near.org',
     walletUrl: 'https://wallet.testnet.near.org',
     helperUrl: 'https://helper.testnet.near.org',
-    contract: 'dev-1609104596673-2046347'
+    contract: 'newfoundtrees.mintbase10.testnet'
 };
 
 export const near = new Near({

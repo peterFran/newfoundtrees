@@ -4,11 +4,13 @@ import Menu, { MenuProps } from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import SafeIcon from '@material-ui/icons/AccountBalance'
 import AccountDetails from '../domain/AccountDetails'
 import { Button } from '@material-ui/core'
+import LinkIcon from '@material-ui/icons/Link';
+import firebase from 'firebase'
 
 const StyledMenu = withStyles({
     paper: {
@@ -56,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
             marginTop: theme.spacing(2),
         },
         fontFamily: 'Arial',
-        fontSize: 12
+        fontSize: 12,
     },
 }))
 
@@ -69,6 +71,52 @@ interface LoginMenuProps {
 const LoginMenu = ({ accountDetails, signIn, signOut }: LoginMenuProps) => {
     const classes = useStyles()
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+    const [isSignedIn, setIsSignedIn] = React.useState(false) // Local signed-in state.
+
+    if (firebase.apps.length === 0) {
+        const config = {
+            apiKey: process.env.REACT_FIREBASE_API_KEY || '',
+            authDomain: process.env.REACT_FIREBASE_AUTH_DOMAIN || '',
+            projectId: process.env.REACT_FIREBASE_PROJECT_ID || '',
+        }
+        firebase.initializeApp(config)
+    }
+
+    // Listen to the Firebase Auth state and set the local state.
+    React.useEffect(() => {
+        const unregisterAuthObserver = firebase
+            .auth()
+            .onAuthStateChanged((user) => {
+                setIsSignedIn(!!user)
+            })
+        return () => unregisterAuthObserver() // Make sure we un-register Firebase observers when the component unmounts.
+    }, [])
+
+    React.useEffect(() => {
+        console.log(
+
+        )
+        if (
+            !!accountDetails &&
+            !!firebase.auth().currentUser &&
+            !firebase
+                .firestore()
+                .collection('near-account')
+                .doc(`${firebase.auth().currentUser?.uid}`)
+                .get()
+        ) {
+            firebase
+                .firestore()
+                .collection('near-account')
+                .doc(`${firebase.auth().currentUser?.uid}`)
+                .set({
+                    id: accountDetails.accountId,
+                })
+                .then((res) => {
+                    console.log(res)
+                })
+        }
+    }, [accountDetails])
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget)
@@ -76,6 +124,18 @@ const LoginMenu = ({ accountDetails, signIn, signOut }: LoginMenuProps) => {
 
     const handleClose = () => {
         setAnchorEl(null)
+    }
+
+    // Configure FirebaseUI.
+    const uiConfig = {
+        // Popup signin flow rather than redirect flow.
+        signInFlow: 'popup',
+        // We will display Google and Facebook as auth providers.
+        signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+        callbacks: {
+            // Avoid redirects after sign-in.
+            // signInSuccessWithAuthResult: () => false,
+        },
     }
 
     return (
@@ -97,17 +157,51 @@ const LoginMenu = ({ accountDetails, signIn, signOut }: LoginMenuProps) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {accountDetails ? (
+                {isSignedIn ? (
                     <>
                         <StyledMenuItem>
                             <ListItemIcon>
-                                <SafeIcon fontSize="small" />
+                                <ArrowBackIcon fontSize="small" />
                             </ListItemIcon>
                             <ListItemText
-                                primary={`${accountDetails.balance.available} Ⓝ`}
+                                primary={
+                                    firebase.auth()?.currentUser?.displayName
+                                }
                             />
                         </StyledMenuItem>
-                        <StyledMenuItem onClick={signOut}>
+                        {accountDetails ? (
+                            <>
+                                <StyledMenuItem>
+                                <ListItemIcon>
+                                        <LinkIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={`${accountDetails.accountId}`}
+                                    />
+                                </StyledMenuItem>
+                                <StyledMenuItem>
+                                    <ListItemIcon>
+                                        <SafeIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={`${accountDetails.balance.available} Ⓝ`}
+                                    />
+                                </StyledMenuItem>
+                            </>
+                        ) : (
+                            <StyledMenuItem onClick={signIn}>
+                                <ListItemIcon>
+                                    <SafeIcon fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText primary={`Link Wallet`} />
+                            </StyledMenuItem>
+                        )}
+                        <StyledMenuItem
+                            onClick={() => {
+                                signOut()
+                                firebase.auth().signOut()
+                            }}
+                        >
                             <ListItemIcon>
                                 <ArrowBackIcon fontSize="small" />
                             </ListItemIcon>
@@ -116,12 +210,10 @@ const LoginMenu = ({ accountDetails, signIn, signOut }: LoginMenuProps) => {
                     </>
                 ) : (
                     <>
-                        <StyledMenuItem onClick={signIn}>
-                            <ListItemIcon>
-                                <ArrowForwardIcon fontSize="small" />
-                            </ListItemIcon>
-                            <ListItemText primary="LogIn" />
-                        </StyledMenuItem>
+                        <StyledFirebaseAuth
+                            uiConfig={uiConfig}
+                            firebaseAuth={firebase.auth()}
+                        />
                     </>
                 )}
             </StyledMenu>

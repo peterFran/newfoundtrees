@@ -1,5 +1,5 @@
 import './App.css'
-import { WalletAccount } from 'near-api-js'
+import { WalletAccount, Contract } from 'near-api-js'
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { Switch, Route } from 'react-router-dom'
@@ -9,51 +9,48 @@ import { near, nearConfig } from './components/NearConfig'
 import Projects from './screens/Projects'
 import AuthContext from './context/AuthContext'
 import Home from './screens/Home/index'
-import AccountDetails, { normaliseBalance } from './domain/AccountDetails'
+import AccountDetails from './domain/AccountDetails'
+import { getAccountDetails, signIn } from './outbound/walletClient'
 
 const scrollTop = () => {
     window.scrollTo(0, 0)
 }
 const App = () => {
     const wallet = React.useMemo(() => new WalletAccount(near, null), [])
-
     const [
         accountDetails,
         setAccountDetails,
     ] = React.useState<AccountDetails | null>(null)
 
+    const [contract, setContract] = React.useState<Contract | null>(null)
+
     const authContext = React.useMemo(
         () => ({
-            signIn: async (): Promise<string> => {
-                return wallet
-                    .requestSignIn(nearConfig.contract, 'Log in to account')
-                    .then(() => {
-                        wallet
-                            .account()
-                            .getAccountBalance()
-                            .then((balance) => {
-                                setAccountDetails({
-                                    balance: normaliseBalance({
-                                        balance: balance,
-                                    }),
-                                    accountId: wallet.getAccountId(),
-                                })
-                                return Promise.resolve('Success')
-                            })
-                            .catch((err) => {
-                                return Promise.reject(err)
-                            })
-                        return Promise.resolve('Success')
-                    })
-                    .catch((err) => {
-                        return Promise.reject(err || 'fail')
-                    })
+            signIn: async (): Promise<AccountDetails> => {
+                return signIn(nearConfig.contract, wallet).then(
+                    (accountDetails) => {
+                        setAccountDetails(accountDetails)
+                        setContract(
+                            new Contract(
+                                wallet.account(),
+                                nearConfig.contract,
+                                {
+                                    viewMethods: [],
+                                    changeMethods: [],
+                                }
+                            )
+                        )
+                        return accountDetails
+                    }
+                )
             },
             signOut: () => {
                 wallet.signOut()
                 setAccountDetails(null)
             },
+            contract: null,
             accountDetails: null,
+
         }),
         [wallet]
     )
@@ -61,20 +58,16 @@ const App = () => {
     React.useEffect(() => {
         const bootstrapAsync = async () => {
             if (wallet.isSignedIn()) {
-                wallet
-                    .account()
-                    .getAccountBalance()
-                    .then((balance) => {
-                        setAccountDetails({
-                            balance: normaliseBalance({ balance: balance }),
-                            accountId: wallet.getAccountId(),
+                getAccountDetails(wallet).then((accountDetails) => {
+                    setAccountDetails(accountDetails)
+                    setContract(
+                        new Contract(wallet.account(), nearConfig.contract, {
+                            viewMethods: ['query'],
+                            changeMethods: [],
                         })
-                        return Promise.resolve('Success')
-                    })
-                    .catch((err) => {
-                        return Promise.reject(err)
-                    })
-                return Promise.resolve('Success')
+                    )
+                    return accountDetails
+                })
             } else {
                 setAccountDetails(null)
             }
@@ -87,6 +80,7 @@ const App = () => {
             <AuthContext.Provider
                 value={{
                     signIn: authContext.signIn,
+                    contract: contract,
                     signOut: authContext.signOut,
                     accountDetails: accountDetails,
                 }}

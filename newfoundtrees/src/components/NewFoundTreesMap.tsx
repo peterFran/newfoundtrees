@@ -1,7 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
-// import MarkerWithLabel from "@react-google-maps/lib/component/MarkerWithLabel";
 import mapStyles from './mapStyles'
 import { Token } from '../domain/Token';
 
@@ -90,8 +89,6 @@ const NewFoundTreesMap = ({
     const [map, setMap] = React.useState<google.maps.Map | null>(null)
 
     const onLoad = React.useCallback(function callback(map) {
-        // const bounds = new window.google.maps.LatLngBounds({lat: -180, lng: -90},  {lat: 180, lng: 90})
-        // map.fitBounds(bounds)
         setMap(map)
     }, [])
 
