@@ -1,9 +1,10 @@
-import { Button, makeStyles } from '@material-ui/core'
 import React from 'react'
+import { Button, makeStyles } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import HeroBanner from '../../components/HeroBanner'
 import InfoBanner from '../../components/InfoBanner'
+import treeGif from '../../assets/pixil-gif-drawing.gif'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -38,6 +39,11 @@ const useStyles = makeStyles((theme) => {
                 fontSize: '1rem',
             },
         },
+        heroGif: {
+            width: '10pc',
+            height: 'auto',
+            opacity: 0.5
+        },
     }
 })
 
@@ -49,6 +55,35 @@ const Home = () => {
             <Helmet>
                 <title>Home</title>
             </Helmet>
+            <div style={{position: 'absolute',  left: 0, bottom: 0}}>
+                    <img
+                        className={classes.heroGif}
+                        src={treeGif}
+                        alt="trees!"
+                    />
+            </div>
+            <div style={{position: 'absolute',  left: 0, top: 0}}>
+                    <img
+                        className={classes.heroGif}
+                        src={treeGif}
+                        alt="trees!"
+                    />
+            </div>
+            <div style={{position: 'absolute',  right: 0, bottom: 0}}>
+                    <img
+                        className={classes.heroGif}
+                        src={treeGif}
+                        alt="trees!"
+                    />
+            </div>
+            <div style={{position: 'absolute',  right: 0, top: 0}}>
+                    <img
+                        className={classes.heroGif}
+                        src={treeGif}
+                        alt="trees!"
+                    />
+            </div>
+
             <div className={classes.container}>
                 <div className={classes.heroWrap}>
                     <HeroBanner
@@ -70,37 +105,43 @@ const Home = () => {
                 <div className={classes.contentWrap}>
                     <InfoBanner>
                         <div>
-                        <div className={classes.text}>
-                            <div>
-                            <span style={{fontSize: 40}}>🌏</span>
-                                <p>
-                                    Explore our map to discover projects around
-                                    the globe.
-                                </p>
+                            <div className={classes.text}>
+                                <div>
+                                    <span style={{ fontSize: 40 }}>🌏</span>
+                                    <p>
+                                        Explore our map to discover projects
+                                        around the globe.
+                                    </p>
+                                </div>
+                                <br />
+                                <div>
+                                    <span style={{ fontSize: 40 }}>💸</span>
+                                    <p>
+                                        Buy NFTs with NEAR tokens, and use the
+                                        power of the blockchain to see exactly
+                                        where your money goes.
+                                    </p>
+                                </div>
+                                <br />
+                                <div>
+                                    <span style={{ fontSize: 40 }}>✉️</span>
+                                    <p>
+                                        Projects will send you updates if you
+                                        own their NFT, so you can see the impact
+                                        your contribution is making.
+                                    </p>
+                                </div>
                             </div>
-                            <br/>
-                            <div>
-                                <span style={{fontSize: 40}}>💸</span>
-                                <p>
-                                    Buy NFTs with NEAR tokens, and use the power
-                                    of the blockchain to see exactly where your
-                                    money goes.
-                                </p>
-                            </div>
-                            <br/>
-                            <div>
-                            <span style={{fontSize: 40}}>✉️</span>
-                                <p>
-                                    Projects will send you updates if you own their NFT, 
-                                    so you can see the impact your contribution is making.
-                                </p>
-                            </div>
-                        </div>
-                        <br/>
-                        
-                        <Button component={ Link } to="/projects" variant="contained" color="primary" >
-                            Take me to the map!
-                        </Button>
+                            <br />
+
+                            <Button
+                                component={Link}
+                                to="/projects"
+                                variant="contained"
+                                color="primary"
+                            >
+                                Take me to the map!
+                            </Button>
                         </div>
                     </InfoBanner>
                 </div>

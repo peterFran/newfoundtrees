@@ -2,7 +2,7 @@ import './App.css'
 import { WalletAccount, Contract } from 'near-api-js'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, useLocation } from 'react-router-dom';
 
 import Navigation from './components/Navigation'
 import { near, nearConfig } from './components/NearConfig'
@@ -16,6 +16,8 @@ const scrollTop = () => {
     window.scrollTo(0, 0)
 }
 const App = () => {
+    const location = useLocation()
+
     const wallet = React.useMemo(() => new WalletAccount(near, null), [])
     const [
         accountDetails,
@@ -50,7 +52,6 @@ const App = () => {
             },
             contract: null,
             accountDetails: null,
-
         }),
         [wallet]
     )
@@ -89,8 +90,9 @@ const App = () => {
                     defaultTitle="New Found Trees"
                     titleTemplate="%s | New Found Trees"
                 />
-                <Navigation loggedIn={accountDetails != null} />
-
+                {location.pathname !== '/' && (
+                    <Navigation loggedIn={accountDetails != null} />
+                )}
                 <Switch>
                     <Route exact path="/">
                         <Home />
