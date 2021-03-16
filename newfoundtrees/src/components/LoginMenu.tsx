@@ -10,7 +10,9 @@ import SafeIcon from '@material-ui/icons/AccountBalance'
 import AccountDetails from '../domain/AccountDetails'
 import { Button } from '@material-ui/core'
 import LinkIcon from '@material-ui/icons/Link';
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
 
 const StyledMenu = withStyles({
     paper: {
