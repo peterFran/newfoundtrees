@@ -75,9 +75,9 @@ const LoginMenu = ({ accountDetails, signIn, signOut }: LoginMenuProps) => {
 
     if (firebase.apps.length === 0) {
         const config = {
-            apiKey: process.env.REACT_FIREBASE_API_KEY || '',
-            authDomain: process.env.REACT_FIREBASE_AUTH_DOMAIN || '',
-            projectId: process.env.REACT_FIREBASE_PROJECT_ID || '',
+            apiKey: process.env.REACT_APP_FIREBASE_API_KEY || '',
+            authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || '',
+            projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || '',
         }
         firebase.initializeApp(config)
     }
