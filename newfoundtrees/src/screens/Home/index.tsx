@@ -4,13 +4,11 @@ import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import HeroBanner from '../../components/HeroBanner'
 import InfoBanner from '../../components/InfoBanner'
-import treeGif from '../../assets/pixil-gif-drawing.gif'
 
 const useStyles = makeStyles((theme) => {
     return {
         container: {
             height: '200vh',
-            width: '100vw',
             scrollBehavior: 'smooth',
         },
         heroWrap: {
@@ -55,34 +53,6 @@ const Home = () => {
             <Helmet>
                 <title>Home</title>
             </Helmet>
-            <div style={{position: 'absolute',  left: 0, bottom: 0}}>
-                    <img
-                        className={classes.heroGif}
-                        src={treeGif}
-                        alt="trees!"
-                    />
-            </div>
-            <div style={{position: 'absolute',  left: 0, top: 0}}>
-                    <img
-                        className={classes.heroGif}
-                        src={treeGif}
-                        alt="trees!"
-                    />
-            </div>
-            <div style={{position: 'absolute',  right: 0, bottom: 0}}>
-                    <img
-                        className={classes.heroGif}
-                        src={treeGif}
-                        alt="trees!"
-                    />
-            </div>
-            <div style={{position: 'absolute',  right: 0, top: 0}}>
-                    <img
-                        className={classes.heroGif}
-                        src={treeGif}
-                        alt="trees!"
-                    />
-            </div>
 
             <div className={classes.container}>
                 <div className={classes.heroWrap}>
@@ -136,7 +106,7 @@ const Home = () => {
 
                             <Button
                                 component={Link}
-                                to="/projects"
+                                to="/map"
                                 variant="contained"
                                 color="primary"
                             >

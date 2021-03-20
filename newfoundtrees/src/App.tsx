@@ -2,7 +2,7 @@ import './App.css'
 import { WalletAccount, Contract } from 'near-api-js'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { Switch, Route, useLocation } from 'react-router-dom';
+import { Switch, Route, useLocation } from 'react-router-dom'
 
 import Navigation from './components/Navigation'
 import { near, nearConfig } from './components/NearConfig'
@@ -11,6 +11,8 @@ import AuthContext from './context/AuthContext'
 import Home from './screens/Home/index'
 import AccountDetails from './domain/AccountDetails'
 import { getAccountDetails, signIn } from './outbound/walletClient'
+import Tokens from './screens/Tokens'
+import { Container } from '@material-ui/core'
 
 const scrollTop = () => {
     window.scrollTo(0, 0)
@@ -90,18 +92,30 @@ const App = () => {
                     defaultTitle="New Found Trees"
                     titleTemplate="%s | New Found Trees"
                 />
-                {location.pathname !== '/' && (
-                    <Navigation loggedIn={accountDetails != null} />
-                )}
-                <Switch>
-                    <Route exact path="/">
-                        <Home />
-                    </Route>
+                <Container
+                maxWidth="lg"
+                    style={
+                        location.pathname !== '/map'
+                            ? { display: 'block' }
+                            : { display: 'flex' }
+                    }
+                >
+                    {location.pathname !== '/' && (
+                        <Navigation loggedIn={accountDetails != null} />
+                    )}
+                    <Switch>
+                        <Route exact path="/">
+                            <Home />
+                        </Route>
+                        <Route exact path="/tokens" preload={scrollTop}>
+                            <Tokens />
+                        </Route>
 
-                    <Route path="/projects" preload={scrollTop}>
-                        <Projects />
-                    </Route>
-                </Switch>
+                        <Route path="/map" preload={scrollTop}>
+                            <Projects />
+                        </Route>
+                    </Switch>
+                </Container>
             </AuthContext.Provider>
         </div>
     )

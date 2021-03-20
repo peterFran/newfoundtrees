@@ -3,11 +3,12 @@ import { createMuiTheme } from '@material-ui/core/styles'
 const defaultTheme = createMuiTheme({ spacing: 5 })
 
 export const COLORS = {
-    primary: '#367560',
-    secondary: '#F4D54B',
+    primary: '#2D0D45',
+    secondary: '#9A3EE0',
     error: '#E76049',
     text: '#2F3542',
-    textSecondary: 'rgba(47, 53, 66, 0.5)',
+    // textSecondary: 'rgba(47, 53, 66, 0.5)',
+    textSecondary: 'rgba(255, 255, 255, 0.7)',
     background: 'white',
     border: '#DADCE0',
     disabled: '#D5DCDC',
@@ -40,36 +41,52 @@ const theme = createMuiTheme({
     },
     // TODO: investigate shadow usage
     typography: {
-        fontFamily: ['"sofia-pro"', 'Arial', 'sans-serif'].join(','),
+        fontFamily: ['Mulish', 'sans-serif'].join(','),
         h1: {
-            fontSize: 64,
+            lineHeight: 1,
             fontWeight: 900,
-            letterSpacing: 0,
+            fontSize: 48,
         },
         h2: {
-            fontSize: 32,
+            fontSize: 29,
             fontWeight: 900,
             lineHeight: 1.2,
             letterSpacing: 0,
         },
         h3: {
-            fontSize: 24,
+            fontSize: 25,
             fontWeight: 900,
             lineHeight: 1.2,
             letterSpacing: 0,
         },
         h4: {
-            fontSize: 16,
-            fontWeight: 900,
+            fontSize: 20,
+            fontWeight: 300,
             lineHeight: 1.2,
             letterSpacing: 0,
         },
+        h5: {
+            fontSize: 17,
+            fontWeight: 300,
+            lineHeight: 1.2,
+            letterSpacing: 0,
+            textTransform: "uppercase"
+        },
+        h6: {
+            fontSize: 15,
+            fontWeight: 900,
+            lineHeight: 1.2,
+            // letterSpacing: 0,
+        },
+
         body1: {
             letterSpacing: 0,
+            fontSize: 13,
+            fontWeight: 300,
         },
         body2: {
-            fontSize: 16,
-            fontWeight: 400,
+            fontSize: 17,
+            fontWeight: 100,
             lineHeight: 1.2,
             letterSpacing: 0,
         },
@@ -79,11 +96,12 @@ const theme = createMuiTheme({
             lineHeight: 1.3,
         },
         button: {
-            fontSize: '1rem',
-            textTransform: 'none',
-            fontWeight: 'bold',
-            letterSpacing: 0,
+            fontSize: 14,
+            textTransform: 'uppercase',
+            fontWeight: 900,
+            lineHeight: 1.3,
         },
+
     },
     spacing: 5,
     shape: {
@@ -129,10 +147,13 @@ const theme = createMuiTheme({
                 fontWeight: 'normal',
             },
             contained: {
+                padding: '10px 22px',
+
                 '&$disabled': {
                     color: '#fff',
                     backgroundColor: COLORS.disabled,
                 },
+                borderRadius: 20
             },
         },
         MuiFilledInput: {

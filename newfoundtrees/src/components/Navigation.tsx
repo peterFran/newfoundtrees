@@ -2,11 +2,26 @@ import React from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import AuthContext from '../context/AuthContext'
-import LoginMenu from './LoginMenu'
+import Menu, { MenuProps } from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import SafeIcon from '@material-ui/icons/AccountBalance'
+
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import { Typography, withStyles } from '@material-ui/core'
+import AccountDetails from '../domain/AccountDetails'
+import LinkIcon from '@material-ui/icons/Link'
+
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
 const LABELS = {
-    projects: 'Tokens',
-    tokens: 'Art',
+    tokens: 'Tokens',
+    map: 'Map',
+    art: 'Art',
     about: 'About',
 }
 
@@ -16,11 +31,13 @@ const useNavItemStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        width: '100pc',
         flex: 1,
+        pointerEvents: 'all',
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
-        marginLeft: theme.spacing(3),
-        marginRight: theme.spacing(3),
+        // marginLeft: theme.spacing(3),
+        // marginRight: theme.spacing(3),
         fontSize: 12,
         textDecoration: 'none',
         color: theme.palette.text.secondary,
@@ -46,8 +63,8 @@ const useNavItemStyles = makeStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        marginLeft: theme.spacing(3),
-        marginRight: theme.spacing(3),
+        // marginLeft: theme.spacing(3),
+        // marginRight: theme.spacing(3),
         fontSize: 12,
         color: theme.palette.text.secondary,
         '&.active': {
@@ -67,17 +84,19 @@ const useNavItemStyles = makeStyles((theme) => ({
     label: {
         marginTop: theme.spacing(1),
         lineHeight: 1,
-        color: 'rgba(255, 255, 255, 0.7)',
+        color: theme.palette.secondary.dark,
+        fontSize: 17,
+        fontWeight: 50,
         [theme.breakpoints.up('md')]: {
             marginTop: theme.spacing(2),
         },
     },
     title: {
-        marginTop: theme.spacing(1),
         lineHeight: 1,
         fontFamily: 'Teko',
         fontWeight: 700,
         fontSize: 25,
+        paddingTop: theme.spacing(4),
         color: 'rgba(255, 255, 255)',
         [theme.breakpoints.up('md')]: {
             marginTop: theme.spacing(2),
@@ -87,66 +106,289 @@ const useNavItemStyles = makeStyles((theme) => ({
 
 interface NavItemProps {
     as?: typeof NavLink
-    name: 'projects' | 'tokens' | 'about'
-    to: '/projects' | '/' | '/'
+    name: 'tokens' | 'about' | 'map' | 'art'
+    to: '/tokens' | '/' | '/map' | '/art'
+    white: boolean
 }
 
-const NavItem = ({ as: Comp = NavLink, name, to }: NavItemProps) => {
+const NavItem = ({ as: Comp = NavLink, name, to, white }: NavItemProps) => {
     const classes = useNavItemStyles()
 
     return (
         <Comp className={classes.root} {...{ to }}>
-            <div className={classes.label}>{LABELS[name]}</div>
+            <div className={classes.label}>
+                <Typography
+                    variant="h5"
+                    color={white ? 'textSecondary' : 'secondary'}
+                >
+                    {LABELS[name]}
+                </Typography>
+            </div>
         </Comp>
     )
 }
 
-const TitleItem = () => {
+const StyledMenu = withStyles({
+    paper: {
+        marginTop: 5,
+        border: '1px solid #d3d4d5',
+    },
+})((props: MenuProps) => (
+    <Menu
+        elevation={0}
+        getContentAnchorEl={null}
+        anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+        }}
+        transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+        }}
+        {...props}
+    />
+))
+
+const StyledMenuItem = withStyles((theme) => ({
+    root: {
+        '&:focus': {
+            '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+                color: theme.palette.common.white,
+            },
+        },
+    },
+    button: {
+        backgroundColor: theme.palette.background.default,
+    },
+}))(MenuItem)
+
+interface WalletItemProps {
+    accountDetails: AccountDetails | null
+    signIn: () => void
+    signOut: () => void
+    white: boolean
+}
+
+const WalletItem = ({
+    white,
+    accountDetails,
+    signIn,
+    signOut,
+}: WalletItemProps) => {
+    const classes = useNavItemStyles()
+
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+    const [isSignedIn, setIsSignedIn] = React.useState(false) // Local signed-in state.
+
+    if (firebase.apps.length === 0) {
+        const config = {
+            apiKey: process.env.REACT_APP_FIREBASE_API_KEY || '',
+            authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || '',
+            projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || '',
+        }
+        firebase.initializeApp(config)
+    }
+
+    // Listen to the Firebase Auth state and set the local state.
+    React.useEffect(() => {
+        const unregisterAuthObserver = firebase
+            .auth()
+            .onAuthStateChanged((user) => {
+                setIsSignedIn(!!user)
+            })
+        return () => unregisterAuthObserver() // Make sure we un-register Firebase observers when the component unmounts.
+    }, [])
+
+    React.useEffect(() => {
+        console.log()
+        if (
+            !!accountDetails &&
+            !!firebase.auth().currentUser &&
+            !firebase
+                .firestore()
+                .collection('near-account')
+                .doc(`${firebase.auth().currentUser?.uid}`)
+                .get()
+        ) {
+            firebase
+                .firestore()
+                .collection('near-account')
+                .doc(`${firebase.auth().currentUser?.uid}`)
+                .set({
+                    id: accountDetails.accountId,
+                })
+                .then((res) => {
+                    console.log(res)
+                })
+        }
+    }, [accountDetails])
+
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget)
+    }
+
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
+
+    // Configure FirebaseUI.
+    const uiConfig = {
+        // Popup signin flow rather than redirect flow.
+        signInFlow: 'popup',
+        // We will display Google and Facebook as auth providers.
+        signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+        callbacks: {
+            // Avoid redirects after sign-in.
+            // signInSuccessWithAuthResult: () => false,
+        },
+    }
+
+    return (
+        <>
+            <div className={classes.root} onClick={handleClick}>
+                <div className={classes.label}>
+                    <Typography
+                        variant="h5"
+                        color={white ? 'textSecondary' : 'secondary'}
+                    >
+                        Wallet
+                    </Typography>
+                </div>
+            </div>
+            <StyledMenu
+                id="customized-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+            >
+                {isSignedIn ? (
+                    <>
+                        <StyledMenuItem>
+                            {/* <ListItemIcon>
+                                <ArrowBackIcon fontSize="small"  color="primary"/>
+                            </ListItemIcon> */}
+                            <ListItemText
+                                primary={
+                                    firebase.auth()?.currentUser?.displayName
+                                }
+                            />
+                        </StyledMenuItem>
+                        {accountDetails ? (
+                            <>
+                                <StyledMenuItem>
+                                    <ListItemIcon>
+                                        <LinkIcon
+                                            fontSize="small"
+                                            color="primary"
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={`${accountDetails.accountId}`}
+                                    />
+                                </StyledMenuItem>
+                                <StyledMenuItem>
+                                    <ListItemIcon>
+                                        <SafeIcon
+                                            fontSize="small"
+                                            color="primary"
+                                        />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={`${accountDetails.balance.available} Ⓝ`}
+                                    />
+                                </StyledMenuItem>
+                            </>
+                        ) : (
+                            <StyledMenuItem onClick={signIn}>
+                                <ListItemIcon>
+                                    <SafeIcon
+                                        fontSize="small"
+                                        color="primary"
+                                    />
+                                </ListItemIcon>
+                                <ListItemText primary={`Link Wallet`} />
+                            </StyledMenuItem>
+                        )}
+                        <StyledMenuItem
+                            onClick={() => {
+                                signOut()
+                                firebase.auth().signOut()
+                            }}
+                        >
+                            <ListItemIcon>
+                                <ArrowBackIcon
+                                    fontSize="small"
+                                    color="primary"
+                                />
+                            </ListItemIcon>
+                            <ListItemText primary="LogOut" />
+                        </StyledMenuItem>
+                    </>
+                ) : (
+                    <>
+                        <StyledFirebaseAuth
+                            uiConfig={uiConfig}
+                            firebaseAuth={firebase.auth()}
+                        />
+                    </>
+                )}
+            </StyledMenu>
+        </>
+    )
+}
+
+const TitleItem = ({ white }: { white: boolean }) => {
     const classes = useNavItemStyles()
 
     return (
         <NavLink className={classes.root} to={'/'}>
-            <div className={classes.title}>NEWFOUNDTREES</div>
+            <div
+                className={classes.title}
+                style={white ? { color: 'rgba(255, 255, 255, 0.7)' } : {}}
+            >
+                  <Typography
+                        variant="h3"
+                        color={white ? 'inherit' : 'primary'}
+                    >NEWFOUNDTREES</Typography>
+                
+            </div>
         </NavLink>
     )
 }
 
 const useHorizontalStyles = makeStyles((theme) => ({
     root: {
-        display: 'flex',
+        display: 'block',
+        // flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         pointerEvents: 'none',
-        position: 'fixed',
         backgroundColor: theme.palette.background.paper,
-        top: 0,
-        bottom: 0,
-        left: 0,
-        width: '100vw',
-        paddingRight: theme.spacing(3),
-        height: 100,
-        zIndex: 10,
+        paddingTop: theme.spacing(5),
+        zIndex: 1,
     },
-    narrowRoot: {
+    mapRoot: {
         display: 'flex',
+        // position: 'fixed',
+        // width: '100pc',
+        flex: 1,
+
+        backgroundColor: 'transparent',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        position: 'fixed',
-        backgroundColor: 'transparent',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        height: 100,
-        zIndex: 10,
+        alignItems:'space-between',
+        pointerEvents: 'none',
+        paddingTop: theme.spacing(5),
+        zIndex: 5,
     },
     wrapper: {
         display: 'flex',
-        width: '100pc',
         alignItems: 'space-between',
         justifyContent: 'flex-end',
-        justifySelf: 'flex-end',
         flexDirection: 'row',
         paddingRight: theme.spacing(2),
+
     },
     pill: {
         borderRadius: 15,
@@ -171,16 +413,16 @@ const useHorizontalStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(5),
         justifyContent: 'center',
         display: 'flex',
-        color: 'white',
+        color: theme.palette.secondary.dark,
     },
 }))
 
 const HorizontalNavigation = ({
-    loggedIn,
-    transparent = false,
+    white,
+    mapView = false,
 }: {
-    loggedIn: boolean
-    transparent?: boolean
+    mapView?: boolean
+    white: boolean
 }) => {
     const { signIn, signOut, accountDetails } = React.useContext(AuthContext)
 
@@ -188,38 +430,51 @@ const HorizontalNavigation = ({
     return (
         <>
             <nav
-                className={classes.root}
-                style={
-                    transparent
-                        ? {
-                              backgroundColor: 'transparent',
-                          }
-                        : {}
-                }
+                className={mapView ? classes.mapRoot :classes.root}
             >
                 <ul className={classes.navList}>
-                    <li className={classes.center}>
+                    <li>
                         <Link to="/" target="_blank" rel="noopener noreferrer">
-                            <TitleItem />
+                            <TitleItem {...{ white }} />
                         </Link>
                     </li>
                     <div className={classes.wrapper}>
-                        <div className={classes.pill}>
+                        {/* <div className={classes.pill}> */}
                             <li className={classes.center}>
-                                <LoginMenu
-                                    {...{ accountDetails, signIn, signOut }}
+                                <WalletItem
+                                    {...{
+                                        accountDetails,
+                                        signIn,
+                                        signOut,
+                                        white,
+                                    }}
                                 />
                             </li>
                             <li className={classes.center}>
-                                <NavItem to={`/projects`} name="projects" />
+                                <NavItem
+                                    to={`/map`}
+                                    name="map"
+                                    {...{ white }}
+                                />
                             </li>
                             <li className={classes.center}>
-                                <NavItem to={`/`} name="tokens" />
+                                <NavItem
+                                    to={`/tokens`}
+                                    name="tokens"
+                                    {...{ white }}
+                                />
                             </li>
                             <li className={classes.center}>
-                                <NavItem to={`/`} name="about" />
+                                <NavItem
+                                    to={`/art`}
+                                    name="art"
+                                    {...{ white }}
+                                />
                             </li>
-                        </div>
+                            <li className={classes.center}>
+                                <NavItem to={`/`} name="about" {...{ white }} />
+                            </li>
+                        {/* </div> */}
                     </div>
                 </ul>
             </nav>
@@ -231,7 +486,11 @@ const Navigation = ({ loggedIn = false }: { loggedIn: boolean }) => {
     const location = useLocation()
     return (
         <HorizontalNavigation
-            {...{ loggedIn, transparent: location.pathname !== '/' }}
+            {...{
+                loggedIn,
+                mapView: location.pathname === '/map',
+                white: location.pathname === '/map',
+            }}
         />
     )
 }
