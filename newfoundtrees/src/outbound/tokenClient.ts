@@ -1,5 +1,5 @@
 import { Token, TokenDetails } from '../domain/Token';
-import ImpactScore from '../components/ImpactScore';
+
 export default function getTokens(): Token[] {
     return [
         {

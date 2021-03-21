@@ -2,7 +2,6 @@ import * as React from 'react'
 import { makeStyles, Typography } from '@material-ui/core'
 import { ReactComponent as Logo } from '../assets/contours.svg'
 import treeImg from '../assets/pixel-tree.png'
-import treeGif from '../assets/pixil-gif-drawing.gif'
 import { Token } from '../domain/Token'
 import ImpactScore from './ImpactScore';
 interface TreeCardProps {
@@ -122,6 +121,7 @@ const TreeCard = ({ token }: TreeCardProps) => {
                                         <img
                                             src={treeImg}
                                             style={{ paddingLeft: 10 }}
+                                            alt="tree"
                                         ></img>
                                 </div>
 

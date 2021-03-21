@@ -16,9 +16,9 @@ const ImpactScore = ({ score }: { score: number }) => {
 
 const ImpactTree = ({ on }: { on: boolean }) => {
     if(on){
-       return <img src={treeGif} style={{ paddingLeft: 10, height: 18 }}></img>
+       return <img src={treeGif} style={{ paddingLeft: 10, height: 18 }} alt="tree"></img>
     } else {
-        return <img src={treeGif} style={{ paddingLeft: 10, height: 18, opacity: 0.2}}></img>
+        return <img src={treeGif} style={{ paddingLeft: 10, height: 18, opacity: 0.2}} alt="tree"></img>
     }
 }
 
