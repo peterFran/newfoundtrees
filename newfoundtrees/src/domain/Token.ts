@@ -11,6 +11,7 @@ export interface TokenDetails {
     name: string
     description: string
     content: string
+    impactScore: 0 | 1 | 2 | 3 | 4 |5
     coordinates: GeolocationCoordinates
     category: 'reforestation' | 'rewilding' | 'cultural'
     beneficiaries: {

@@ -3,6 +3,7 @@ import { Button, makeStyles, Typography } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 import TreeCard from '../../components/TreeCard'
 import TitledMegaCard from '../../components/TitledMegaCard'
+import getTokens from '../../outbound/tokenClient'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -49,6 +50,9 @@ const useStyles = makeStyles((theme) => {
 const Tokens = () => {
     const classes = useStyles()
 
+    const listedProjects = getTokens()
+
+
     return (
         <>
             <Helmet>
@@ -85,8 +89,8 @@ const Tokens = () => {
                                 </>
                             }
                         />
-                        <TreeCard name={'Forest Park'} />
-                        <TreeCard name={'Mossy Earth Net Zero'} />
+                        <TreeCard token={listedProjects[0]}/>
+                        <TreeCard token={listedProjects[1]}/>
                     </div>
                 </div>
             </div>

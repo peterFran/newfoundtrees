@@ -85,8 +85,8 @@ const theme = createMuiTheme({
             fontWeight: 300,
         },
         body2: {
-            fontSize: 17,
-            fontWeight: 100,
+            fontSize: 11,
+            fontWeight: 700,
             lineHeight: 1.2,
             letterSpacing: 0,
         },
