@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     background: {
         height: '100%',
         width: '100%',
+        overflow: 'hidden'
     },
 
     background2: {

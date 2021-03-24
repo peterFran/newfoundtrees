@@ -31,13 +31,10 @@ const useNavItemStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100pc',
         flex: 1,
         pointerEvents: 'all',
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
-        // marginLeft: theme.spacing(3),
-        // marginRight: theme.spacing(3),
         fontSize: 12,
         textDecoration: 'none',
         color: theme.palette.text.secondary,
@@ -96,7 +93,7 @@ const useNavItemStyles = makeStyles((theme) => ({
         fontFamily: 'Teko',
         fontWeight: 700,
         fontSize: 25,
-        paddingTop: theme.spacing(4),
+        paddingTop: theme.spacing(1),
         color: 'rgba(255, 255, 255)',
         [theme.breakpoints.up('md')]: {
             marginTop: theme.spacing(2),
@@ -374,7 +371,6 @@ const useHorizontalStyles = makeStyles((theme) => ({
         // position: 'fixed',
         // width: '100pc',
         flex: 1,
-
         backgroundColor: 'transparent',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -389,7 +385,6 @@ const useHorizontalStyles = makeStyles((theme) => ({
         justifyContent: 'flex-end',
         flexDirection: 'row',
         paddingRight: theme.spacing(2),
-
     },
     pill: {
         borderRadius: 15,

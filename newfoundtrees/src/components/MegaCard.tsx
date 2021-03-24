@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 const MegaCard = ({ children }: MegaCardProps) => {
     const styles = useStyles()
     return (
-        <Grid xs={12} sm={12} md={6} style={{ height: '520px' }}>
+        <Grid xs={12} sm={6} md={6} style={{ height: '520px' }}>
             <div className={styles.wrap}>
                 <div className={styles.box}>
                     <div className={styles.veil}></div>
