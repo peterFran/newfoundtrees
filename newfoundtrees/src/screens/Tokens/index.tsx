@@ -62,7 +62,7 @@ const Tokens = () => {
                     <TreeCardGrid title="🌲 NFT">
                         <TitledMegaCard
                             title="Throw your money at some trees"
-                            body={`Are you dying to show your friends some cool NFTs, but also want to save the reforest and rewild the plannet? We got you covered fam.`}
+                            body={`Are you dying to show your friends some cool NFTs, but also want to protect and grow our forests and rewild the plannet? We got you covered fam.`}
                             footer={
                                 <>
                                     <Typography
