@@ -18,8 +18,7 @@ const useStyles = makeStyles((theme) => ({
         borderWidth: theme.spacing(1),
         borderRadius: 15,
         borderStyle: 'solid',
-        marginLeft: theme.spacing(2),
-        marginRight: theme.spacing(2),
+
         borderColor: theme.palette.primary.dark,
     },
     logo: {
@@ -110,7 +109,7 @@ const TreeCard = ({ token }: TreeCardProps) => {
     const styles = useStyles()
 
     return (
-        <Grid item xs={3} style={{height: '100%'}}>
+        <Grid item xs={12} sm={6} md={3} style={{height: '100%'}}>
 
             <div className={styles.box}>
                 <div className={styles.background}>

@@ -9,6 +9,10 @@ const useStyles = makeStyles((theme) => ({
     wrap: {
         display: 'flex',
         height: '100%',
+        padding: '10px'
+        // borderRadius: 15,
+        // overflow: 'hidden',
+
     },
     box: {
         justifyContent: 'center',
@@ -16,8 +20,6 @@ const useStyles = makeStyles((theme) => ({
         backgroundSize: '100% 100%',
         backgroundImage: `url('/map.png')`,
         backgroundRepeat: 'no-repeat',
-        marginLeft: theme.spacing(2),
-        marginRight: theme.spacing(2),
         borderRadius: 15,
         overflow: 'hidden',
     },
@@ -45,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 const MegaCard = ({ children }: MegaCardProps) => {
     const styles = useStyles()
     return (
-        <Grid item xs={6} style={{ height: '100%' }}>
+        <Grid xs={12} sm={6} md={6} style={{ height: '100%' }}>
             <div className={styles.wrap}>
                 <div className={styles.box}>
                     <div className={styles.veil}></div>

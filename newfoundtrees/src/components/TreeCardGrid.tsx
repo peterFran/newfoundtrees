@@ -43,7 +43,7 @@ const TreeCardGrid = ({ title, children }: TreeCardRowProps) => {
                     direction="row"
                     xs={12}
                     zeroMinWidth
-                    spacing={1}
+                    spacing={4}
                 >
                     {children}
                 </Grid>
