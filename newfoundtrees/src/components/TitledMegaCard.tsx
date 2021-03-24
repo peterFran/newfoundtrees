@@ -10,6 +10,7 @@ interface TitledMegaCardProps {
 
 const TitledMegaCard = ({ title, body, footer }: TitledMegaCardProps) => {
     return (
+
         <MegaCard>
             <Typography
                 variant="h1"

@@ -93,16 +93,14 @@ const App = () => {
                     titleTemplate="%s | New Found Trees"
                 />
                 <Container
-                maxWidth="lg"
+                    maxWidth="lg"
                     style={
                         location.pathname !== '/map'
                             ? { display: 'block' }
                             : { display: 'flex' }
                     }
                 >
-                    {location.pathname !== '/' && (
-                        <Navigation loggedIn={accountDetails != null} />
-                    )}
+                    <Navigation loggedIn={accountDetails != null} />
                     <Switch>
                         <Route exact path="/">
                             <Home />

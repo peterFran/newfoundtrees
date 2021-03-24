@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => {
             top: 0,
             left: 0,
             width: '100vw',
-            height: 'auto',
+            height: '100vh',
             opacity: 0.1,
             minHeight: '800px',
             backgroundColor: theme.palette.background.paper,
@@ -65,8 +65,8 @@ const HeroBanner = ({
         <>
             <div>
                 <div className="container d-flex flex-column justify-content-center justify-content-lg-end align-items-center">
-                    <div className="herobanner-row row pb-4 w-100">
-                        <div className="col-12">
+                    <div className="herobanner-row row pb-4 w-100" style={{display: 'flex', height: '100vh'}}>
+                        <div className="col-12" style={{display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent:"space-evenly"}}>
                             <h1
                                 className={`${styles.heroTitle} mb-3 mt-7`}
                                 style={{ backgroundImage: `url(${image})` }}

@@ -13,10 +13,9 @@ const useStyles = makeStyles((theme) => {
         },
         heroWrap: {
             display: 'flex',
-            paddingTop: 100,
             height: '100vh',
             justifyContent: 'center',
-            alignItems: 'center',
+            alignItems: 'space-around',
         },
         contentWrap: {
             display: 'flex',
@@ -37,11 +36,6 @@ const useStyles = makeStyles((theme) => {
                 fontSize: '1rem',
             },
         },
-        heroGif: {
-            width: '10pc',
-            height: 'auto',
-            opacity: 0.5
-        },
     }
 })
 
@@ -55,7 +49,6 @@ const Home = () => {
             </Helmet>
 
             <div className={classes.container}>
-                <div className={classes.heroWrap}>
                     <HeroBanner
                         image="leaves.jpg"
                         title="Select, Collect, Protect"
@@ -71,7 +64,6 @@ const Home = () => {
                             </p>
                         </div>
                     </HeroBanner>
-                </div>
                 <div className={classes.contentWrap}>
                     <InfoBanner>
                         <div>

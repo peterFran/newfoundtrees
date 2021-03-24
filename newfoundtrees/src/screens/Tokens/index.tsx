@@ -4,14 +4,13 @@ import { Helmet } from 'react-helmet'
 import TreeCard from '../../components/TreeCard'
 import TitledMegaCard from '../../components/TitledMegaCard'
 import getTokens from '../../outbound/tokenClient'
+import TreeCardGrid from '../../components/TreeCardGrid'
 
 const useStyles = makeStyles((theme) => {
     return {
         container: {
-            height: '200vh',
-            // width: '100vw',
-            marginTop: theme.spacing(10),
-            // marginLeft: '20pc',
+            marginTop: theme.spacing(5),
+            paddingBottom: theme.spacing(20),
             paddingTop: theme.spacing(4),
             display: 'flex',
             alignItems: 'flex-start',
@@ -52,7 +51,6 @@ const Tokens = () => {
 
     const listedProjects = getTokens()
 
-
     return (
         <>
             <Helmet>
@@ -61,16 +59,10 @@ const Tokens = () => {
 
             <div className={classes.container}>
                 <div className={classes.contentWrap}>
-                    <Typography
-                        variant="h4"
-                        style={{ textAlign: 'left', paddingBottom: 20 }}
-                    >
-                        🌲 NFT
-                    </Typography>
-                    <div className={classes.row}>
+                    <TreeCardGrid title="🌲 NFT">
                         <TitledMegaCard
                             title="Throw your money at some trees"
-                            body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                            body={`Are you dying to show your friends some cool NFTs, but also want to save the reforest and rewild the plannet? We got you covered fam.`}
                             footer={
                                 <>
                                     <Typography
@@ -81,7 +73,7 @@ const Tokens = () => {
                                     </Typography>
                                     <Button
                                         variant="contained"
-                                        color="secondary"
+                                        color="primary"
                                         href="/map"
                                     >
                                         🗺️ View on map
@@ -89,9 +81,18 @@ const Tokens = () => {
                                 </>
                             }
                         />
-                        <TreeCard token={listedProjects[0]}/>
-                        <TreeCard token={listedProjects[1]}/>
-                    </div>
+                        <TreeCard token={listedProjects[0]} />
+                        <TreeCard token={listedProjects[1]} />
+                    </TreeCardGrid>
+
+                    <TreeCardGrid title="🌲 FUNDABLE INITIATIVES">
+                        <>
+                            <TreeCard token={listedProjects[0]} />
+                            <TreeCard token={listedProjects[1]} />
+                            <TreeCard token={listedProjects[2]} />
+                            <TreeCard token={listedProjects[0]} />
+                        </>
+                    </TreeCardGrid>
                 </div>
             </div>
         </>

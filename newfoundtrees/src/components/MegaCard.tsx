@@ -1,16 +1,18 @@
 import * as React from 'react'
-import { makeStyles } from '@material-ui/core'
+import { Grid, makeStyles } from '@material-ui/core'
 
 interface MegaCardProps {
     children: React.ReactNode
 }
 
 const useStyles = makeStyles((theme) => ({
+    wrap: {
+        display: 'flex',
+        height: '100%',
+    },
     box: {
-        flex: 2,
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: '100%',
         backgroundSize: '100% 100%',
         backgroundImage: `url('/map.png')`,
         backgroundRepeat: 'no-repeat',
@@ -43,10 +45,14 @@ const useStyles = makeStyles((theme) => ({
 const MegaCard = ({ children }: MegaCardProps) => {
     const styles = useStyles()
     return (
-        <div className={styles.box}>
-            <div className={styles.veil}></div>
-            <div className={styles.inner}>{children}</div>
-        </div>
+        <Grid item xs={6} style={{ height: '100%' }}>
+            <div className={styles.wrap}>
+                <div className={styles.box}>
+                    <div className={styles.veil}></div>
+                    <div className={styles.inner}>{children}</div>
+                </div>
+            </div>
+        </Grid>
     )
 }
 

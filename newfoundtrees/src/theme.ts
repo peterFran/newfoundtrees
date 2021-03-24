@@ -3,41 +3,55 @@ import { createMuiTheme } from '@material-ui/core/styles'
 const defaultTheme = createMuiTheme({ spacing: 5 })
 
 export const COLORS = {
-    primary: '#2D0D45',
-    secondary: '#9A3EE0',
-    error: '#E76049',
-    text: '#2F3542',
-    // textSecondary: 'rgba(47, 53, 66, 0.5)',
-    textSecondary: 'rgba(255, 255, 255, 0.7)',
-    background: 'white',
-    border: '#DADCE0',
-    disabled: '#D5DCDC',
+    NFPurple: '#9A3EE0',
+    NFDeepPurple: '#8147AE',
+    NFSmokeOnTheWater: '#2D0D45',
+    NFSkin: '#EFBDD5',
+    NFZing: '#71F909',
+    NFTeal: '#95EEC8',
+    NFBehindTheVeil: 'rgba(255, 255, 255, 0.7)',
+    NFTypeWriter: '#2F3542',
+    NFWhite: 'white'
 }
 
+
+
+    // primary: '#2D0D45',
+    // secondary: '#9A3EE0',
+    // error: '#E76049',
+    // text: '#2F3542',
+    // textSecondary: 'rgba(47, 53, 66, 0.5)',
+    // textSecondary: 'rgba(255, 255, 255, 0.7)',
+    // background: 'white',
+    // border: '#DADCE0',
+    // disabled: '#D5DCDC',
 const theme = createMuiTheme({
     palette: {
         primary: {
-            main: COLORS.primary,
-            light: '#02B875',
+            dark: COLORS.NFSmokeOnTheWater,
+            main: COLORS.NFPurple,
+            light: COLORS.NFSkin
         },
         secondary: {
-            main: COLORS.secondary,
+            main: COLORS.NFTeal,
+            light: COLORS.NFZing
         },
-        error: {
-            main: COLORS.error,
-        },
+        // error: {
+        //     main: COLORS.error,
+        // },
         text: {
-            primary: COLORS.text,
-            secondary: COLORS.textSecondary,
-            disabled: COLORS.disabled,
+            primary: COLORS.NFSmokeOnTheWater,
+            secondary: COLORS.NFBehindTheVeil,
+            hint: COLORS.NFDeepPurple
+            // disabled: COLORS.disabled,
         },
         background: {
-            default: COLORS.background,
+            default: COLORS.NFWhite,
         },
-        action: {
-            active: COLORS.textSecondary,
-        },
-        divider: COLORS.border,
+        // action: {
+        //     active: COLORS.textSecondary,
+        // },
+        // divider: COLORS.border,
     },
     // TODO: investigate shadow usage
     typography: {
@@ -89,6 +103,7 @@ const theme = createMuiTheme({
             fontWeight: 700,
             lineHeight: 1.2,
             letterSpacing: 0,
+            // color: theme.palette.
         },
         overline: {
             fontSize: 12,
@@ -133,7 +148,7 @@ const theme = createMuiTheme({
                 padding: '11px 22px',
                 '&:hover': {
                     color: '#fff',
-                    borderColor: COLORS.secondary,
+                    borderColor: COLORS.NFSkin,
                 },
             },
             outlined: {
@@ -151,7 +166,7 @@ const theme = createMuiTheme({
 
                 '&$disabled': {
                     color: '#fff',
-                    backgroundColor: COLORS.disabled,
+                    backgroundColor: COLORS.NFSkin,
                 },
                 borderRadius: 20
             },
@@ -159,20 +174,20 @@ const theme = createMuiTheme({
         MuiFilledInput: {
             root: {
                 backgroundColor: '#fff',
-                border: `1px solid ${COLORS.border}`,
+                border: `1px solid ${COLORS.NFDeepPurple}`,
                 borderRadius: 5,
                 transition: defaultTheme.transitions.create(['border-color']),
                 '&:hover': {
                     backgroundColor: '#fff',
-                    borderColor: COLORS.secondary,
+                    borderColor: COLORS.NFTeal,
                 },
                 '&$focused': {
                     backgroundColor: '#fff',
-                    borderColor: COLORS.secondary,
-                    boxShadow: `0 0 0 1px ${COLORS.secondary}`,
+                    borderColor: COLORS.NFTeal,
+                    boxShadow: `0 0 0 1px ${COLORS.NFTeal}`,
                 },
                 '&$error': {
-                    borderColor: COLORS.error,
+                    borderColor: COLORS.NFSkin,
                 },
                 // "& input:valid": {
                 //   color: "#367560",
@@ -183,107 +198,107 @@ const theme = createMuiTheme({
                 height: 50,
             },
         },
-        MuiOutlinedInput: {
-            root: {
-                backgroundColor: '#fff',
-                '&:hover $notchedOutline': {
-                    borderColor: COLORS.secondary,
-                },
-                '&$focused $notchedOutline': {
-                    borderColor: COLORS.secondary,
-                },
-                '& input:valid + fieldset, & input:valid + div + fieldset': {
-                    borderColor: COLORS.primary,
-                },
-            },
-            input: {
-                boxSizing: 'border-box',
-                height: 50,
-                padding: '18px 14px 10px',
-            },
-            notchedOutline: {
-                top: 0,
-                borderColor: COLORS.border,
-                '& legend': {
-                    display: 'none',
-                },
-            },
-        },
-        MuiInputLabel: {
-            outlined: {
-                '&$shrink': {
-                    transform: 'translate(14px, 6px) scale(0.75)',
-                },
-            },
-        },
-        MuiFormControl: {
-            marginNormal: {
-                marginTop: defaultTheme.spacing(2),
-                marginBottom: defaultTheme.spacing(1),
-            },
-        },
-        MuiFormLabel: {
-            root: {
-                '&$focused': {
-                    color: COLORS.textSecondary,
-                },
-            },
-        },
-        MuiPaper: {
-            rounded: {
-                borderRadius: 10,
-            },
-        },
-        MuiCardContent: {
-            root: {
-                padding: defaultTheme.spacing(3),
-                '&:last-child': {
-                    paddingBottom: defaultTheme.spacing(3),
-                },
-            },
-        },
-        MuiTypography: {
-            gutterBottom: {
-                marginBottom: defaultTheme.spacing(1),
-            },
-        },
-        MuiDialog: {
-            paper: {
-                margin: defaultTheme.spacing(3),
-            },
-            paperFullWidth: {
-                width: 'calc(100% - 30px)',
-            },
-            paperScrollPaper: {
-                maxHeight: 'calc(100% - 30px)',
-            },
-        },
-        MuiTable: {
-            root: {
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                overflow: 'hidden',
-            },
-        },
-        MuiTableHead: {
-            root: {
-                backgroundColor: 'rgba(255, 255, 255, 0.7)',
-            },
-        },
-        MuiTableCell: {
-            root: {
-                fontSize: 16,
-                padding: defaultTheme.spacing(2),
-                borderBottom: '1px solid rgba(47, 53, 66, 0.11)',
-            },
-            head: {
-                fontSize: 12,
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-                color: COLORS.textSecondary,
-                borderBottom: 'none',
-            },
-        },
+        // MuiOutlinedInput: {
+        //     root: {
+        //         backgroundColor: '#fff',
+        //         '&:hover $notchedOutline': {
+        //             borderColor: COLORS.secondary,
+        //         },
+        //         '&$focused $notchedOutline': {
+        //             borderColor: COLORS.secondary,
+        //         },
+        //         '& input:valid + fieldset, & input:valid + div + fieldset': {
+        //             borderColor: COLORS.primary,
+        //         },
+        //     },
+        //     input: {
+        //         boxSizing: 'border-box',
+        //         height: 50,
+        //         padding: '18px 14px 10px',
+        //     },
+        //     notchedOutline: {
+        //         top: 0,
+        //         borderColor: COLORS.border,
+        //         '& legend': {
+        //             display: 'none',
+        //         },
+        //     },
+        // },
+        // MuiInputLabel: {
+        //     outlined: {
+        //         '&$shrink': {
+        //             transform: 'translate(14px, 6px) scale(0.75)',
+        //         },
+        //     },
+        // },
+        // MuiFormControl: {
+        //     marginNormal: {
+        //         marginTop: defaultTheme.spacing(2),
+        //         marginBottom: defaultTheme.spacing(1),
+        //     },
+        // },
+        // MuiFormLabel: {
+        //     root: {
+        //         '&$focused': {
+        //             color: COLORS.textSecondary,
+        //         },
+        //     },
+        // },
+        // MuiPaper: {
+        //     rounded: {
+        //         borderRadius: 10,
+        //     },
+        // },
+        // MuiCardContent: {
+        //     root: {
+        //         padding: defaultTheme.spacing(3),
+        //         '&:last-child': {
+        //             paddingBottom: defaultTheme.spacing(3),
+        //         },
+        //     },
+        // },
+        // MuiTypography: {
+        //     gutterBottom: {
+        //         marginBottom: defaultTheme.spacing(1),
+        //     },
+        // },
+        // MuiDialog: {
+        //     paper: {
+        //         margin: defaultTheme.spacing(3),
+        //     },
+        //     paperFullWidth: {
+        //         width: 'calc(100% - 30px)',
+        //     },
+        //     paperScrollPaper: {
+        //         maxHeight: 'calc(100% - 30px)',
+        //     },
+        // },
+        // MuiTable: {
+        //     root: {
+        //         borderTopLeftRadius: 10,
+        //         borderTopRightRadius: 10,
+        //         overflow: 'hidden',
+        //     },
+        // },
+        // MuiTableHead: {
+        //     root: {
+        //         backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        //     },
+        // },
+        // MuiTableCell: {
+        //     root: {
+        //         fontSize: 16,
+        //         padding: defaultTheme.spacing(2),
+        //         borderBottom: '1px solid rgba(47, 53, 66, 0.11)',
+        //     },
+        //     head: {
+        //         fontSize: 12,
+        //         fontWeight: 'bold',
+        //         textTransform: 'uppercase',
+        //         color: COLORS.textSecondary,
+        //         borderBottom: 'none',
+        //     },
+        // },
     },
     props: {
         MuiFilledInput: {

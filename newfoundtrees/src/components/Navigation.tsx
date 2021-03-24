@@ -9,7 +9,7 @@ import SafeIcon from '@material-ui/icons/AccountBalance'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import { Typography, withStyles } from '@material-ui/core'
+import { Typography, withStyles, useTheme } from '@material-ui/core';
 import AccountDetails from '../domain/AccountDetails'
 import LinkIcon from '@material-ui/icons/Link'
 
@@ -119,7 +119,7 @@ const NavItem = ({ as: Comp = NavLink, name, to, white }: NavItemProps) => {
             <div className={classes.label}>
                 <Typography
                     variant="h5"
-                    color={white ? 'textSecondary' : 'secondary'}
+                    color={white ? 'textSecondary' : 'primary'}
                 >
                     {LABELS[name]}
                 </Typography>
@@ -249,7 +249,7 @@ const WalletItem = ({
                 <div className={classes.label}>
                     <Typography
                         variant="h5"
-                        color={white ? 'textSecondary' : 'secondary'}
+                        color={white ? 'textSecondary' : 'primary'}
                     >
                         Wallet
                     </Typography>
@@ -340,16 +340,17 @@ const WalletItem = ({
 
 const TitleItem = ({ white }: { white: boolean }) => {
     const classes = useNavItemStyles()
+    const theme = useTheme()
 
     return (
         <NavLink className={classes.root} to={'/'}>
             <div
                 className={classes.title}
-                style={white ? { color: 'rgba(255, 255, 255, 0.7)' } : {}}
+                style={white ? { color: theme.palette.text.secondary } : {color: theme.palette.primary.dark }}
             >
                   <Typography
                         variant="h3"
-                        color={white ? 'inherit' : 'primary'}
+                        color="inherit"
                     >NEWFOUNDTREES</Typography>
                 
             </div>

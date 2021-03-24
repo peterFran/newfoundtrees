@@ -75,7 +75,7 @@ export default function getTokens(): Token[] {
                         proportion: 1,
                     },
                 ],
-                category: 'reforestation',
+                category: 'cultural',
                 coordinates: {
                     latitude: -21.22119515496362,
                     longitude: 17.067420321086132,
@@ -86,7 +86,7 @@ export default function getTokens(): Token[] {
                     'https://images.prismic.io/mossyearth/73653848-73de-4da1-b7ed-3c4eb19ab6d1_INVASIVE+TREES.jpg',
                 content: 'https://www.youtube.com/watch?v=DsGnVZawfpg',
                 description:
-                    'The region we will be working in Namibia is characterised by open desert shrubland interspersed by mountainous terrain, wooded ephemeral (intermittent water) and perennial (constant water) river beds, and grassy sand and gravel plains. These habitats are threatened by overgrazing, the spread of non-native Prosopis spp., climate change and erosion. Oana has already made great progress in clearing large areas of Prosopis and will soon be able to start restoring the river beds as well as the grassland ecosystem through planting. To do so, they require a local nursery where the native species can be propagated and taken care of until they are strong enough to be planted out in the harsh conditions of Southern Namibia.',
+                    'The region we will be working in Namibia is characterised by open desert shrubland interspersed by mountainous terrain, wooded ephemeral (intermittent water) and perennial (constant water) river beds, and grassy sand and gravel plains. These habitats are threatened by overgrazing, the spread of non-native Prosopis, climate change and erosion.',
             } as TokenDetails,
             price: 20,
             batchSize: 5,
