@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => {
             marginLeft: -theme.spacing(2),
             marginRight: -theme.spacing(2),
             display: 'flex',
-            maxHeight: 500,
+            height: '100%',
             flex: 1,
             overflow: 'hidden',
             justifyContent: 'space-between',

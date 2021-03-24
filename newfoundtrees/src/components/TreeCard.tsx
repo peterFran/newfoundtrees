@@ -109,7 +109,7 @@ const TreeCard = ({ token }: TreeCardProps) => {
     const styles = useStyles()
 
     return (
-        <Grid item xs={12} sm={6} md={3} style={{height: '100%'}}>
+        <Grid item xs={12} sm={6} md={3} style={{height: '520px'}}>
 
             <div className={styles.box}>
                 <div className={styles.background}>
