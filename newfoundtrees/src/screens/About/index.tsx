@@ -45,7 +45,7 @@ const Home = () => {
     return (
         <>
             <Helmet>
-                <title>Home</title>
+                <title>About</title>
             </Helmet>
 
             <div className={classes.container}>

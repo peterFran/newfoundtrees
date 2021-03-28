@@ -1,10 +1,10 @@
 import React from 'react'
 import { Button, makeStyles, Typography } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
-import TreeCard from '../../components/TreeCard'
 import TitledMegaCard from '../../components/TitledMegaCard'
 import getTokens from '../../outbound/tokenClient'
 import TreeCardGrid from '../../components/TreeCardGrid'
+import { TreeCardItem } from '../../components/TreeCard'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -81,16 +81,16 @@ const Tokens = () => {
                                 </>
                             }
                         />
-                        <TreeCard token={listedProjects[0]} />
-                        <TreeCard token={listedProjects[1]} />
+                        <TreeCardItem token={listedProjects[0]} />
+                        <TreeCardItem token={listedProjects[1]} />
                     </TreeCardGrid>
 
                     <TreeCardGrid title="🌲 FUNDABLE INITIATIVES">
                         <>
-                            <TreeCard token={listedProjects[0]} />
-                            <TreeCard token={listedProjects[1]} />
-                            <TreeCard token={listedProjects[2]} />
-                            <TreeCard token={listedProjects[0]} />
+                            <TreeCardItem token={listedProjects[0]} />
+                            <TreeCardItem token={listedProjects[1]} />
+                            <TreeCardItem token={listedProjects[2]} />
+                            <TreeCardItem token={listedProjects[0]} />
                         </>
                     </TreeCardGrid>
                 </div>

@@ -17,29 +17,6 @@ const useStyles = makeStyles((theme) => {
             width: '100vw',
             backgroundColor: '#eee',
         },
-        floatingMoney: {
-            position: 'absolute',
-            top: '3pc',
-            right: '3pc',
-            paddingTop: 10,
-            paddingBottom: 10,
-            paddingLeft: 20,
-            paddingRight: 20,
-            borderRadius: 25,
-            zIndex:10,
-            textAlign: 'center',
-            justifyContent: 'center',
-            backgroundColor: theme.palette.secondary.main,
-            [theme.breakpoints.down('sm')]: {
-                top: '0.5pc',
-                right: '0.5pc',
-                paddingTop: 5,
-                paddingBottom: 5,
-                paddingLeft: 10,
-                paddingRight: 10,
-                borderRadius: 15,
-            },
-        },
     }
 })
 

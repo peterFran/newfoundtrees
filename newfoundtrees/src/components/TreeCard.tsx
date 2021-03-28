@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     background: {
         height: '100%',
         width: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
 
     background2: {
@@ -102,7 +102,6 @@ const GetContourColour = ({
         case 'cultural': {
             return theme.palette.secondary.light
         }
-
     }
 }
 
@@ -110,63 +109,73 @@ const TreeCard = ({ token }: TreeCardProps) => {
     const styles = useStyles()
 
     return (
-        <Grid item xs={12} sm={6} md={3} style={{height: '520px'}}>
-
-            <div className={styles.box}>
+        <div className={styles.box}>
+            <div className={styles.background}>
                 <div className={styles.background}>
-                    <div className={styles.background}>
-                        <Contours
-                            className={styles.logo}
-                            contourColour={GetContourColour({
-                                category: token.details.category,
-                            })}
-                        />
-                    </div>
-                    <div className={styles.background2}></div>
+                    <Contours
+                        className={styles.logo}
+                        contourColour={GetContourColour({
+                            category: token.details.category,
+                        })}
+                    />
                 </div>
+                <div className={styles.background2}></div>
+            </div>
 
-                <div className={styles.inner}>
+            <div className={styles.inner}>
+                <div className={styles.top}>
+                    <Typography
+                        variant="h2"
+                        color="primary"
+                        align="left"
+                        style={{ paddingBottom: 50 }}
+                    >
+                        {token.details.name}
+                    </Typography>
+                </div>
+                <div className={styles.bottom}>
                     <div className={styles.top}>
-                        <Typography variant="h2" color="primary" align="left" style={{paddingBottom: 50}}>
-                            {token.details.name}
+                        <Typography
+                            variant="body1"
+                            color="textPrimary"
+                            align="justify"
+                        >
+                            {token.details.description}
                         </Typography>
                     </div>
                     <div className={styles.bottom}>
-                        <div className={styles.top}>
-                            <Typography variant="body1" color="textPrimary" align="justify">
-                                {token.details.description}
-                            </Typography>
-                        </div>
-                        <div className={styles.bottom}>
-                            <div className={styles.scoreBlock}>
-                                <div className={styles.scoreBlockElement}>
-                                    <span>
-                                        <Typography
-                                            variant="body2"
-                                        >
-                                            NFTREE
-                                        </Typography>
-                                    </span>
-                                    <img
-                                        src={treeImg}
-                                        style={{ paddingLeft: 10 }}
-                                        alt="tree"
-                                    ></img>
-                                </div>
-
-                                <div className={styles.scoreBlockElement}>
+                        <div className={styles.scoreBlock}>
+                            <div className={styles.scoreBlockElement}>
+                                <span>
                                     <Typography variant="body2">
-                                        IMPACT
+                                        NFTREE
                                     </Typography>
-                                    <ImpactScore
-                                        score={token.details.impactScore}
-                                    />
-                                </div>
+                                </span>
+                                <img
+                                    src={treeImg}
+                                    style={{ paddingLeft: 10 }}
+                                    alt="tree"
+                                ></img>
+                            </div>
+
+                            <div className={styles.scoreBlockElement}>
+                                <Typography variant="body2">IMPACT</Typography>
+                                <ImpactScore
+                                    score={token.details.impactScore}
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    )
+}
+
+export const TreeCardItem = ({ token }: TreeCardProps) => {
+    return (
+        <Grid item xs={12} sm={6} md={3} style={{ height: '520px' }}>
+            <TreeCard token={token} />
         </Grid>
     )
 }

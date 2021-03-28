@@ -4,8 +4,8 @@ import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import mapStyles from './mapStyles'
 import { Token } from '../domain/Token';
 
-import TokenInfoWindow from './TokenInfoWindow'
 import { makeStyles } from '@material-ui/core'
+import NewTokenInfoWindow from './NewTokenInfoWindow';
 
 const mapContainerStyle = {
     maxWidth: '100vw',
@@ -100,7 +100,7 @@ const NewFoundTreesMap = ({
         <>
             <title>New Found Trees</title>
             {!isLoaded ? null : (
-                <div>
+                <div style={{height: '100%'}}>
                     <GoogleMap
                         mapContainerStyle={mapContainerStyle}
                         zoom={2}
@@ -149,14 +149,33 @@ const NewFoundTreesMap = ({
                                             project.details.coordinates
                                                 .longitude,
                                     })
-                                    console.log(map?.getCenter())
+                                    const southLat: number | undefined = map?.getBounds()?.getSouthWest()?.lat()
+
+                                    const centerLessBound = project.details.coordinates.latitude - (southLat ? southLat: 0)
+
+                                    console.log("START")
+                                    console.log(`Center: ${project.details.coordinates.latitude}`)
+                                    console.log(`SoutherlyPoint: ${southLat}`)
+                                    console.log(`HalfWay: ${project.details.coordinates
+                                        .latitude - (centerLessBound * 0.6)}, ${project.details.coordinates
+                                        .longitude}`)
+                                    
+                                    map?.panTo({
+                                        lat:
+                                            project.details.coordinates
+                                                .latitude + (centerLessBound * 0.9),
+                                        lng:
+                                            project.details.coordinates
+                                                .longitude,
+                                    })
+                                    console.log(`New center: ${map?.getCenter()}`)
 
                                     setSelected(project)
                                 }}
                             />
                         ))}
                         {selected && (
-                            <TokenInfoWindow
+                            <NewTokenInfoWindow
                                 token={selected as Token}
                                 onCloseClick={() => setSelected(null)}
                             />

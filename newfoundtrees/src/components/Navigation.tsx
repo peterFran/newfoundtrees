@@ -5,11 +5,24 @@ import AuthContext from '../context/AuthContext'
 import Menu, { MenuProps } from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import SafeIcon from '@material-ui/icons/AccountBalance'
-
+import MenuIcon from '@material-ui/icons/Menu'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import { Typography, withStyles, useTheme } from '@material-ui/core';
+import {
+    Typography,
+    withStyles,
+    useTheme,
+    useMediaQuery,
+    createStyles,
+    Theme,
+    Paper,
+    MenuList,
+    Popper,
+    Grow,
+    ClickAwayListener,
+    IconButton,
+} from '@material-ui/core'
 import AccountDetails from '../domain/AccountDetails'
 import LinkIcon from '@material-ui/icons/Link'
 
@@ -60,8 +73,6 @@ const useNavItemStyles = makeStyles((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         flex: 1,
-        // marginLeft: theme.spacing(3),
-        // marginRight: theme.spacing(3),
         fontSize: 12,
         color: theme.palette.text.secondary,
         '&.active': {
@@ -343,13 +354,15 @@ const TitleItem = ({ white }: { white: boolean }) => {
         <NavLink className={classes.root} to={'/'}>
             <div
                 className={classes.title}
-                style={white ? { color: theme.palette.text.secondary } : {color: theme.palette.primary.dark }}
+                style={
+                    white
+                        ? { color: theme.palette.text.secondary }
+                        : { color: theme.palette.primary.dark }
+                }
             >
-                  <Typography
-                        variant="h3"
-                        color="inherit"
-                    >NEWFOUNDTREES</Typography>
-                
+                <Typography variant="h3" color="inherit">
+                    NEWFOUNDTREES
+                </Typography>
             </div>
         </NavLink>
     )
@@ -374,7 +387,7 @@ const useHorizontalStyles = makeStyles((theme) => ({
         backgroundColor: 'transparent',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems:'space-between',
+        alignItems: 'space-between',
         pointerEvents: 'none',
         paddingTop: theme.spacing(5),
         zIndex: 5,
@@ -425,9 +438,7 @@ const HorizontalNavigation = ({
     const classes = useHorizontalStyles()
     return (
         <>
-            <nav
-                className={mapView ? classes.mapRoot :classes.root}
-            >
+            <nav className={mapView ? classes.mapRoot : classes.root}>
                 <ul className={classes.navList}>
                     <li>
                         <Link to="/" target="_blank" rel="noopener noreferrer">
@@ -435,42 +446,32 @@ const HorizontalNavigation = ({
                         </Link>
                     </li>
                     <div className={classes.wrapper}>
-                        {/* <div className={classes.pill}> */}
-                            <li className={classes.center}>
-                                <WalletItem
-                                    {...{
-                                        accountDetails,
-                                        signIn,
-                                        signOut,
-                                        white,
-                                    }}
-                                />
-                            </li>
-                            <li className={classes.center}>
-                                <NavItem
-                                    to={`/map`}
-                                    name="map"
-                                    {...{ white }}
-                                />
-                            </li>
-                            <li className={classes.center}>
-                                <NavItem
-                                    to={`/tokens`}
-                                    name="tokens"
-                                    {...{ white }}
-                                />
-                            </li>
-                            <li className={classes.center}>
-                                <NavItem
-                                    to={`/art`}
-                                    name="art"
-                                    {...{ white }}
-                                />
-                            </li>
-                            <li className={classes.center}>
-                                <NavItem to={`/`} name="about" {...{ white }} />
-                            </li>
-                        {/* </div> */}
+                        <li className={classes.center}>
+                            <WalletItem
+                                {...{
+                                    accountDetails,
+                                    signIn,
+                                    signOut,
+                                    white,
+                                }}
+                            />
+                        </li>
+                        <li className={classes.center}>
+                            <NavItem to={`/map`} name="map" {...{ white }} />
+                        </li>
+                        <li className={classes.center}>
+                            <NavItem
+                                to={`/tokens`}
+                                name="tokens"
+                                {...{ white }}
+                            />
+                        </li>
+                        <li className={classes.center}>
+                            <NavItem to={`/art`} name="art" {...{ white }} />
+                        </li>
+                        <li className={classes.center}>
+                            <NavItem to={`/`} name="about" {...{ white }} />
+                        </li>
                     </div>
                 </ul>
             </nav>
@@ -478,17 +479,150 @@ const HorizontalNavigation = ({
     )
 }
 
+const useMobileStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            display: 'flex',
+            zIndex: 5,
+        },
+        paper: {
+            marginRight: theme.spacing(2),
+        },
+        icon: {
+            display: 'flex',
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            zIndex: 5,
+            margin: theme.spacing(2),
+        },
+    })
+)
+
+const MobileNavigation = ({ mapView }: { mapView: boolean }) => {
+    const classes = useMobileStyles()
+    const [open, setOpen] = React.useState(false)
+    const anchorRef = React.useRef<HTMLButtonElement>(null)
+
+    const handleToggle = () => {
+        setOpen((prevOpen) => !prevOpen)
+    }
+
+    const handleClose = (event: React.MouseEvent<EventTarget>) => {
+        if (
+            anchorRef.current &&
+            anchorRef.current.contains(event.target as HTMLElement)
+        ) {
+            return
+        }
+
+        setOpen(false)
+    }
+
+    function handleListKeyDown(event: React.KeyboardEvent) {
+        if (event.key === 'Tab') {
+            event.preventDefault()
+            setOpen(false)
+        }
+    }
+
+    // return focus to the button when we transitioned from !open -> open
+    const prevOpen = React.useRef(open)
+    React.useEffect(() => {
+        if (prevOpen.current === true && open === false) {
+            anchorRef.current!.focus()
+        }
+
+        prevOpen.current = open
+    }, [open])
+
+    return (
+        <div className={classes.root}>
+            <Link to="/" target="_blank" rel="noopener noreferrer">
+                <TitleItem {...{ white: mapView }} />
+            </Link>
+            <div className={classes.icon}>
+                <IconButton
+                    ref={anchorRef}
+                    size="medium"
+                    aria-controls={open ? 'menu-list-grow' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleToggle}
+                >
+                    <MenuIcon
+                        color={mapView ? 'secondary' : 'primary'}
+                        fontSize="large"
+                    />
+                </IconButton>
+                <Popper
+                    open={open}
+                    anchorEl={anchorRef.current}
+                    role={undefined}
+                    transition
+                    disablePortal
+                >
+                    {({ TransitionProps, placement }) => (
+                        <Grow
+                            {...TransitionProps}
+                            style={{
+                                transformOrigin:
+                                    placement === 'bottom'
+                                        ? 'center top'
+                                        : 'center bottom',
+                            }}
+                        >
+                            <Paper>
+                                <ClickAwayListener onClickAway={handleClose}>
+                                    <MenuList
+                                        autoFocusItem={open}
+                                        id="menu-list-grow"
+                                        onKeyDown={handleListKeyDown}
+                                    >
+                                        <MenuItem onClick={handleClose}>
+                                            Profile
+                                        </MenuItem>
+                                        <MenuItem onClick={handleClose}>
+                                            My account
+                                        </MenuItem>
+                                        <MenuItem onClick={handleClose}>
+                                            Logout
+                                        </MenuItem>
+                                    </MenuList>
+                                </ClickAwayListener>
+                            </Paper>
+                        </Grow>
+                    )}
+                </Popper>
+            </div>
+        </div>
+    )
+}
+
 const Navigation = ({ loggedIn = false }: { loggedIn: boolean }) => {
     const location = useLocation()
-    return (
-        <HorizontalNavigation
-            {...{
-                loggedIn,
-                mapView: location.pathname === '/map',
-                white: location.pathname === '/map',
-            }}
-        />
-    )
+    const theme = useTheme()
+    const matches = useMediaQuery(theme.breakpoints.up('md'), { noSsr: true })
+
+    if (matches) {
+        return (
+            <HorizontalNavigation
+                {...{
+                    loggedIn,
+                    mapView: location.pathname === '/map',
+                    white: location.pathname === '/map',
+                }}
+            />
+        )
+    } else {
+        return (
+            <MobileNavigation
+                {...{
+                    // loggedIn,
+                    mapView: location.pathname === '/map',
+                }}
+            />
+        )
+    }
 }
 
 export default Navigation
