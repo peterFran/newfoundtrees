@@ -115,7 +115,7 @@ const useNavItemStyles = makeStyles((theme) => ({
 interface NavItemProps {
     as?: typeof NavLink
     name: 'tokens' | 'about' | 'map' | 'art'
-    to: '/tokens' | '/' | '/map' | '/art'
+    to: '/about' | '/' | '/map' | '/art'
     white: boolean
 }
 
@@ -461,7 +461,7 @@ const HorizontalNavigation = ({
                         </li>
                         <li className={classes.center}>
                             <NavItem
-                                to={`/tokens`}
+                                to={`/`}
                                 name="tokens"
                                 {...{ white }}
                             />
@@ -470,7 +470,7 @@ const HorizontalNavigation = ({
                             <NavItem to={`/art`} name="art" {...{ white }} />
                         </li>
                         <li className={classes.center}>
-                            <NavItem to={`/`} name="about" {...{ white }} />
+                            <NavItem to={`/about`} name="about" {...{ white }} />
                         </li>
                     </div>
                 </ul>

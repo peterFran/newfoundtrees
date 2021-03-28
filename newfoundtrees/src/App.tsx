@@ -102,11 +102,11 @@ const App = () => {
                 >
                     <Navigation loggedIn={accountDetails != null} />
                     <Switch>
-                        <Route exact path="/">
-                            <Home />
-                        </Route>
-                        <Route exact path="/tokens" preload={scrollTop}>
+                        <Route exact path="/" preload={scrollTop}>
                             <Tokens />
+                        </Route>
+                        <Route exact path="/about" preload={scrollTop}>
+                            <Home />
                         </Route>
 
                         <Route path="/map" preload={scrollTop}>
