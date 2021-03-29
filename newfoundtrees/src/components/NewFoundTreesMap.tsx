@@ -22,6 +22,7 @@ const options = {
     scrollwheel: true,
     zoomControl: true,
     minZoom: 3,
+    gestureHandling : "greedy"
 }
 
 const center = {
