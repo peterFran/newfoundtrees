@@ -13,6 +13,7 @@ import AccountDetails from './domain/AccountDetails'
 import { getAccountDetails, signIn } from './outbound/walletClient'
 import Tokens from './screens/Tokens'
 import { Container } from '@material-ui/core'
+import Empty from './screens/Empty'
 
 const scrollTop = () => {
     window.scrollTo(0, 0)
@@ -105,12 +106,17 @@ const App = () => {
                         <Route exact path="/" preload={scrollTop}>
                             <Tokens />
                         </Route>
+                        
                         <Route exact path="/about" preload={scrollTop}>
                             <Home />
                         </Route>
 
                         <Route path="/map" preload={scrollTop}>
                             <Projects />
+                        </Route>
+
+                        <Route path='*' exact={true}>
+                            <Empty />
                         </Route>
                     </Switch>
                 </Container>

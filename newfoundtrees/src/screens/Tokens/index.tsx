@@ -43,6 +43,23 @@ const useStyles = makeStyles((theme) => {
             height: 'auto',
             opacity: 0.5,
         },
+
+        sellBanner: {
+            display: "flex",
+            width: '100vw',
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '60px',
+            backgroundColor: theme.palette.primary.dark,
+            opacity: 1,
+            zIndex: 3,
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            paddingLeft: theme.spacing(4),
+            paddingRight: theme.spacing(4)
+        },
     }
 })
 
@@ -58,6 +75,12 @@ const Tokens = () => {
             </Helmet>
 
             <div className={classes.container}>
+                <div className={classes.sellBanner}>
+                    <Button variant="contained" color="primary" href="/sell">
+                        💰 Sell Token
+                    </Button>
+                </div>
+
                 <div className={classes.contentWrap}>
                     <TreeCardGrid title="🌲 NFT">
                         <TitledMegaCard
