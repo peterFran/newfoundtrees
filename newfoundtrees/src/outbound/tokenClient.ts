@@ -3,6 +3,7 @@ import { Token, TokenDetails } from '../domain/Token';
 export default function getTokens(): Token[] {
     return [
         {
+            id: 1,
             details: {
                 name: 'Reforesting London',
                 beneficiaries: [
@@ -31,6 +32,7 @@ export default function getTokens(): Token[] {
             updates: []
         } as Token,
         {
+            id: 2,
             details: {
                 name: 'Eagle Nests in Scotland',
                 beneficiaries: [
@@ -63,6 +65,7 @@ export default function getTokens(): Token[] {
             updates: []
         } as Token,
         {
+            id: 3,
             details: {
                 name: 'Building a Namibian Tree Nursery',
                 beneficiaries: [

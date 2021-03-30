@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => {
     return {
         container: {
             marginTop: theme.spacing(5),
-            paddingBottom: theme.spacing(20),
             paddingTop: theme.spacing(4),
             display: 'flex',
             alignItems: 'flex-start',
@@ -18,9 +17,9 @@ const useStyles = makeStyles((theme) => {
         },
         contentWrap: {
             display: 'flex',
-            height: '100vh',
+            height: '100%',
             flex: 1,
-
+            paddingBottom: theme.spacing(20),
             justifyContent: 'flex-start',
             alignItems: 'space-between',
             flexDirection: 'column',
@@ -75,11 +74,7 @@ const Tokens = () => {
             </Helmet>
 
             <div className={classes.container}>
-                <div className={classes.sellBanner}>
-                    <Button variant="contained" color="primary" href="/sell">
-                        💰 Sell Token
-                    </Button>
-                </div>
+
 
                 <div className={classes.contentWrap}>
                     <TreeCardGrid title="🌲 NFT">
@@ -117,7 +112,13 @@ const Tokens = () => {
                         </>
                     </TreeCardGrid>
                 </div>
+
             </div>
+            <div className={classes.sellBanner}>
+                    <Button variant="contained" color="primary" href="/sell">
+                        💰 Sell Token
+                    </Button>
+                </div>
         </>
     )
 }

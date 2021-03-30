@@ -460,17 +460,17 @@ const HorizontalNavigation = ({
                             <NavItem to={`/map`} name="map" {...{ white }} />
                         </li>
                         <li className={classes.center}>
-                            <NavItem
-                                to={`/`}
-                                name="tokens"
-                                {...{ white }}
-                            />
+                            <NavItem to={`/`} name="tokens" {...{ white }} />
                         </li>
                         <li className={classes.center}>
                             <NavItem to={`/art`} name="art" {...{ white }} />
                         </li>
                         <li className={classes.center}>
-                            <NavItem to={`/about`} name="about" {...{ white }} />
+                            <NavItem
+                                to={`/about`}
+                                name="about"
+                                {...{ white }}
+                            />
                         </li>
                     </div>
                 </ul>
@@ -560,15 +560,13 @@ const MobileNavigation = ({ mapView }: { mapView: boolean }) => {
                     role={undefined}
                     transition
                     disablePortal
+                    placement='bottom-end'
                 >
                     {({ TransitionProps, placement }) => (
                         <Grow
                             {...TransitionProps}
                             style={{
-                                transformOrigin:
-                                    placement === 'bottom'
-                                        ? 'center top'
-                                        : 'center bottom',
+                                transformOrigin: 'center bottom',
                             }}
                         >
                             <Paper>
@@ -578,15 +576,26 @@ const MobileNavigation = ({ mapView }: { mapView: boolean }) => {
                                         id="menu-list-grow"
                                         onKeyDown={handleListKeyDown}
                                     >
-                                        <MenuItem onClick={handleClose}>
-                                            Profile
-                                        </MenuItem>
-                                        <MenuItem onClick={handleClose}>
-                                            My account
-                                        </MenuItem>
-                                        <MenuItem onClick={handleClose}>
-                                            Logout
-                                        </MenuItem>
+                                        <Link to='/'>
+                                            <MenuItem onClick={handleClose}>
+                                                Tokens
+                                            </MenuItem>
+                                        </Link>
+                                        <Link to='/map'>
+                                            <MenuItem onClick={handleClose}>
+                                                Map
+                                            </MenuItem>
+                                        </Link>
+                                        <Link to='/art'>
+                                            <MenuItem onClick={handleClose}>
+                                                Art
+                                            </MenuItem>
+                                        </Link>
+                                        <Link to='/about'>
+                                            <MenuItem onClick={handleClose}>
+                                                About
+                                            </MenuItem>
+                                        </Link>
                                     </MenuList>
                                 </ClickAwayListener>
                             </Paper>

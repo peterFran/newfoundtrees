@@ -1,4 +1,5 @@
 export interface Token {
+    id: number
     details: TokenDetails
     batchSize: number
     sold: number,

@@ -4,6 +4,7 @@ import treeImg from '../assets/pixel-tree.png'
 import { Token } from '../domain/Token'
 import ImpactScore from './ImpactScore'
 import Contours from './svg/Contours'
+import { Link } from 'react-router-dom'
 interface TreeCardProps {
     token: Token
 }
@@ -109,66 +110,70 @@ const TreeCard = ({ token }: TreeCardProps) => {
     const styles = useStyles()
 
     return (
-        <div className={styles.box}>
-            <div className={styles.background}>
+        <Link to={`/token/${token.id}`}>
+            <div className={styles.box}>
                 <div className={styles.background}>
-                    <Contours
-                        className={styles.logo}
-                        contourColour={GetContourColour({
-                            category: token.details.category,
-                        })}
-                    />
+                    <div className={styles.background}>
+                        <Contours
+                            className={styles.logo}
+                            contourColour={GetContourColour({
+                                category: token.details.category,
+                            })}
+                        />
+                    </div>
+                    <div className={styles.background2}></div>
                 </div>
-                <div className={styles.background2}></div>
-            </div>
 
-            <div className={styles.inner}>
-                <div className={styles.top}>
-                    <Typography
-                        variant="h2"
-                        color="primary"
-                        align="left"
-                        style={{ paddingBottom: 50 }}
-                    >
-                        {token.details.name}
-                    </Typography>
-                </div>
-                <div className={styles.bottom}>
+                <div className={styles.inner}>
                     <div className={styles.top}>
                         <Typography
-                            variant="body1"
-                            color="textPrimary"
-                            align="justify"
+                            variant="h2"
+                            color="primary"
+                            align="left"
+                            style={{ paddingBottom: 50 }}
                         >
-                            {token.details.description}
+                            {token.details.name}
                         </Typography>
                     </div>
                     <div className={styles.bottom}>
-                        <div className={styles.scoreBlock}>
-                            <div className={styles.scoreBlockElement}>
-                                <span>
-                                    <Typography variant="body2">
-                                        NFTREE
-                                    </Typography>
-                                </span>
-                                <img
-                                    src={treeImg}
-                                    style={{ paddingLeft: 10 }}
-                                    alt="tree"
-                                ></img>
-                            </div>
+                        <div className={styles.top}>
+                            <Typography
+                                variant="body1"
+                                color="textPrimary"
+                                align="justify"
+                            >
+                                {token.details.description}
+                            </Typography>
+                        </div>
+                        <div className={styles.bottom}>
+                            <div className={styles.scoreBlock}>
+                                <div className={styles.scoreBlockElement}>
+                                    <span>
+                                        <Typography variant="body2">
+                                            NFTREE
+                                        </Typography>
+                                    </span>
+                                    <img
+                                        src={treeImg}
+                                        style={{ paddingLeft: 10 }}
+                                        alt="tree"
+                                    ></img>
+                                </div>
 
-                            <div className={styles.scoreBlockElement}>
-                                <Typography variant="body2">IMPACT</Typography>
-                                <ImpactScore
-                                    score={token.details.impactScore}
-                                />
+                                <div className={styles.scoreBlockElement}>
+                                    <Typography variant="body2">
+                                        IMPACT
+                                    </Typography>
+                                    <ImpactScore
+                                        score={token.details.impactScore}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }
 
