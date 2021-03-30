@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => {
             height: '100%',
             flex: 1,
             overflow: 'hidden',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
             alignItems: 'space-between',
             flexDirection: 'row',
         },
