@@ -3,7 +3,7 @@ import * as React from 'react'
 import { Token } from '../domain/Token'
 import PlainMegaCard from './PlainMegaCard'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import Breadcrumbs from './Breadcrumbs';
+import Breadcrumbs from './Breadcrumbs'
 
 interface TitledMegaCardProps {
     token: Token
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     veil: {
         display: 'flex',
         position: 'absolute',
-        top:0,
+        top: 0,
         bottom: 0,
         left: 0,
         right: 0,
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
         height: `${CARD_HEIGHT * NUMBER_CARDS + 2}px`,
         borderRadius: 10,
         opacity: 1,
-        background: `linear-gradient(${theme.palette.secondary.light} 0%, ${theme.palette.secondary.light} 20%, rgba(255,255,255, 100) 33%, ${theme.palette.primary.dark} 100%)`,
+        background: `linear-gradient(${theme.palette.secondary.light} 0%, ${theme.palette.secondary.light} 15%, rgba(255,255,255, 100) 33%, ${theme.palette.primary.dark} 100%)`,
     },
 }))
 
@@ -33,7 +33,7 @@ const IDMegaCard = ({ token }: TitledMegaCardProps) => {
     const [index, setIndex] = React.useState(0)
     const styles = useStyles()
     return (
-        <PlainMegaCard >
+        <PlainMegaCard>
             <div
                 className={styles.veil}
                 style={{ top: `${-index * CARD_HEIGHT}px` }}
@@ -56,15 +56,14 @@ const IDMegaCard = ({ token }: TitledMegaCardProps) => {
                     aria-label="show more"
                     onClick={() => {
                         setIndex((index + 1) % NUMBER_CARDS)
-                        console.log(`INDEC: ${index}`)
                     }}
                     component="span"
                 >
                     <KeyboardArrowDownIcon fontSize="large" />
                 </IconButton>
-                <div style={{width: '20%'}}>
-                    <Breadcrumbs quantity={NUMBER_CARDS} index={index}/>
-                    </div>
+                <div style={{ width: '20%', position: 'absolute', right: '10%' }}>
+                    <Breadcrumbs quantity={NUMBER_CARDS} index={index} />
+                </div>
             </div>
             <div
                 style={{

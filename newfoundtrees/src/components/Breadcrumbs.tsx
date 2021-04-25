@@ -4,17 +4,17 @@ import { makeStyles } from '@material-ui/core'
 const useStyles = makeStyles((theme) => ({
     sphere: {
         height: '0.7em',
+        margin: '0.8em',
         width: '0.7em',
         borderRadius: '50%',
         float: 'left',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
-        // transform: 'scale(.3)',
-        // msTransform: 'scale(.3)',
-        // WebkitTransform: 'scale(.3)',
         zIndex: 1,
-        transition: 'transform .2s linear',
+        opacity: 0.5,
+        transition: 'opacity .2s linear',
+        WebkitTransition: 'opacity .2s linear',
         backgroundColor: theme.palette.secondary.light,
     },
 }))
@@ -22,9 +22,10 @@ const useStyles = makeStyles((theme) => ({
 interface BreadcrumbProps {
     quantity: number
     index: number
+    direction? : 'row' | 'column'
 }
 
-const Breadcrumbs = ({ quantity, index }: BreadcrumbProps) => {
+const Breadcrumbs = ({ quantity, index, direction = 'column' }: BreadcrumbProps) => {
     const crumbs = Array.from(Array(quantity).keys())
 
     const styles = useStyles()
@@ -33,8 +34,9 @@ const Breadcrumbs = ({ quantity, index }: BreadcrumbProps) => {
             style={{
                 display: 'flex',
                 width: '100%',
+                alignItems: 'flex-end',
                 justifyContent: 'space-around',
-                flexDirection: 'row',
+                flexDirection: direction,
             }}
         >
             {crumbs.map((idx) => {
@@ -44,9 +46,10 @@ const Breadcrumbs = ({ quantity, index }: BreadcrumbProps) => {
                         style={
                             index === idx
                                 ? {
-                                      transform: 'scale(1.3)',
-                                      msTransform: 'scale(1.3)',
-                                      WebkitTransform: 'scale(1.3)',
+                                    //   transform: 'opacity(0.6)',
+                                    //   msTransform: 'opacity(0.6)',
+                                    //   WebkitTransform: 'opacity(0.6)',
+                                    opacity: 1
                                   }
                                 : {}
                         }
