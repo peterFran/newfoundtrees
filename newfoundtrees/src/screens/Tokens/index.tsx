@@ -114,11 +114,11 @@ const Tokens = () => {
                 </div>
 
             </div>
-            <div className={classes.sellBanner}>
+            {/* <div className={classes.sellBanner}>
                     <Button variant="contained" color="primary" href="/sell">
                         💰 Sell Token
                     </Button>
-                </div>
+                </div> */}
         </>
     )
 }

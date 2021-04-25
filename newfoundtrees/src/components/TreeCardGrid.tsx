@@ -4,13 +4,15 @@ import React from 'react'
 interface TreeCardRowProps {
     title: String
     children: React.ReactNode
+    reverse?: boolean
 }
 
 const useStyles = makeStyles((theme) => {
     return {
         wrap: {
             marginTop: theme.spacing(4),
-            marginBottom: theme.spacing(4)
+            marginBottom: theme.spacing(4),
+            overflow: 'visible' 
         },
         row: {
             marginLeft: -theme.spacing(2),
@@ -18,7 +20,7 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             height: '100%',
             flex: 1,
-            overflow: 'hidden',
+            overflow: 'visible',
             justifyContent: 'center',
             alignItems: 'space-between',
             flexDirection: 'row',
@@ -26,7 +28,7 @@ const useStyles = makeStyles((theme) => {
     }
 })
 
-const TreeCardGrid = ({ title, children }: TreeCardRowProps) => {
+const TreeCardGrid = ({ title, children, reverse=false }: TreeCardRowProps) => {
     const styles = useStyles()
     return (
         <div className={styles.wrap}>
@@ -40,7 +42,7 @@ const TreeCardGrid = ({ title, children }: TreeCardRowProps) => {
             <div className={styles.row}>
                 <Grid
                     container
-                    direction="row"
+                    direction={reverse ? "row-reverse" : "row"}
                     xs={12}
                     zeroMinWidth
                     spacing={4}

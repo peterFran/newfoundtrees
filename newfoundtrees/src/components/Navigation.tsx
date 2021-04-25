@@ -165,9 +165,9 @@ const StyledMenuItem = withStyles((theme) => ({
             },
         },
     },
-    button: {
-        backgroundColor: theme.palette.background.default,
-    },
+    // button: {
+    //     backgroundColor: theme.palette.background.default,
+    // },
 }))(MenuItem)
 
 interface WalletItemProps {
@@ -356,7 +356,7 @@ const TitleItem = ({ white }: { white: boolean }) => {
                 className={classes.title}
                 style={
                     white
-                        ? { color: theme.palette.text.secondary }
+                        ? { color: 'white' }
                         : { color: theme.palette.primary.dark }
                 }
             >
@@ -381,8 +381,6 @@ const useHorizontalStyles = makeStyles((theme) => ({
     },
     mapRoot: {
         display: 'flex',
-        // position: 'fixed',
-        // width: '100pc',
         flex: 1,
         backgroundColor: 'transparent',
         flexDirection: 'row',
@@ -441,9 +439,9 @@ const HorizontalNavigation = ({
             <nav className={mapView ? classes.mapRoot : classes.root}>
                 <ul className={classes.navList}>
                     <li>
-                        <Link to="/" target="_blank" rel="noopener noreferrer">
+                        {/* <Link to="/" target="_blank" rel="noopener noreferrer"> */}
                             <TitleItem {...{ white }} />
-                        </Link>
+                        {/* </Link> */}
                     </li>
                     <div className={classes.wrapper}>
                         <li className={classes.center}>
@@ -617,8 +615,8 @@ const Navigation = ({ loggedIn = false }: { loggedIn: boolean }) => {
             <HorizontalNavigation
                 {...{
                     loggedIn,
-                    mapView: location.pathname === '/map',
-                    white: location.pathname === '/map',
+                    mapView: location.pathname === '/map' || location.pathname === '/about',
+                    white: location.pathname === '/map' || location.pathname === '/about',
                 }}
             />
         )
@@ -626,7 +624,6 @@ const Navigation = ({ loggedIn = false }: { loggedIn: boolean }) => {
         return (
             <MobileNavigation
                 {...{
-                    // loggedIn,
                     mapView: location.pathname === '/map',
                 }}
             />

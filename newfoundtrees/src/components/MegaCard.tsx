@@ -8,11 +8,7 @@ interface MegaCardProps {
 const useStyles = makeStyles((theme) => ({
     wrap: {
         display: 'flex',
-        height: '100%',
-        padding: '10px'
-        // borderRadius: 15,
-        // overflow: 'hidden',
-
+        height: '100%'
     },
     box: {
         justifyContent: 'center',
@@ -28,8 +24,7 @@ const useStyles = makeStyles((theme) => ({
         height: '100%',
         position: 'relative',
         backgroundColor: '#2D0D45',
-        opacity: 0.8,
-        padding: theme.spacing(3),
+        opacity: 0.8
     },
     inner: {
         width: '100%',
@@ -47,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const MegaCard = ({ children }: MegaCardProps) => {
     const styles = useStyles()
     return (
-        <Grid xs={12} sm={6} md={6} style={{ height: '520px' }}>
+        <Grid item xs={12} sm={6} md={6} style={{ height: '520px' }}>
             <div className={styles.wrap}>
                 <div className={styles.box}>
                     <div className={styles.veil}></div>

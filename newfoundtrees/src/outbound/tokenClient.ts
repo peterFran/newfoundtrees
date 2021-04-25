@@ -1,4 +1,4 @@
-import { Token, TokenDetails } from '../domain/Token';
+import { Token, TokenDetails } from '../domain/Token'
 
 export default function getTokens(): Token[] {
     return [
@@ -21,7 +21,8 @@ export default function getTokens(): Token[] {
 
                 cover:
                     'https://mossy-prod-assets.s3.eu-central-1.amazonaws.com/IR_default.jpg',
-                content: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                content:
+                    'https://bpybatlqkq3w52jsp2wupba64i6xg6glpghikcmx6p65enqjyu7a.arweave.net/C_AQTXBUN27pMn6tR4Qe4j1zeMt5joUJl_P90jYJxT4',
                 description:
                     'I would like to plant some trees in my garden. Then there will be more birds. I like birds very much. Especially the hawks. They are fearsome creatures',
             } as TokenDetails,
@@ -29,7 +30,7 @@ export default function getTokens(): Token[] {
             batchSize: 3,
             sold: 1,
             ownedEditions: [] as number[],
-            updates: []
+            updates: [],
         } as Token,
         {
             id: 2,
@@ -54,7 +55,8 @@ export default function getTokens(): Token[] {
 
                 cover:
                     'https://images.prismic.io/mossyearth/32623040-b3da-4c00-a74e-81aa1bf9a0cc_white-tailed+eagle.png',
-                content: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                content:
+                    'https://bpybatlqkq3w52jsp2wupba64i6xg6glpghikcmx6p65enqjyu7a.arweave.net/C_AQTXBUN27pMn6tR4Qe4j1zeMt5joUJl_P90jYJxT4',
                 description:
                     "By purchasing this token, you are helping to fund a new rewilding project in the Scottish Highlands. \nIn partnership with the Roy Dennis Wildlife Foundation we're building two eagle nest platforms targeting the native golden and white-tailed eagles.",
             } as TokenDetails,
@@ -62,7 +64,7 @@ export default function getTokens(): Token[] {
             batchSize: 10,
             sold: 5,
             ownedEditions: [] as number[],
-            updates: []
+            updates: [],
         } as Token,
         {
             id: 3,
@@ -87,7 +89,8 @@ export default function getTokens(): Token[] {
 
                 cover:
                     'https://images.prismic.io/mossyearth/73653848-73de-4da1-b7ed-3c4eb19ab6d1_INVASIVE+TREES.jpg',
-                content: 'https://www.youtube.com/watch?v=DsGnVZawfpg',
+                content:
+                    'https://bpybatlqkq3w52jsp2wupba64i6xg6glpghikcmx6p65enqjyu7a.arweave.net/C_AQTXBUN27pMn6tR4Qe4j1zeMt5joUJl_P90jYJxT4',
                 description:
                     'The region we will be working in Namibia is characterised by open desert shrubland interspersed by mountainous terrain, wooded ephemeral (intermittent water) and perennial (constant water) river beds, and grassy sand and gravel plains. These habitats are threatened by overgrazing, the spread of non-native Prosopis, climate change and erosion.',
             } as TokenDetails,
@@ -97,5 +100,4 @@ export default function getTokens(): Token[] {
             ownedEditions: [1, 3, 4],
         } as Token,
     ]
-    
 }

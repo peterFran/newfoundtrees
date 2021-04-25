@@ -1,23 +1,22 @@
-import './App.css'
-import { WalletAccount, Contract } from 'near-api-js'
+import { Container, useTheme } from '@material-ui/core'
+import { Contract, WalletAccount } from 'near-api-js'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { Switch, Route, useLocation } from 'react-router-dom'
-
+import { Route, Switch, useLocation } from 'react-router-dom'
+import './App.css'
 import Navigation from './components/Navigation'
 import { near, nearConfig } from './components/NearConfig'
-import Projects from './screens/Map'
 import AuthContext from './context/AuthContext'
-import Home from './screens/About/index'
 import AccountDetails from './domain/AccountDetails'
+import getTokens from './outbound/tokenClient'
 import { getAccountDetails, signIn } from './outbound/walletClient'
-import Tokens from './screens/Tokens'
-import { Container } from '@material-ui/core'
+import Home from './screens/About/index'
 import Empty from './screens/Empty'
+import Projects from './screens/Map'
+import TokenPage from './screens/Token'
+import Tokens from './screens/Tokens'
 
-const scrollTop = () => {
-    window.scrollTo(0, 0)
-}
+
 const App = () => {
     const location = useLocation()
 
@@ -79,8 +78,20 @@ const App = () => {
         bootstrapAsync()
     }, [wallet])
 
+    const theme = useTheme()
     return (
-        <div className="App">
+        <div
+            className="App"
+            style={
+                location.pathname === '/about'
+                    ? {
+                          backgroundColor: theme.palette.primary.dark,
+                          background: `linear-gradient(to bottom, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.dark} 55%, #000000 55%,${theme.palette.primary.light} 55%,${theme.palette.primary.light} 100%)`, /* W3C */
+                          overflow: 'hidden',
+                      }
+                    : { overflow: 'hidden' }
+            }
+        >
             <AuthContext.Provider
                 value={{
                     signIn: authContext.signIn,
@@ -103,19 +114,35 @@ const App = () => {
                 >
                     <Navigation loggedIn={accountDetails != null} />
                     <Switch>
-                        <Route exact path="/" preload={scrollTop}>
+                        <Route exact path="/">
                             <Tokens />
                         </Route>
-                        
-                        <Route exact path="/about" preload={scrollTop}>
+
+                        <Route exact path="/about">
                             <Home />
                         </Route>
 
-                        <Route path="/map" preload={scrollTop}>
+                        <Route path="/map">
                             <Projects />
                         </Route>
 
-                        <Route path='*' exact={true}>
+                        <Route
+                            path="/token/:id"
+                            render={(
+                                props
+                            ): {
+                                props: { match: { params: { id: number } } }
+                            } => {
+                                const token = getTokens().find(
+                                    (token) =>
+                                        `${token.id}` === props.match.params.id
+                                )
+                                if (token) return <TokenPage token={token} />
+                                else return <Empty />
+                            }}
+                        />
+
+                        <Route path="*" exact={true}>
                             <Empty />
                         </Route>
                     </Switch>

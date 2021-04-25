@@ -7,6 +7,7 @@ import Contours from './svg/Contours'
 import { Link } from 'react-router-dom'
 interface TreeCardProps {
     token: Token
+    showContent?: boolean
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -106,7 +107,7 @@ const GetContourColour = ({
     }
 }
 
-const TreeCard = ({ token }: TreeCardProps) => {
+const TreeCard = ({ token, showContent = false }: TreeCardProps) => {
     const styles = useStyles()
 
     return (
@@ -126,15 +127,36 @@ const TreeCard = ({ token }: TreeCardProps) => {
 
                 <div className={styles.inner}>
                     <div className={styles.top}>
-                        <Typography
-                            variant="h2"
-                            color="primary"
-                            align="left"
-                            style={{ paddingBottom: 50 }}
-                        >
-                            {token.details.name}
-                        </Typography>
+                        <div className={styles.top}>
+                            <Typography
+                                variant="h2"
+                                color="primary"
+                                align="left"
+                                style={{ paddingBottom: 50 }}
+                            >
+                                {token.details.name}
+                            </Typography>
+                        </div>
+                        {showContent && (
+                            <div className={styles.bottom}>
+                                <video
+                                    autoPlay
+                                    width="100%"
+                                    height="auto"
+                                    controls
+                                >
+                                    <source
+                                        src="https://bpybatlqkq3w52jsp2wupba64i6xg6glpghikcmx6p65enqjyu7a.arweave.net/C_AQTXBUN27pMn6tR4Qe4j1zeMt5joUJl_P90jYJxT4"
+                                        type="video/mp4"
+                                        // poster="https://www.example.com/poster.png"
+                                        // primaryColor="red"
+                                        // other props
+                                    />
+                                </video>
+                            </div>
+                        )}
                     </div>
+
                     <div className={styles.bottom}>
                         <div className={styles.top}>
                             <Typography
@@ -150,7 +172,7 @@ const TreeCard = ({ token }: TreeCardProps) => {
                                 <div className={styles.scoreBlockElement}>
                                     <span>
                                         <Typography variant="body2">
-                                            NFTREE
+                                            {token.details.category.toLocaleUpperCase()}
                                         </Typography>
                                     </span>
                                     <img
