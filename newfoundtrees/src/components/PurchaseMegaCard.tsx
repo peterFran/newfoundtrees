@@ -1,11 +1,12 @@
 import { Button, makeStyles, Typography } from '@material-ui/core'
+import { formatNearAmount } from 'near-api-js/lib/utils/format'
 import * as React from 'react'
-import { Token } from '../domain/Token'
+import { OldToken } from '../domain/Token'
 import ImpactScore from './ImpactScore'
 import PlainMegaCard from './PlainMegaCard'
 
 interface PurchaseMegaCardProps {
-    token: Token
+    token: OldToken
     rotated?: boolean
     background?: boolean
 }
@@ -27,6 +28,18 @@ const useStyles = makeStyles((theme) => ({
 
 const PurchaseMegaCard = ({ token }: PurchaseMegaCardProps) => {
     const styles = useStyles()
+
+    React.useEffect(() => {
+        try {
+            formatNearAmount(
+                token.price.toLocaleString('fullwide', { useGrouping: false })
+            )
+        } catch (error) {
+            console.log(token.price.toFixed())
+            console.log(error)
+        }
+    }, [token])
+
     return (
         <PlainMegaCard border={false}>
             <div className={styles.container}>
@@ -37,7 +50,14 @@ const PurchaseMegaCard = ({ token }: PurchaseMegaCardProps) => {
                     >
                         {token.details.category} Project
                     </Typography>
-                    <Typography variant="h5">Ⓝ{token.price}</Typography>
+                    <Typography variant="h5">
+                        Ⓝ
+                        {formatNearAmount(
+                            token.price.toLocaleString('fullwide', {
+                                useGrouping: false,
+                            })
+                        )}
+                    </Typography>
                 </div>
                 <div
                     style={{

@@ -8,14 +8,12 @@ import Navigation from './components/Navigation'
 import { near, nearConfig } from './components/NearConfig'
 import AuthContext from './context/AuthContext'
 import AccountDetails from './domain/AccountDetails'
-import getTokens from './outbound/tokenClient'
 import { getAccountDetails, signIn } from './outbound/walletClient'
 import Home from './screens/About/index'
 import Empty from './screens/Empty'
 import Projects from './screens/Map'
 import TokenPage from './screens/Token'
 import Tokens from './screens/Tokens'
-
 
 const App = () => {
     const location = useLocation()
@@ -86,7 +84,7 @@ const App = () => {
                 location.pathname === '/about'
                     ? {
                           backgroundColor: theme.palette.primary.dark,
-                          background: `linear-gradient(to bottom, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.dark} 55%, #000000 55%,${theme.palette.primary.light} 55%,${theme.palette.primary.light} 100%)`, /* W3C */
+                          background: `linear-gradient(to bottom, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.dark} 55%, #000000 55%,${theme.palette.primary.light} 55%,${theme.palette.primary.light} 100%)` /* W3C */,
                           overflow: 'hidden',
                       }
                     : { overflow: 'hidden' }
@@ -133,12 +131,7 @@ const App = () => {
                             ): {
                                 props: { match: { params: { id: number } } }
                             } => {
-                                const token = getTokens().find(
-                                    (token) =>
-                                        `${token.id}` === props.match.params.id
-                                )
-                                if (token) return <TokenPage token={token} />
-                                else return <Empty />
+                                return (<TokenPage id={props.match.params.id} />)
                             }}
                         />
 

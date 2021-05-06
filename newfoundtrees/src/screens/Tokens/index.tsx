@@ -2,9 +2,11 @@ import React from 'react'
 import { Button, makeStyles, Typography } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 import TitledMegaCard from '../../components/TitledMegaCard'
-import getTokens from '../../outbound/tokenClient'
+import { LIST_TOKENS_QUERY, StoreData, StoreVars } from '../../outbound/tokenClient'
 import TreeCardGrid from '../../components/TreeCardGrid'
-import { TreeCardItem } from '../../components/TreeCard'
+import { TreeCardItem, TreeCardItemMeta } from '../../components/TreeCard'
+import { Store, Thing } from '../../domain/Token'
+import { useQuery } from '@apollo/client'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -44,7 +46,7 @@ const useStyles = makeStyles((theme) => {
         },
 
         sellBanner: {
-            display: "flex",
+            display: 'flex',
             width: '100vw',
             position: 'fixed',
             bottom: 0,
@@ -57,7 +59,7 @@ const useStyles = makeStyles((theme) => {
             alignItems: 'center',
             justifyContent: 'flex-end',
             paddingLeft: theme.spacing(4),
-            paddingRight: theme.spacing(4)
+            paddingRight: theme.spacing(4),
         },
     }
 })
@@ -65,7 +67,19 @@ const useStyles = makeStyles((theme) => {
 const Tokens = () => {
     const classes = useStyles()
 
-    const listedProjects = getTokens()
+    const { loading, data } = useQuery<StoreData, StoreVars>(
+        LIST_TOKENS_QUERY,
+        {
+            variables: {
+                store: process.env.REACT_APP_MINTBASE_STORE_NAME || '',
+            },
+        }
+    )
+
+    React.useEffect(() => {
+        console.log(`lalala ${loading}`)
+        console.log(data?.store[0]?.things || 'DAMN')
+    }, [loading])
 
     return (
         <>
@@ -74,8 +88,6 @@ const Tokens = () => {
             </Helmet>
 
             <div className={classes.container}>
-
-
                 <div className={classes.contentWrap}>
                     <TreeCardGrid title="🌲 NFT">
                         <TitledMegaCard
@@ -99,26 +111,24 @@ const Tokens = () => {
                                 </>
                             }
                         />
-                        <TreeCardItem token={listedProjects[0]} />
-                        <TreeCardItem token={listedProjects[1]} />
+                        {!loading &&
+                            data?.store[0] &&
+                            data.store[0].things.map((thing: Thing) => {
+                                return <TreeCardItemMeta thing={thing} />
+                            })}
                     </TreeCardGrid>
 
                     <TreeCardGrid title="🌲 FUNDABLE INITIATIVES">
                         <>
-                            <TreeCardItem token={listedProjects[0]} />
-                            <TreeCardItem token={listedProjects[1]} />
-                            <TreeCardItem token={listedProjects[2]} />
-                            <TreeCardItem token={listedProjects[0]} />
+                            {!loading &&
+                                data?.store[0] &&
+                                data.store[0].things.map((thing: Thing) => {
+                                    return <TreeCardItemMeta thing={thing} />
+                                })}
                         </>
                     </TreeCardGrid>
                 </div>
-
             </div>
-            {/* <div className={classes.sellBanner}>
-                    <Button variant="contained" color="primary" href="/sell">
-                        💰 Sell Token
-                    </Button>
-                </div> */}
         </>
     )
 }

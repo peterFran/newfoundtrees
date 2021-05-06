@@ -1,12 +1,12 @@
 import { IconButton, makeStyles, Typography } from '@material-ui/core'
 import * as React from 'react'
-import { Token } from '../domain/Token'
+import { OldToken } from '../domain/Token'
 import PlainMegaCard from './PlainMegaCard'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import Breadcrumbs from './Breadcrumbs'
 
 interface TitledMegaCardProps {
-    token: Token
+    token: OldToken
 }
 
 const CARD_HEIGHT = 670
@@ -138,7 +138,7 @@ const IDMegaCard = ({ token }: TitledMegaCardProps) => {
                                 fontSize: 63,
                             }}
                         >
-                            NFTREE #{token.id}
+                            NFTREE #{token.edition}
                         </Typography>
                     </div>
                 </div>

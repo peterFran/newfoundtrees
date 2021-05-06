@@ -1,13 +1,18 @@
 import * as React from 'react'
 import { Grid, makeStyles, Typography, useTheme } from '@material-ui/core'
 import treeImg from '../assets/pixel-tree.png'
-import { Token } from '../domain/Token'
+import { OldToken, Thing, Metadata, TokenDetails, Token } from '../domain/Token';
 import ImpactScore from './ImpactScore'
 import Contours from './svg/Contours'
 import { Link } from 'react-router-dom'
+import { api, getToken } from '../outbound/tokenClient'
 interface TreeCardProps {
-    token: Token
+    token: OldToken
     showContent?: boolean
+}
+
+interface TreeCardNewProps {
+    thing: Thing
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -203,6 +208,20 @@ export const TreeCardItem = ({ token }: TreeCardProps) => {
     return (
         <Grid item xs={12} sm={6} md={3} style={{ height: '520px' }}>
             <TreeCard token={token} />
+        </Grid>
+    )
+}
+
+export const TreeCardItemMeta = ({ thing }: TreeCardNewProps) => {
+    const [state, setState] = React.useState<OldToken | null>(null)
+    React.useEffect(() => {
+        getToken(thing).then((
+            bits
+        ) => setState(bits))
+    }, [thing])
+    return (
+        <Grid item xs={12} sm={6} md={3} style={{ height: '520px' }}>
+            {state && <TreeCard token={state} />}
         </Grid>
     )
 }
