@@ -53,8 +53,7 @@ export const GET_TOKEN_QUERY = gql`
 
 export const api = new API({
     chain: Chain.near,
-    networkName: Network.testnet,
-    // apiBaseUrl: 'https://3uiuvtox2o22lrfp75guumsm22u5smiq3nerav4kputcbs55wtvq.arweave.net',
+    networkName: process.env.REACT_APP_NEAR_CHAIN === 'mainnet' ? Network.main : Network.testnet,
     apiKey: process.env.REACT_APP_MINTBASE_API_KEY,
 })
 
