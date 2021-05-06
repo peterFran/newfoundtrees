@@ -48,7 +48,7 @@ const Projects = () => {
             </Helmet> 
 
             <div className={classes.mapContainer}>
-                {/* <NewFoundTreesMap tokens={listedProjects}/> */}
+                <NewFoundTreesMap tokens={[]}/>
             </div>
         </>
     )
