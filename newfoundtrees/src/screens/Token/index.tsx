@@ -119,13 +119,13 @@ const TokenPage = ({ id }: { id: string }) => {
                                 </TreeCardGrid>
                             </div>
                         </div>
-                        {/* {token.ownedEditions.length > 0 && (
+                        {token.ownedEditions.length > 0 && (
                 <div className={classes.sellBanner}>
                     <Button variant="contained" color="primary" href="/sell">
                         💰 Sell Token
                     </Button>
                 </div>
-            )} */}
+            )}
                     </>
                 )
             )}

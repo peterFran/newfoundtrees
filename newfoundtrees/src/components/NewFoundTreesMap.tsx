@@ -75,6 +75,7 @@ interface NewFoundTreesMapProps {
 
 const NewFoundTreesMap = ({
     tokens = [],
+    
 }: NewFoundTreesMapProps) => {
     const [selected, setSelected] = React.useState<
         OldToken | null

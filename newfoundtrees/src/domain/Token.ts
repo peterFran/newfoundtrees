@@ -13,10 +13,10 @@ export interface Metadata {
     amountToMint: number,
     animation_url: string,
     description: string,
-    name: string,
+    title: string,
     price: number,
-    image: string,
-    attributes: {trait_type: string, value: any}[]
+    media: string,
+    extra: {trait_type: string, value: any}[]
 }
 
 export interface TokenDetails {

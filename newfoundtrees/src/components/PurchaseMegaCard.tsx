@@ -4,6 +4,7 @@ import * as React from 'react'
 import { OldToken } from '../domain/Token'
 import ImpactScore from './ImpactScore'
 import PlainMegaCard from './PlainMegaCard'
+import SmallMap from './SmallMap'
 
 interface PurchaseMegaCardProps {
     token: OldToken
@@ -23,6 +24,27 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         display: 'flex',
         justifyContent: 'space-between',
+    },
+    mapContainer: {
+        justifySelf: 'center',
+        width: '100%',
+        borderRadius: 20,
+        height: 200,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: theme.spacing(4),
+        flexDirection: 'column',
+        textAlign: 'right',
+    },
+    mapBox: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 20,
+        borderWidth: theme.spacing(1),
+        borderStyle: 'solid',
+        borderColor: theme.palette.primary.dark,
+        overflow: 'hidden',
     },
 }))
 
@@ -93,11 +115,16 @@ const PurchaseMegaCard = ({ token }: PurchaseMegaCardProps) => {
                     >
                         Location:
                     </Typography>
-                    <Typography variant="body1">{`${token.details.coordinates.latitude.toFixed(
-                        6
-                    )}, ${token.details.coordinates.longitude.toFixed(
-                        6
-                    )}`}</Typography>
+                    <div className={styles.mapContainer}>
+                        <SmallMap token={token} />
+                        <div style={{width: '100%'}}>
+                            <Typography variant="body1">{`${token.details.coordinates.latitude.toFixed(
+                                6
+                            )}, ${token.details.coordinates.longitude.toFixed(
+                                6
+                            )}`}</Typography>
+                        </div>
+                    </div>
                 </div>
                 <div
                     style={{

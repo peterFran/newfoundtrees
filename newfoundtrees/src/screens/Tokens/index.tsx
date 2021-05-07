@@ -2,10 +2,10 @@ import React from 'react'
 import { Button, makeStyles, Typography } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 import TitledMegaCard from '../../components/TitledMegaCard'
-import { LIST_TOKENS_QUERY, StoreData, StoreVars } from '../../outbound/tokenClient'
+import { fetchTokens, LIST_TOKENS_QUERY, StoreData, StoreVars } from '../../outbound/tokenClient'
 import TreeCardGrid from '../../components/TreeCardGrid'
-import { TreeCardItem, TreeCardItemMeta } from '../../components/TreeCard'
-import { Store, Thing } from '../../domain/Token'
+import { TreeCardItem } from '../../components/TreeCard'
+import { Thing, OldToken } from '../../domain/Token';
 import { useQuery } from '@apollo/client'
 
 const useStyles = makeStyles((theme) => {
@@ -66,6 +66,7 @@ const useStyles = makeStyles((theme) => {
 
 const Tokens = () => {
     const classes = useStyles()
+    const [availableTokens, setAvailableTokens] = React.useState<OldToken[]>([])
 
     const { loading, data } = useQuery<StoreData, StoreVars>(
         LIST_TOKENS_QUERY,
@@ -77,9 +78,12 @@ const Tokens = () => {
     )
 
     React.useEffect(() => {
-        console.log(`lalala ${loading}`)
-        console.log(data?.store[0]?.things || 'DAMN')
-    }, [loading])
+
+        if(!loading && data?.store && data.store.length > 0){
+            // console.log(data?.store[0].things)
+            fetchTokens(data.store[0].things).then((tokens) => setAvailableTokens(tokens))
+        }
+    }, [loading, data])
 
     return (
         <>
@@ -112,18 +116,15 @@ const Tokens = () => {
                             }
                         />
                         {!loading &&
-                            data?.store[0] &&
-                            data.store[0].things.map((thing: Thing) => {
-                                return <TreeCardItemMeta thing={thing} />
+                            availableTokens.map((thing: OldToken) => {
+                                return <TreeCardItem token={thing} />
                             })}
                     </TreeCardGrid>
 
                     <TreeCardGrid title="🌲 FUNDABLE INITIATIVES">
                         <>
-                            {!loading &&
-                                data?.store[0] &&
-                                data.store[0].things.map((thing: Thing) => {
-                                    return <TreeCardItemMeta thing={thing} />
+                            {!loading && availableTokens.map((thing: OldToken) => {
+                                    return <TreeCardItem token={thing} />
                                 })}
                         </>
                     </TreeCardGrid>

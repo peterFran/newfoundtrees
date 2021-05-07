@@ -4,9 +4,10 @@ import { Helmet } from 'react-helmet'
 import { makeStyles } from '@material-ui/core/styles'
 
 import NewFoundTreesMap from '../../components/NewFoundTreesMap'
-import { LIST_TOKENS_QUERY, StoreData, StoreVars } from '../../outbound/tokenClient';
-import { OldToken } from '../../domain/Token';
+import { fetchTokens, getToken, LIST_TOKENS_QUERY, StoreData, StoreVars } from '../../outbound/tokenClient';
+import { OldToken, Thing, TokenDetails } from '../../domain/Token';
 import { useQuery } from '@apollo/client';
+import { resolve } from 'node:path';
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => {
 const Projects = () => {
     const classes = useStyles()
 
+    const [availableTokens, setAvailableTokens] = React.useState<OldToken[]>([])
     const { loading, data } = useQuery<StoreData, StoreVars>(
         LIST_TOKENS_QUERY,
         {
@@ -35,11 +37,13 @@ const Projects = () => {
         }
     )
 
-    // React.useEffect(() => {
-    //     if(!loading && data?.store && data.store.length > 0){
-    //         Promise.all([data.store[0].things.map(thing => getToken(thing))]).then(())
-    //     }
-    // }, [loading, data])
+    React.useEffect(() => {
+
+        if(!loading && data?.store && data.store.length > 0){
+            console.log(data?.store[0].things)
+            fetchTokens(data.store[0].things).then((tokens) => setAvailableTokens(tokens))
+        }
+    }, [loading, data])
 
     return (
         <>
@@ -48,7 +52,7 @@ const Projects = () => {
             </Helmet> 
 
             <div className={classes.mapContainer}>
-                <NewFoundTreesMap tokens={[]}/>
+                <NewFoundTreesMap tokens={availableTokens}/>
             </div>
         </>
     )

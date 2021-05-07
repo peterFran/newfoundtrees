@@ -212,18 +212,18 @@ export const TreeCardItem = ({ token }: TreeCardProps) => {
     )
 }
 
-export const TreeCardItemMeta = ({ thing }: TreeCardNewProps) => {
-    const [state, setState] = React.useState<OldToken | null>(null)
-    React.useEffect(() => {
-        getToken(thing).then((
-            bits
-        ) => setState(bits))
-    }, [thing])
-    return (
-        <Grid item xs={12} sm={6} md={3} style={{ height: '520px' }}>
-            {state && <TreeCard token={state} />}
-        </Grid>
-    )
-}
+// export const TreeCardItemMeta = ({ thing }: TreeCardNewProps) => {
+//     const [state, setState] = React.useState<OldToken | null>(null)
+//     React.useEffect(() => {
+//         getToken(thing).then((
+//             bits
+//         ) => setState(bits))
+//     }, [thing])
+//     return (
+//         <Grid item xs={12} sm={6} md={3} style={{ height: '520px' }}>
+//             {state && <TreeCard token={state} />}
+//         </Grid>
+//     )
+// }
 
 export default TreeCard
