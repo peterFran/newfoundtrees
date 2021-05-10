@@ -5,17 +5,13 @@ import { Helmet } from 'react-helmet'
 import { OldToken, Thing } from '../../domain/Token'
 import TreeCardGrid from '../../components/TreeCardGrid'
 import PurchaseMegaCard from '../../components/PurchaseMegaCard'
-// import { Wallet, Network, Chain } from 'mintbase'
-// import getTokens from '../../outbound/tokenClient'
+import { API, Wallet } from 'mintbase'
 import IDMegaCard from '../../components/IDMegaCard'
-import {
-    getToken,
-    GET_TOKEN_QUERY,
-    LIST_TOKENS_QUERY,
-} from '../../outbound/tokenClient'
+import { getToken, GET_TOKEN_QUERY } from '../../outbound/tokenClient'
 import { useQuery } from '@apollo/client'
-import { Redirect } from 'react-router'
 import Empty from '../Empty'
+import { wallet } from '../../outbound/walletClient'
+import AuthContext from '../../context/AuthContext'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -83,8 +79,6 @@ interface ThingVars {
 const TokenPage = ({ id }: { id: string }) => {
     const classes = useStyles()
 
-    // const minty = new Wallet({ networkName: 'testnet' as Network, chain: 'near' as Chain })
-
     const { data, error } = useQuery<ThingData, ThingVars>(GET_TOKEN_QUERY, {
         variables: { thingId: id },
     })
@@ -92,8 +86,6 @@ const TokenPage = ({ id }: { id: string }) => {
     const [token, setToken] = React.useState<OldToken>()
 
     React.useEffect(() => {
-        console.log('huzzah')
-        console.log(data)
         if (data?.thing && data.thing.length > 0) {
             getToken(data.thing[0]).then((it) => {
                 setToken(it)
@@ -120,12 +112,16 @@ const TokenPage = ({ id }: { id: string }) => {
                             </div>
                         </div>
                         {token.ownedEditions.length > 0 && (
-                <div className={classes.sellBanner}>
-                    <Button variant="contained" color="primary" href="/sell">
-                        💰 Sell Token
-                    </Button>
-                </div>
-            )}
+                            <div className={classes.sellBanner}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    href="/sell"
+                                >
+                                    💰 Sell Token
+                                </Button>
+                            </div>
+                        )}
                     </>
                 )
             )}

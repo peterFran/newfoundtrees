@@ -33,29 +33,6 @@ export const LIST_TOKENS_QUERY = gql`
     }
 `
 
-// export const LIST_TOKENS_QUERY = gql`
-//     query LIST_TOKENS_QUERY($store: String!) {
-//         store(where: { id: { _eq: $store } }) {
-//             things {
-//                 id
-//                 metaId
-//                 tokens_aggregate(distinct_on: thingId) {
-//                     nodes {
-//                         id
-//                         list {
-//                             price
-//                         }
-//                         mintGroupId
-//                     }
-//                 }
-//             }
-//             id
-//             name
-//             owner
-//         }
-//     }
-// `
-
 export const GET_TOKEN_QUERY = gql`
     query GET_TOKEN_QUERY($thingId: String!) {
         thing(where: { id: { _eq: $thingId } }) {

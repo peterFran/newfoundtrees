@@ -188,47 +188,47 @@ const WalletItem = ({
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [isSignedIn, setIsSignedIn] = React.useState(false) // Local signed-in state.
 
-    // if (firebase.apps.length === 0) {
-    //     const config = {
-    //         apiKey: process.env.REACT_APP_FIREBASE_API_KEY || '',
-    //         authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || '',
-    //         projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || '',
-    //     }
-    //     firebase.initializeApp(config)
-    // }
+    if (firebase.apps.length === 0) {
+        const config = {
+            apiKey: process.env.REACT_APP_FIREBASE_API_KEY || '',
+            authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || '',
+            projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || '',
+        }
+        firebase.initializeApp(config)
+    }
 
     // Listen to the Firebase Auth state and set the local state.
-    // React.useEffect(() => {
-    //     const unregisterAuthObserver = firebase
-    //         .auth()
-    //         .onAuthStateChanged((user) => {
-    //             setIsSignedIn(!!user)
-    //         })
-    //     return () => unregisterAuthObserver() // Make sure we un-register Firebase observers when the component unmounts.
-    // }, [])
+    React.useEffect(() => {
+        const unregisterAuthObserver = firebase
+            .auth()
+            .onAuthStateChanged((user) => {
+                setIsSignedIn(!!user)
+            })
+        return () => unregisterAuthObserver() // Make sure we un-register Firebase observers when the component unmounts.
+    }, [])
 
-    // React.useEffect(() => {
-    //     if (
-    //         !!accountDetails &&
-    //         !!firebase.auth().currentUser &&
-    //         !firebase
-    //             .firestore()
-    //             .collection('near-account')
-    //             .doc(`${firebase.auth().currentUser?.uid}`)
-    //             .get()
-    //     ) {
-    //         firebase
-    //             .firestore()
-    //             .collection('near-account')
-    //             .doc(`${firebase.auth().currentUser?.uid}`)
-    //             .set({
-    //                 id: accountDetails.accountId,
-    //             })
-    //             .then((res) => {
-    //                 console.log(res)
-    //             })
-    //     }
-    // }, [accountDetails])
+    React.useEffect(() => {
+        if (
+            !!accountDetails &&
+            !!firebase.auth().currentUser &&
+            !firebase
+                .firestore()
+                .collection('near-account')
+                .doc(`${firebase.auth().currentUser?.uid}`)
+                .get()
+        ) {
+            firebase
+                .firestore()
+                .collection('near-account')
+                .doc(`${firebase.auth().currentUser?.uid}`)
+                .set({
+                    id: accountDetails.accountId,
+                })
+                .then((res) => {
+                    console.log(res)
+                })
+        }
+    }, [accountDetails])
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget)
@@ -246,7 +246,7 @@ const WalletItem = ({
         signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
         callbacks: {
             // Avoid redirects after sign-in.
-            // signInSuccessWithAuthResult: () => false,
+            signInSuccessWithAuthResult: () => false,
         },
     }
 
@@ -272,12 +272,12 @@ const WalletItem = ({
                 {isSignedIn ? (
                     <>
                         <StyledMenuItem>
-                            {/* <ListItemIcon>
+                            <ListItemIcon>
                                 <ArrowBackIcon fontSize="small"  color="primary"/>
-                            </ListItemIcon> */}
+                            </ListItemIcon>
                             <ListItemText
-                                primary={"You"
-                                    // firebase.auth()?.currentUser?.displayName
+                                primary={
+                                    firebase.auth()?.currentUser?.displayName
                                 }
                             />
                         </StyledMenuItem>
@@ -320,7 +320,7 @@ const WalletItem = ({
                         <StyledMenuItem
                             onClick={() => {
                                 signOut()
-                                // firebase.auth().signOut()
+                                firebase.auth().signOut()
                             }}
                         >
                             <ListItemIcon>
@@ -334,10 +334,10 @@ const WalletItem = ({
                     </>
                 ) : (
                     <>
-                        {/* <StyledFirebaseAuth
+                        <StyledFirebaseAuth
                             uiConfig={uiConfig}
                             firebaseAuth={firebase.auth()}
-                        /> */}
+                        />
                     </>
                 )}
             </StyledMenu>

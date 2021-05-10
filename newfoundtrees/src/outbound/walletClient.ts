@@ -1,6 +1,7 @@
 import { WalletConnection } from 'near-api-js'
 import { normaliseBalance } from '../domain/AccountDetails'
 import AccountDetails from '../domain/AccountDetails'
+import { Chain, Network, Wallet } from 'mintbase'
 export async function signIn(
     contract: string,
     wallet: WalletConnection
@@ -29,3 +30,12 @@ export async function getAccountDetails(wallet: WalletConnection) {
             return Promise.reject(err)
         })
 }
+
+export const wallet = new Wallet({
+    chain: Chain.near,
+    networkName:
+        process.env.REACT_APP_NEAR_CHAIN === 'mainnet'
+            ? Network.main
+            : Network.testnet,
+    apiKey: process.env.REACT_APP_MINTBASE_API_KEY,
+})
