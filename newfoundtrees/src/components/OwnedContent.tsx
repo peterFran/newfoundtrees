@@ -1,10 +1,10 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
-import { OldToken } from '../domain/Token'
+import { NewFoundToken } from '../domain/Token'
 import ReactPlayer from 'react-player'
 
 interface OwnedContentProps {
-    token: OldToken
+    token: NewFoundToken
 }
 
 const useStyles = makeStyles((theme) => ({

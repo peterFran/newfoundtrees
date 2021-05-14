@@ -5,9 +5,10 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import NewFoundTreesMap from '../../components/NewFoundTreesMap'
 import { fetchTokens, getToken, LIST_TOKENS_QUERY, StoreData, StoreVars } from '../../outbound/tokenClient';
-import { OldToken, Thing, TokenDetails } from '../../domain/Token';
+import { NewFoundToken, Thing, TokenDetails } from '../../domain/Token';
 import { useQuery } from '@apollo/client';
 import { resolve } from 'node:path';
+import AuthContext from '../../context/AuthContext';
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -27,7 +28,9 @@ const useStyles = makeStyles((theme) => {
 const Projects = () => {
     const classes = useStyles()
 
-    const [availableTokens, setAvailableTokens] = React.useState<OldToken[]>([])
+    const { wallet } = React.useContext(AuthContext)
+
+    const [availableTokens, setAvailableTokens] = React.useState<NewFoundToken[]>([])
     const { loading, data } = useQuery<StoreData, StoreVars>(
         LIST_TOKENS_QUERY,
         {
@@ -40,10 +43,9 @@ const Projects = () => {
     React.useEffect(() => {
 
         if(!loading && data?.store && data.store.length > 0){
-            console.log(data?.store[0].things)
             fetchTokens(data.store[0].things).then((tokens) => setAvailableTokens(tokens))
         }
-    }, [loading, data])
+    }, [loading, data, wallet])
 
     return (
         <>

@@ -5,8 +5,9 @@ import TitledMegaCard from '../../components/TitledMegaCard'
 import { fetchTokens, LIST_TOKENS_QUERY, StoreData, StoreVars } from '../../outbound/tokenClient'
 import TreeCardGrid from '../../components/TreeCardGrid'
 import { TreeCardItem } from '../../components/TreeCard'
-import { Thing, OldToken } from '../../domain/Token';
+import { Thing, NewFoundToken } from '../../domain/Token';
 import { useQuery } from '@apollo/client'
+import AuthContext from '../../context/AuthContext'
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -66,7 +67,9 @@ const useStyles = makeStyles((theme) => {
 
 const Tokens = () => {
     const classes = useStyles()
-    const [availableTokens, setAvailableTokens] = React.useState<OldToken[]>([])
+    const [availableTokens, setAvailableTokens] = React.useState<NewFoundToken[]>([])
+
+    const { wallet } = React.useContext(AuthContext)
 
     const { loading, data } = useQuery<StoreData, StoreVars>(
         LIST_TOKENS_QUERY,
@@ -78,12 +81,11 @@ const Tokens = () => {
     )
 
     React.useEffect(() => {
-
+        console.log(wallet)
         if(!loading && data?.store && data.store.length > 0){
-            // console.log(data?.store[0].things)
             fetchTokens(data.store[0].things).then((tokens) => setAvailableTokens(tokens))
         }
-    }, [loading, data])
+    }, [loading, data, wallet])
 
     return (
         <>
@@ -116,15 +118,15 @@ const Tokens = () => {
                             }
                         />
                         {!loading &&
-                            availableTokens.map((thing: OldToken) => {
-                                return <TreeCardItem token={thing} />
+                            availableTokens.map((thing: NewFoundToken) => {
+                                return <TreeCardItem token={thing} key={thing.id}/>
                             })}
                     </TreeCardGrid>
 
                     <TreeCardGrid title="🌲 FUNDABLE INITIATIVES">
                         <>
-                            {!loading && availableTokens.map((thing: OldToken) => {
-                                    return <TreeCardItem token={thing} />
+                            {!loading && availableTokens.map((thing: NewFoundToken) => {
+                                    return <TreeCardItem token={thing} key={thing.id} />
                                 })}
                         </>
                     </TreeCardGrid>

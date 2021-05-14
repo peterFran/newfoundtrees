@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Button, makeStyles, Typography } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
-import { OldToken, Thing } from '../../domain/Token'
+import { NewFoundToken, Thing } from '../../domain/Token'
 import TreeCardGrid from '../../components/TreeCardGrid'
 import PurchaseMegaCard from '../../components/PurchaseMegaCard'
 import { API, Wallet } from 'mintbase'
@@ -10,7 +10,7 @@ import IDMegaCard from '../../components/IDMegaCard'
 import { getToken, GET_TOKEN_QUERY } from '../../outbound/tokenClient'
 import { useQuery } from '@apollo/client'
 import Empty from '../Empty'
-import { wallet } from '../../outbound/walletClient'
+// import { wallet } from '../../outbound/walletClient'
 import AuthContext from '../../context/AuthContext'
 
 const useStyles = makeStyles((theme) => {
@@ -79,11 +79,17 @@ interface ThingVars {
 const TokenPage = ({ id }: { id: string }) => {
     const classes = useStyles()
 
+    const { accountDetails, wallet } = React.useContext(AuthContext)
+
+    React.useEffect(() => {
+        console.log(accountDetails)
+    }, [accountDetails])
+
     const { data, error } = useQuery<ThingData, ThingVars>(GET_TOKEN_QUERY, {
         variables: { thingId: id },
     })
 
-    const [token, setToken] = React.useState<OldToken>()
+    const [token, setToken] = React.useState<NewFoundToken>()
 
     React.useEffect(() => {
         if (data?.thing && data.thing.length > 0) {
@@ -91,7 +97,7 @@ const TokenPage = ({ id }: { id: string }) => {
                 setToken(it)
             })
         }
-    }, [data])
+    }, [data, wallet])
 
     return (
         <>

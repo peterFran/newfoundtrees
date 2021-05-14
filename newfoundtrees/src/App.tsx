@@ -1,14 +1,14 @@
 import { Container, useTheme } from '@material-ui/core'
-import { Contract, WalletAccount } from 'near-api-js'
-import React from 'react'
+import { Wallet } from 'mintbase'
+import { WalletConfig } from 'mintbase/lib/types'
+import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Route, Switch, useLocation } from 'react-router-dom'
 import './App.css'
 import Navigation from './components/Navigation'
-import { near, nearConfig } from './components/NearConfig'
+import { mintbaseConfig } from './components/NearConfig'
 import AuthContext from './context/AuthContext'
 import AccountDetails from './domain/AccountDetails'
-import { getAccountDetails, signIn } from './outbound/walletClient'
 import Home from './screens/About/index'
 import Empty from './screens/Empty'
 import Projects from './screens/Map'
@@ -18,63 +18,63 @@ import Tokens from './screens/Tokens'
 const App = () => {
     const location = useLocation()
 
-    const wallet = React.useMemo(() => new WalletAccount(near, null), [])
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [wallet, setWallet] = useState<Wallet | null>(null)
+
+    useEffect(() => {
+        initWallet()
+    }, [])
+
     const [
         accountDetails,
         setAccountDetails,
     ] = React.useState<AccountDetails | null>(null)
 
-    const [contract, setContract] = React.useState<Contract | null>(null)
+    const initWallet = async () => {
+        const { data: walletData, error } = await new Wallet().init(
+            mintbaseConfig as WalletConfig
+        )
+
+        if (error) return
+
+        const { wallet, isConnected } = walletData
+
+        if (isConnected) {
+            try {
+                const { data: details } = await wallet.details()
+
+                setAccountDetails(details)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        setWallet(wallet)
+        setIsLoggedIn(isConnected)
+    }
+
+    useEffect(() => {
+        if (!wallet) return
+        wallet.details().then(({ data: details }) => {
+            setAccountDetails(details as AccountDetails)
+        })
+    }, [wallet])
 
     const authContext = React.useMemo(
         () => ({
-            signIn: async (): Promise<AccountDetails> => {
-                return signIn(nearConfig.contract, wallet).then(
-                    (accountDetails) => {
-                        setAccountDetails(accountDetails)
-                        setContract(
-                            new Contract(
-                                wallet.account(),
-                                nearConfig.contract,
-                                {
-                                    viewMethods: [],
-                                    changeMethods: [],
-                                }
-                            )
-                        )
-                        return accountDetails
-                    }
-                )
+            wallet: wallet,
+            signIn: async () => {
+                if (!wallet) return
+                wallet.connect({ requestSignIn: true })
             },
             signOut: () => {
-                wallet.signOut()
+                wallet?.disconnect()
                 setAccountDetails(null)
             },
-            contract: null,
-            accountDetails: null,
+            accountDetails: accountDetails,
         }),
-        [wallet]
+        [wallet, accountDetails]
     )
-
-    React.useEffect(() => {
-        const bootstrapAsync = async () => {
-            if (wallet.isSignedIn()) {
-                getAccountDetails(wallet).then((accountDetails) => {
-                    setAccountDetails(accountDetails)
-                    setContract(
-                        new Contract(wallet.account(), nearConfig.contract, {
-                            viewMethods: ['query'],
-                            changeMethods: [],
-                        })
-                    )
-                    return accountDetails
-                })
-            } else {
-                setAccountDetails(null)
-            }
-        }
-        bootstrapAsync()
-    }, [wallet])
 
     const theme = useTheme()
     return (
@@ -92,8 +92,8 @@ const App = () => {
         >
             <AuthContext.Provider
                 value={{
+                    wallet: wallet,
                     signIn: authContext.signIn,
-                    contract: contract,
                     signOut: authContext.signOut,
                     accountDetails: accountDetails,
                 }}
@@ -131,7 +131,7 @@ const App = () => {
                             ): {
                                 props: { match: { params: { id: number } } }
                             } => {
-                                return (<TokenPage id={props.match.params.id} />)
+                                return <TokenPage id={props.match.params.id} />
                             }}
                         />
 

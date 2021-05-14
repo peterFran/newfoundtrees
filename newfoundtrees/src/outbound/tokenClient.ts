@@ -1,5 +1,5 @@
-import { OldToken, TokenDetails, Thing, Metadata, Store } from '../domain/Token'
-import { API, Chain, Network } from 'mintbase'
+import { NewFoundToken, TokenDetails, Thing, Metadata, Store } from '../domain/Token'
+import { API, Chain, MintbaseAPIConfig, Network, Wallet } from 'mintbase'
 import { gql } from '@apollo/client'
 
 export interface StoreData {
@@ -40,6 +40,7 @@ export const GET_TOKEN_QUERY = gql`
             metaId
             tokens_aggregate(distinct_on: thingId) {
                 nodes {
+                    id
                     list {
                         price
                     }
@@ -50,16 +51,8 @@ export const GET_TOKEN_QUERY = gql`
     }
 `
 
-export const api = new API({
-    chain: Chain.near,
-    networkName:
-        process.env.REACT_APP_NEAR_CHAIN === 'mainnet'
-            ? Network.main
-            : Network.testnet,
-    apiKey: process.env.REACT_APP_MINTBASE_API_KEY,
-})
 
-export async function fetchTokens(things: Thing[]): Promise<OldToken[]> {
+export async function fetchTokens(things: Thing[]): Promise<NewFoundToken[]> {
     return Promise.all(
         things.filter((thing) => thing.tokens_aggregate.nodes[0].list?.price != null).map(async (thing) => {
             console.log(thing)
@@ -68,10 +61,13 @@ export async function fetchTokens(things: Thing[]): Promise<OldToken[]> {
     ).catch(() => [])
 }
 
-export async function getToken(thing: Thing): Promise<OldToken> {
-    return api.fetchMetadata(thing.metaId).then((meta: Metadata) => {
-        console.log(`ID: ${thing.metaId}`)
-        console.log(meta)
+export async function getToken(thing: Thing): Promise<NewFoundToken> {
+    console.log(`I'm getting a token ${thing.metaId}`)
+    return fetch(`https://arweave.net/${thing.metaId}`).then(
+        response => response.json()
+    ).then(
+        (meta: Metadata) => 
+    {
         return {
             id: thing.id,
             edition: thing.tokens_aggregate.nodes[0]?.mintGroupId.split(':')[0],
@@ -106,11 +102,12 @@ export async function getToken(thing: Thing): Promise<OldToken> {
                 ),
                 cover: meta.media,
             } as TokenDetails,
-            batchSize: meta.amountToMint,
+            batchSize: meta.copies,
             sold: 0,
-            price: thing.tokens_aggregate.nodes[0]?.list.price,
+            price: thing.tokens_aggregate.nodes.length > 0 ? Math.min.apply(Math, thing.tokens_aggregate.nodes.map(tok => tok.list.price)) : null,
             ownedEditions: [],
+            availableEditions: thing.tokens_aggregate.nodes,
             updates: [],
-        } as OldToken
+        } as NewFoundToken
     })
 }

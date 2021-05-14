@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import mapStyles from './mapStyles'
-import { OldToken } from '../domain/Token'
+import { NewFoundToken } from '../domain/Token'
 
 import { makeStyles } from '@material-ui/core'
 
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface SmallMapProps {
-    token: OldToken
+    token: NewFoundToken
 }
 
 const SmallMap = ({ token }: SmallMapProps) => {

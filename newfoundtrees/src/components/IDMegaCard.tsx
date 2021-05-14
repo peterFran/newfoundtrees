@@ -1,12 +1,12 @@
 import { IconButton, makeStyles, Typography } from '@material-ui/core'
 import * as React from 'react'
-import { OldToken } from '../domain/Token'
+import { NewFoundToken } from '../domain/Token'
 import PlainMegaCard from './PlainMegaCard'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import Breadcrumbs from './Breadcrumbs'
 
 interface TitledMegaCardProps {
-    token: OldToken
+    token: NewFoundToken
 }
 
 const CARD_HEIGHT = 670

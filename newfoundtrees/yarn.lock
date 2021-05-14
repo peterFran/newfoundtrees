@@ -8436,10 +8436,10 @@ minizlib@^2.1.1:
     minipass "^3.0.0"
     yallist "^4.0.0"
 
-mintbase@0.0.25:
-  version "0.0.25"
-  resolved "https://registry.yarnpkg.com/mintbase/-/mintbase-0.0.25.tgz#90f49fba8c0f824014a74beb7919cdedcfa531cf"
-  integrity sha512-paU1Qr/16m2QgewCut+ATE+heJTsf5TEy6Uk9M9qMOSi/6fElYXwlGlCL7O2VrNdUgU3HvtxjjkEye7Dlr6phQ==
+mintbase@0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/mintbase/-/mintbase-0.1.3.tgz#2556b6024fee493bacc6251b5471784a534ad2e5"
+  integrity sha512-YbU6EzpqqsGj71Ic/01pyF+zDlMj6DiMYu6oa88EEgxek/sN5LtelNBzDo2jGbedfs3jQkkJiSnzXCJjezSP4w==
   dependencies:
     bn.js "^5.2.0"
     browser-or-node "^1.3.0"
@@ -8451,6 +8451,7 @@ mintbase@0.0.25:
     isomorphic-unfetch "^3.1.0"
     near-api-js "^0.39.0"
     regenerator-runtime "^0.13.7"
+    urlcat "^2.0.4"
     uuid "^8.3.2"
 
 mississippi@^3.0.0:
@@ -12381,6 +12382,11 @@ url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+urlcat@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/urlcat/-/urlcat-2.0.4.tgz#c119b4e3b31df4d140e77e177ea5d95dbe6b2fe2"
+  integrity sha512-12c4Vi40DHVdZ/8mOLjZjp0asCzM6hi8Gj116fpImRP1FN4gBMCtMi9XhLNOmre/FEQYNqHbZmX8iyYAtIcy8Q==
 
 use@^3.1.0:
   version "3.1.1"

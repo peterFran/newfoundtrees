@@ -22,10 +22,14 @@ const useStyles = makeStyles((theme) => ({
 interface BreadcrumbProps {
     quantity: number
     index: number
-    direction? : 'row' | 'column'
+    direction?: 'row' | 'column'
 }
 
-const Breadcrumbs = ({ quantity, index, direction = 'column' }: BreadcrumbProps) => {
+const Breadcrumbs = ({
+    quantity,
+    index,
+    direction = 'column',
+}: BreadcrumbProps) => {
     const crumbs = Array.from(Array(quantity).keys())
 
     const styles = useStyles()
@@ -43,13 +47,11 @@ const Breadcrumbs = ({ quantity, index, direction = 'column' }: BreadcrumbProps)
                 return (
                     <div
                         className={styles.sphere}
+                        key={idx}
                         style={
                             index === idx
                                 ? {
-                                    //   transform: 'opacity(0.6)',
-                                    //   msTransform: 'opacity(0.6)',
-                                    //   WebkitTransform: 'opacity(0.6)',
-                                    opacity: 1
+                                      opacity: 1,
                                   }
                                 : {}
                         }

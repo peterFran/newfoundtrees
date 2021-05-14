@@ -1,13 +1,13 @@
 import React from 'react'
 import { Button, makeStyles } from '@material-ui/core'
 import { InfoWindow } from '@react-google-maps/api'
-import { OldToken } from '../domain/Token'
+import { NewFoundToken } from '../domain/Token'
 import ReactCardFlip from 'react-card-flip'
 import OwnedContent from './OwnedContent'
 import ProgressBar from 'react-bootstrap/esm/ProgressBar'
 
 interface TokenInfoWindowProps {
-    token: OldToken
+    token: NewFoundToken
     onCloseClick: () => void
 }
 

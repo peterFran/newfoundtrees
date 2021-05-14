@@ -43,6 +43,7 @@ const TreeCardGrid = ({ title, children, reverse=false }: TreeCardRowProps) => {
                 <Grid
                     container
                     direction={reverse ? "row-reverse" : "row"}
+                    item
                     xs={12}
                     zeroMinWidth
                     spacing={4}

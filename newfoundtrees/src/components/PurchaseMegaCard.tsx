@@ -1,13 +1,14 @@
 import { Button, makeStyles, Typography } from '@material-ui/core'
 import { formatNearAmount } from 'near-api-js/lib/utils/format'
 import * as React from 'react'
-import { OldToken } from '../domain/Token'
+import { NewFoundToken } from '../domain/Token'
 import ImpactScore from './ImpactScore'
 import PlainMegaCard from './PlainMegaCard'
 import SmallMap from './SmallMap'
+import AuthContext from '../context/AuthContext'
 
 interface PurchaseMegaCardProps {
-    token: OldToken
+    token: NewFoundToken
     rotated?: boolean
     background?: boolean
 }
@@ -51,14 +52,14 @@ const useStyles = makeStyles((theme) => ({
 const PurchaseMegaCard = ({ token }: PurchaseMegaCardProps) => {
     const styles = useStyles()
 
+    const { wallet } = React.useContext(AuthContext)
+
+
     React.useEffect(() => {
         try {
-            formatNearAmount(
-                token.price.toLocaleString('fullwide', { useGrouping: false })
-            )
+            console.log(token.availableEditions)
         } catch (error) {
-            console.log(token.price.toFixed())
-            console.log(error)
+
         }
     }, [token])
 
@@ -136,8 +137,16 @@ const PurchaseMegaCard = ({ token }: PurchaseMegaCardProps) => {
                     <Typography variant="body2">IMPACT</Typography>
                     <ImpactScore score={token.details.impactScore} />
                 </div>
-                <Button variant="contained" color="primary" href="/buy">
-                    💰 Buy Token
+                
+                <Button variant="contained" color="primary" onClick={() => {
+                    console.log(token.price.toFixed())
+                    wallet?.makeOffer(token.availableEditions[0].id, 
+                        token.price.toLocaleString('fullwide', {
+                            useGrouping: false,
+                        })
+                    )
+                    }}>
+                    Buy Token
                 </Button>
             </div>
         </PlainMegaCard>

@@ -1,12 +1,11 @@
-import { Contract } from 'near-api-js';
+import { Wallet } from 'mintbase';
 import * as React from 'react'
 import AccountDetails from '../domain/AccountDetails';
-import { defaultAccount } from '../domain/AccountDetails';
 
 const AuthContext = React.createContext({
-    signIn: () => Promise.resolve(defaultAccount),
+    wallet: {} as Wallet | null,
+    signIn: () => {},
     signOut: () => {},
-    contract: null as Contract | null,
     accountDetails: {} as AccountDetails | null,
 })
 

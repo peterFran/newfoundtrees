@@ -171,19 +171,14 @@ const StyledMenuItem = withStyles((theme) => ({
 }))(MenuItem)
 
 interface WalletItemProps {
-    accountDetails: AccountDetails | null
-    signIn: () => void
-    signOut: () => void
     white: boolean
 }
 
 const WalletItem = ({
-    white,
-    accountDetails,
-    signIn,
-    signOut,
+    white
 }: WalletItemProps) => {
     const classes = useNavItemStyles()
+    const { signIn, signOut, accountDetails } = React.useContext(AuthContext)
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const [isSignedIn, setIsSignedIn] = React.useState(false) // Local signed-in state.
@@ -206,6 +201,11 @@ const WalletItem = ({
             })
         return () => unregisterAuthObserver() // Make sure we un-register Firebase observers when the component unmounts.
     }, [])
+
+    React.useEffect(()=> {
+        console.log("YES!@")
+        console.log(accountDetails)
+    }, [accountDetails])
 
     React.useEffect(() => {
         if (
@@ -273,7 +273,10 @@ const WalletItem = ({
                     <>
                         <StyledMenuItem>
                             <ListItemIcon>
-                                <ArrowBackIcon fontSize="small"  color="primary"/>
+                                <ArrowBackIcon
+                                    fontSize="small"
+                                    color="primary"
+                                />
                             </ListItemIcon>
                             <ListItemText
                                 primary={
@@ -302,7 +305,7 @@ const WalletItem = ({
                                         />
                                     </ListItemIcon>
                                     <ListItemText
-                                        primary={`${accountDetails.balance.available} Ⓝ`}
+                                        primary={`${accountDetails.balance} Ⓝ`}
                                     />
                                 </StyledMenuItem>
                             </>
@@ -430,7 +433,6 @@ const HorizontalNavigation = ({
     mapView?: boolean
     white: boolean
 }) => {
-    const { signIn, signOut, accountDetails } = React.useContext(AuthContext)
 
     const classes = useHorizontalStyles()
     return (
@@ -438,18 +440,13 @@ const HorizontalNavigation = ({
             <nav className={mapView ? classes.mapRoot : classes.root}>
                 <ul className={classes.navList}>
                     <li>
-                        {/* <Link to="/" target="_blank" rel="noopener noreferrer"> */}
-                            <TitleItem {...{ white }} />
-                        {/* </Link> */}
+                        <TitleItem {...{ white }} />
                     </li>
                     <div className={classes.wrapper}>
                         <li className={classes.center}>
                             <WalletItem
                                 {...{
-                                    accountDetails,
-                                    signIn,
-                                    signOut,
-                                    white,
+                                    white
                                 }}
                             />
                         </li>
@@ -557,7 +554,7 @@ const MobileNavigation = ({ mapView }: { mapView: boolean }) => {
                     role={undefined}
                     transition
                     disablePortal
-                    placement='bottom-end'
+                    placement="bottom-end"
                 >
                     {({ TransitionProps, placement }) => (
                         <Grow
@@ -573,22 +570,22 @@ const MobileNavigation = ({ mapView }: { mapView: boolean }) => {
                                         id="menu-list-grow"
                                         onKeyDown={handleListKeyDown}
                                     >
-                                        <Link to='/'>
+                                        <Link to="/">
                                             <MenuItem onClick={handleClose}>
                                                 Tokens
                                             </MenuItem>
                                         </Link>
-                                        <Link to='/map'>
+                                        <Link to="/map">
                                             <MenuItem onClick={handleClose}>
                                                 Map
                                             </MenuItem>
                                         </Link>
-                                        <Link to='/art'>
+                                        <Link to="/art">
                                             <MenuItem onClick={handleClose}>
                                                 Art
                                             </MenuItem>
                                         </Link>
-                                        <Link to='/about'>
+                                        <Link to="/about">
                                             <MenuItem onClick={handleClose}>
                                                 About
                                             </MenuItem>
@@ -614,8 +611,12 @@ const Navigation = ({ loggedIn = false }: { loggedIn: boolean }) => {
             <HorizontalNavigation
                 {...{
                     loggedIn,
-                    mapView: location.pathname === '/map' || location.pathname === '/about',
-                    white: location.pathname === '/map' || location.pathname === '/about',
+                    mapView:
+                        location.pathname === '/map' ||
+                        location.pathname === '/about',
+                    white:
+                        location.pathname === '/map' ||
+                        location.pathname === '/about',
                 }}
             />
         )

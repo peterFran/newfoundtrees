@@ -1,16 +1,17 @@
-export interface OldToken {
+export interface NewFoundToken {
     id: string
     edition: string
     details: TokenDetails
     batchSize: number
     sold: number,
     price: number,
-    ownedEditions: number[]
+    ownedEditions: string[]
+    availableEditions: Token[]
     updates: TokenUpdate[]
 }
 
 export interface Metadata {
-    amountToMint: number,
+    copies: number,
     animation_url: string,
     description: string,
     title: string,

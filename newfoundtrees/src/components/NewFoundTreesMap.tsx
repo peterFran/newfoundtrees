@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import mapStyles from './mapStyles'
-import { OldToken } from '../domain/Token';
+import { NewFoundToken } from '../domain/Token';
 
 import { makeStyles } from '@material-ui/core'
 import NewTokenInfoWindow from './NewTokenInfoWindow';
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 interface NewFoundTreesMapProps {
-    tokens?: OldToken[]
+    tokens?: NewFoundToken[]
 }
 
 const NewFoundTreesMap = ({
@@ -78,7 +78,7 @@ const NewFoundTreesMap = ({
     
 }: NewFoundTreesMapProps) => {
     const [selected, setSelected] = React.useState<
-        OldToken | null
+        NewFoundToken | null
     >(null)
 
     const styles = useStyles()
@@ -178,7 +178,7 @@ const NewFoundTreesMap = ({
                         ))}
                         {selected && (
                             <NewTokenInfoWindow
-                                token={selected as OldToken}
+                                token={selected as NewFoundToken}
                                 onCloseClick={() => setSelected(null)}
                             />
                         )}
