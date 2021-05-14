@@ -1,5 +1,4 @@
 import { NewFoundToken, TokenDetails, Thing, Metadata, Store } from '../domain/Token'
-import { API, Chain, MintbaseAPIConfig, Network, Wallet } from 'mintbase'
 import { gql } from '@apollo/client'
 
 export interface StoreData {

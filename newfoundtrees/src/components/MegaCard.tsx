@@ -16,15 +16,18 @@ const useStyles = makeStyles((theme) => ({
         backgroundSize: '100% 100%',
         backgroundImage: `url('/map.png')`,
         backgroundRepeat: 'no-repeat',
-        borderRadius: 15,
-        overflow: 'hidden',
+        borderRadius: 15
     },
     veil: {
-        width: '100%',
+        width: '200%',
         height: '100%',
         position: 'relative',
         backgroundColor: '#2D0D45',
-        opacity: 0.8
+        opacity: 0.8,
+        borderRadius: 15,
+        display: 'absolute',
+        right: 0,
+        left: '-100%'
     },
     inner: {
         width: '100%',

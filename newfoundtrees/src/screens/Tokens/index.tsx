@@ -112,13 +112,13 @@ const Tokens = () => {
                                         color="primary"
                                         href="/map"
                                     >
-                                        🗺️ View on map
+                                        View on map 🗺️ 
                                     </Button>
                                 </>
                             }
                         />
                         {!loading &&
-                            availableTokens.map((thing: NewFoundToken) => {
+                            availableTokens.slice(0, 2).map((thing: NewFoundToken) => {
                                 return <TreeCardItem token={thing} key={thing.id}/>
                             })}
                     </TreeCardGrid>

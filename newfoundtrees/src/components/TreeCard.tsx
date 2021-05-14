@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
         borderStyle: 'solid',
 
         borderColor: theme.palette.secondary.main,
+        boxShadow: '0px 4px 4px 0px #00000040'
     },
     logo: {
         display: 'block',
@@ -93,15 +94,20 @@ const TreeCard = ({ token, showContent = false }: TreeCardProps) => {
     return (
         <div className={styles.box} onClick={handleOnClick}>
             <div className={styles.inner}>
-                <div style={{display: 'flex', flexDirection: 'column'}}>
+                <div style={{minHeight: '30%'}}>
                     <Typography
                         variant="h2"
                         color="primary"
                         align="left"
-                        style={{ paddingBottom: 50 }}
+                        
+                        style={{ paddingBottom: 10, fontSize: 27 }}
                     >
                         {token.details.name}
                     </Typography>
+                </div>
+                <div>
+                    
+                    
 
                     <Typography
                         variant="body1"
