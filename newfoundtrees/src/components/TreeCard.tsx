@@ -112,7 +112,7 @@ const TreeCard = ({ token, showContent = false }: TreeCardProps) => {
                     <Typography
                         variant="body1"
                         color="textPrimary"
-                        align="justify"
+                        align="left"
                     >
                         {token.details.description}
                     </Typography>

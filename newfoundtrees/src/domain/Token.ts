@@ -51,12 +51,12 @@ export interface Store {
 export interface Thing {
     metaId: string
     id: string
-    tokens_aggregate: {nodes: Token[]}
+    tokens: Token[]
 };
 
 export interface Token {
     id: string
-    list: List 
+    lists: List[] 
     mintGroupId: string
 }
 
