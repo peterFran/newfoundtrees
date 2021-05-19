@@ -23,7 +23,6 @@ import {
     ClickAwayListener,
     IconButton,
 } from '@material-ui/core'
-import AccountDetails from '../domain/AccountDetails'
 import LinkIcon from '@material-ui/icons/Link'
 
 import firebase from 'firebase/app'

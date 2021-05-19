@@ -14,7 +14,6 @@ interface PurchaseMegaCardProps {
 
 const CARD_HEIGHT = 600
 
-
 const useStyles = makeStyles((theme) => ({
     container: {
         paddingLeft: theme.spacing(15),
@@ -60,13 +59,10 @@ const PurchaseMegaCard = ({ token }: PurchaseMegaCardProps) => {
 
     const { wallet } = React.useContext(AuthContext)
 
-
     React.useEffect(() => {
         try {
             console.log(token.availableEditions)
-        } catch (error) {
-
-        }
+        } catch (error) {}
     }, [token])
 
     return (
@@ -129,11 +125,24 @@ const PurchaseMegaCard = ({ token }: PurchaseMegaCardProps) => {
                     >
                         Location:
                     </Typography>
-                    <Typography variant="h5" style={{textDecoration: 'underline'}} >{`${token.details.coordinates.latitude.toFixed(
-                                6
-                            )}, ${token.details.coordinates.longitude.toFixed(
-                                6
-                            )}`}</Typography>
+                    <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${token.details.coordinates.latitude.toFixed(
+                            6
+                        )},${token.details.coordinates.longitude.toFixed(
+                            6
+                        )}`}
+                        style={{
+                            color: "black"
+                        }}
+                    >
+                    <Typography
+                        variant="h5"
+                        style={{ textDecoration: 'underline' }}
+                    >{`${token.details.coordinates.latitude.toFixed(
+                        6
+                    )}, ${token.details.coordinates.longitude.toFixed(
+                        6
+                    )}`}</Typography></a>
                     {/* <div className={styles.mapContainer}>
                         <SmallMap token={token} />
                         <div style={{width: '100%'}}>
@@ -155,17 +164,28 @@ const PurchaseMegaCard = ({ token }: PurchaseMegaCardProps) => {
                     <Typography variant="body2">IMPACT</Typography>
                     <ImpactScore score={token.details.impactScore} />
                 </div>
-                <div style={{padding: 15, justifyContent: 'flex-start', display: 'flex'}}>
-                <Button variant="contained" color="primary" onClick={() => {
-                    console.log(token.price.toFixed())
-                    wallet?.makeOffer(token.availableEditions[0].id, 
-                        token.price.toLocaleString('fullwide', {
-                            useGrouping: false,
-                        })
-                    )
-                    }}>
-                    Buy Token 💰
-                </Button>
+                <div
+                    style={{
+                        padding: 15,
+                        justifyContent: 'flex-start',
+                        display: 'flex',
+                    }}
+                >
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                            console.log(token.price.toFixed())
+                            wallet?.makeOffer(
+                                token.availableEditions[0].id,
+                                token.price.toLocaleString('fullwide', {
+                                    useGrouping: false,
+                                })
+                            )
+                        }}
+                    >
+                        Buy Token 💰
+                    </Button>
                 </div>
             </div>
         </PlainMegaCard>
