@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet'
 import { Route, Switch, useLocation } from 'react-router-dom'
 import './App.css'
 import Navigation from './components/Navigation'
+import tree from './assets/tokensBackground.png'
 import { mintbaseConfig } from './components/NearConfig'
 import AuthContext from './context/AuthContext'
 import AccountDetails from './domain/AccountDetails'
@@ -87,6 +88,13 @@ const App = () => {
                           background: `linear-gradient(to bottom, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.dark} 55%, #000000 55%,${theme.palette.primary.light} 55%,${theme.palette.primary.light} 100%)` /* W3C */,
                           overflow: 'hidden',
                       }
+                    : location.pathname === '/tokens' || location.pathname === '/' ? {
+                        backgroundImage: `url(${tree})`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPositionX: 'right -60px',
+                        backgroundPositionY: '30%',
+                        overflow: 'hidden' 
+                    } 
                     : { overflow: 'hidden' }
             }
         >

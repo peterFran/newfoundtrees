@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
         borderWidth: 1,
         borderRadius: 15,
         borderStyle: 'solid',
+        backgroundColor: theme.palette.background.paper,
 
         borderColor: theme.palette.secondary.main,
         boxShadow: '0px 4px 4px 0px #00000040'

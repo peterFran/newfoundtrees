@@ -4,10 +4,9 @@ import { Helmet } from 'react-helmet'
 import { makeStyles } from '@material-ui/core/styles'
 
 import NewFoundTreesMap from '../../components/NewFoundTreesMap'
-import { fetchTokens, getToken, LIST_TOKENS_QUERY, StoreData, StoreVars } from '../../outbound/tokenClient';
-import { NewFoundToken, Thing, TokenDetails } from '../../domain/Token';
+import { fetchTokens, LIST_TOKENS_QUERY, StoreData, StoreVars } from '../../outbound/tokenClient';
+import { NewFoundToken } from '../../domain/Token';
 import { useQuery } from '@apollo/client';
-import { resolve } from 'node:path';
 import AuthContext from '../../context/AuthContext';
 
 const useStyles = makeStyles((theme) => {

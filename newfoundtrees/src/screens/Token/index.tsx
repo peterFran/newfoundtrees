@@ -1,23 +1,19 @@
 import * as React from 'react'
 
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import { Button, makeStyles } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
 import { NewFoundToken, Thing } from '../../domain/Token'
 import TreeCardGrid from '../../components/TreeCardGrid'
 import PurchaseMegaCard from '../../components/PurchaseMegaCard'
-import { API, Wallet } from 'mintbase'
 import IDMegaCard from '../../components/IDMegaCard'
 import { getToken, GET_TOKEN_QUERY } from '../../outbound/tokenClient'
 import { useQuery } from '@apollo/client'
 import Empty from '../Empty'
-// import { wallet } from '../../outbound/walletClient'
 import AuthContext from '../../context/AuthContext'
 
 const useStyles = makeStyles((theme) => {
     return {
         container: {
-            // marginTop: theme.spacing(5),
-            // paddingTop: theme.spacing(2),
             display: 'flex',
             alignItems: 'flex-start',
             scrollBehavior: 'smooth',
