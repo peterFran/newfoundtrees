@@ -5,7 +5,7 @@ import TitledMegaCard from '../../components/TitledMegaCard'
 import { fetchTokens, LIST_TOKENS_QUERY, StoreData, StoreVars } from '../../outbound/tokenClient'
 import TreeCardGrid from '../../components/TreeCardGrid'
 import { TreeCardItem } from '../../components/TreeCard'
-import { Thing, NewFoundToken } from '../../domain/Token';
+import { NewFoundToken } from '../../domain/Token';
 import { useQuery } from '@apollo/client'
 import AuthContext from '../../context/AuthContext'
 
