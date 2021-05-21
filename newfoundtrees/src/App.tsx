@@ -15,6 +15,7 @@ import Empty from './screens/Empty'
 import Projects from './screens/Map'
 import TokenPage from './screens/Token'
 import Tokens from './screens/Tokens'
+import WalletScreen from './screens/Wallet'
 
 const App = () => {
     const location = useLocation()
@@ -92,8 +93,11 @@ const App = () => {
                         backgroundImage: `url(${tree})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundPositionX: 'right -60px',
-                        backgroundPositionY: '30%',
+                        backgroundPositionY: '150px',
                         overflow: 'hidden' 
+                    } 
+                    : location.pathname === '/art' || location.pathname === '/' ? {
+                        backgroundColor: theme.palette.primary.dark
                     } 
                     : { overflow: 'hidden' }
             }
@@ -130,6 +134,10 @@ const App = () => {
 
                         <Route path="/map">
                             <Projects />
+                        </Route>
+
+                        <Route path="/art">
+                            <WalletScreen />
                         </Route>
 
                         <Route

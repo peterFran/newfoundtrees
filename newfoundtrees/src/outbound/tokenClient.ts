@@ -15,6 +15,11 @@ export interface StoreVars {
     store: string
 }
 
+export interface UserVars {
+    store: string
+    user: string
+}
+
 export const LIST_TOKENS_QUERY = gql`
     query LIST_TOKENS_QUERY($store: String!) {
         store(where: { id: { _eq: $store } }) {
@@ -25,6 +30,27 @@ export const LIST_TOKENS_QUERY = gql`
                     id
                     mintGroupId
                     lists(where: { acceptedOfferId: { _is_null: true } }) {
+                        price
+                    }
+                }
+            }
+            id
+            name
+            owner
+        }
+    }
+`
+
+export const LIST_USERS_TOKENS_QUERY = gql`
+    query LIST_USERS_TOKENS_QUERY($store: String!, $user: String!) {
+        store(where: { id: { _eq: $store } }) {
+            things(distinct_on: metaId, where: {tokens: {ownerId: {_eq: $user}, lists: {acceptedOfferId: {_is_null: false}}}}) {
+                id
+                metaId
+                tokens(where: {ownerId: {_eq: $user}, lists: {acceptedOfferId: {_is_null: false}}}) {
+                    id
+                    mintGroupId
+                    lists(where: { acceptedOfferId: { _is_null: false } }) {
                         price
                     }
                 }
@@ -58,6 +84,16 @@ export async function fetchTokens(things: Thing[]): Promise<NewFoundToken[]> {
             .filter(
                 (thing) => thing.tokens.some(it => it.lists.length > 0)
             )
+            .map(async (thing) => {
+                console.log(thing)
+                return await getToken(thing)
+            })
+    ).catch(() => [])
+}
+
+export async function fetchUsersTokens(things: Thing[]): Promise<NewFoundToken[]> {
+    return Promise.all(
+        things
             .map(async (thing) => {
                 console.log(thing)
                 return await getToken(thing)

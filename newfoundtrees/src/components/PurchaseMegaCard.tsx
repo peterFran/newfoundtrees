@@ -76,14 +76,16 @@ const PurchaseMegaCard = ({ token }: PurchaseMegaCardProps) => {
                     >
                         {token.details.category} Project
                     </Typography>
-                    <Typography color="primary" variant="h5">
-                        Ⓝ{' '}
-                        {formatNearAmount(
-                            token.price.toLocaleString('fullwide', {
-                                useGrouping: false,
-                            })
-                        )}
-                    </Typography>
+                    {token.price && (
+                        <Typography color="primary" variant="h5">
+                            Ⓝ{' '}
+                            {formatNearAmount(
+                                token.price.toLocaleString('fullwide', {
+                                    useGrouping: false,
+                                })
+                            )}
+                        </Typography>
+                    )}
                 </div>
                 <div
                     style={{
@@ -126,23 +128,24 @@ const PurchaseMegaCard = ({ token }: PurchaseMegaCardProps) => {
                         Location:
                     </Typography>
                     <a
+                        target="_blank"
+                        rel="noreferrer"
                         href={`https://www.google.com/maps/search/?api=1&query=${token.details.coordinates.latitude.toFixed(
                             6
-                        )},${token.details.coordinates.longitude.toFixed(
-                            6
-                        )}`}
+                        )},${token.details.coordinates.longitude.toFixed(6)}`}
                         style={{
-                            color: "black"
+                            color: 'black',
                         }}
                     >
-                    <Typography
-                        variant="h5"
-                        style={{ textDecoration: 'underline' }}
-                    >{`${token.details.coordinates.latitude.toFixed(
-                        6
-                    )}, ${token.details.coordinates.longitude.toFixed(
-                        6
-                    )}`}</Typography></a>
+                        <Typography
+                            variant="h5"
+                            style={{ textDecoration: 'underline' }}
+                        >{`${token.details.coordinates.latitude.toFixed(
+                            6
+                        )}, ${token.details.coordinates.longitude.toFixed(
+                            6
+                        )}`}</Typography>
+                    </a>
                     {/* <div className={styles.mapContainer}>
                         <SmallMap token={token} />
                         <div style={{width: '100%'}}>
@@ -171,21 +174,23 @@ const PurchaseMegaCard = ({ token }: PurchaseMegaCardProps) => {
                         display: 'flex',
                     }}
                 >
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                            console.log(token.price.toFixed())
-                            wallet?.makeOffer(
-                                token.availableEditions[0].id,
-                                token.price.toLocaleString('fullwide', {
-                                    useGrouping: false,
-                                })
-                            )
-                        }}
-                    >
-                        Buy Token 💰
-                    </Button>
+                    {token.price && (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                console.log(token.price.toFixed())
+                                wallet?.makeOffer(
+                                    token.availableEditions[0].id,
+                                    token.price.toLocaleString('fullwide', {
+                                        useGrouping: false,
+                                    })
+                                )
+                            }}
+                        >
+                            Buy Token 💰
+                        </Button>
+                    )}
                 </div>
             </div>
         </PlainMegaCard>

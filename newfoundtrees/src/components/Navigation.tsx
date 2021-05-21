@@ -376,7 +376,7 @@ const useHorizontalStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         justifyContent: 'space-between',
         pointerEvents: 'none',
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: 'transparent',
         paddingTop: theme.spacing(5),
         zIndex: 1,
     },
@@ -612,10 +612,12 @@ const Navigation = ({ loggedIn = false }: { loggedIn: boolean }) => {
                     loggedIn,
                     mapView:
                         location.pathname === '/map' ||
-                        location.pathname === '/about',
+                        location.pathname === '/about' ||
+                        location.pathname === '/art',
                     white:
                         location.pathname === '/map' ||
-                        location.pathname === '/about',
+                        location.pathname === '/about'||
+                        location.pathname === '/art',
                 }}
             />
         )
