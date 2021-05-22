@@ -97,7 +97,9 @@ const App = () => {
                         overflow: 'hidden' 
                     } 
                     : location.pathname === '/art' || location.pathname === '/' ? {
-                        backgroundColor: theme.palette.primary.dark
+                        backgroundColor: theme.palette.primary.dark,
+                        overflow: 'hidden',
+                        minHeight: '100vh'
                     } 
                     : { overflow: 'hidden' }
             }

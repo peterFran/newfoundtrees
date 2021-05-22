@@ -184,7 +184,7 @@ const PurchaseMegaCard = ({ token }: PurchaseMegaCardProps) => {
                                     token.availableEditions[0].id,
                                     token.price.toLocaleString('fullwide', {
                                         useGrouping: false,
-                                    })
+                                    }), "market.mintspace2.testnet"
                                 )
                             }}
                         >

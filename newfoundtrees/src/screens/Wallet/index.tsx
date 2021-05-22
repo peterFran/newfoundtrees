@@ -1,7 +1,6 @@
 import React from 'react'
-import { Button, makeStyles, Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
-import TitledMegaCard from '../../components/TitledMegaCard'
 import { fetchUsersTokens, LIST_USERS_TOKENS_QUERY, StoreData, UserVars } from '../../outbound/tokenClient'
 import TreeCardGrid from '../../components/TreeCardGrid'
 import { TreeCardItem } from '../../components/TreeCard'
