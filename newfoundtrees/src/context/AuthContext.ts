@@ -4,9 +4,11 @@ import AccountDetails from '../domain/AccountDetails';
 
 const AuthContext = React.createContext({
     wallet: {} as Wallet | null,
-    signIn: () => {},
+    signIn: ({request=true}:{request:boolean, accountId?: string}) => {},
     signOut: () => {},
     accountDetails: {} as AccountDetails | null,
+    isNearLoggedIn: false as boolean,
+    isOAuthLoggedIn: false as boolean
 })
 
 export default AuthContext

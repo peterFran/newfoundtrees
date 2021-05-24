@@ -76,11 +76,7 @@ interface ThingVars {
 const TokenPage = ({ id }: { id: string }) => {
     const classes = useStyles()
 
-    const { accountDetails, wallet } = React.useContext(AuthContext)
-
-    React.useEffect(() => {
-        console.log(accountDetails)
-    }, [accountDetails])
+    const { wallet } = React.useContext(AuthContext)
 
     const { data, error } = useQuery<ThingData, ThingVars>(GET_TOKEN_QUERY, {
         variables: { thingId: id },

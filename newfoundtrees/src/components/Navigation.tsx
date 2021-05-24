@@ -27,7 +27,7 @@ import LinkIcon from '@material-ui/icons/Link'
 
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import 'firebase/firestore'
+// import 'firebase/firestore'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
 const LABELS = {
@@ -173,61 +173,17 @@ interface WalletItemProps {
     white: boolean
 }
 
-const WalletItem = ({
-    white
-}: WalletItemProps) => {
+const WalletItem = ({ white }: WalletItemProps) => {
     const classes = useNavItemStyles()
-    const { signIn, signOut, accountDetails } = React.useContext(AuthContext)
+    const {
+        signIn,
+        signOut,
+        accountDetails,
+        isOAuthLoggedIn,
+        isNearLoggedIn,
+    } = React.useContext(AuthContext)
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-    const [isSignedIn, setIsSignedIn] = React.useState(false) // Local signed-in state.
-
-    if (firebase.apps.length === 0) {
-        const config = {
-            apiKey: process.env.REACT_APP_FIREBASE_API_KEY || '',
-            authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || '',
-            projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || '',
-        }
-        firebase.initializeApp(config)
-    }
-
-    // Listen to the Firebase Auth state and set the local state.
-    React.useEffect(() => {
-        const unregisterAuthObserver = firebase
-            .auth()
-            .onAuthStateChanged((user) => {
-                setIsSignedIn(!!user)
-            })
-        return () => unregisterAuthObserver() // Make sure we un-register Firebase observers when the component unmounts.
-    }, [])
-
-    React.useEffect(()=> {
-        console.log("YES!@")
-        console.log(accountDetails)
-    }, [accountDetails])
-
-    React.useEffect(() => {
-        if (
-            !!accountDetails &&
-            !!firebase.auth().currentUser &&
-            !firebase
-                .firestore()
-                .collection('near-account')
-                .doc(`${firebase.auth().currentUser?.uid}`)
-                .get()
-        ) {
-            firebase
-                .firestore()
-                .collection('near-account')
-                .doc(`${firebase.auth().currentUser?.uid}`)
-                .set({
-                    id: accountDetails.accountId,
-                })
-                .then((res) => {
-                    console.log(res)
-                })
-        }
-    }, [accountDetails])
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget)
@@ -268,7 +224,7 @@ const WalletItem = ({
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {isSignedIn ? (
+                {isOAuthLoggedIn ? (
                     <>
                         <StyledMenuItem>
                             <ListItemIcon>
@@ -283,7 +239,7 @@ const WalletItem = ({
                                 }
                             />
                         </StyledMenuItem>
-                        {accountDetails ? (
+                        {isNearLoggedIn ? (
                             <>
                                 <StyledMenuItem>
                                     <ListItemIcon>
@@ -293,7 +249,7 @@ const WalletItem = ({
                                         />
                                     </ListItemIcon>
                                     <ListItemText
-                                        primary={`${accountDetails.accountId}`}
+                                        primary={`${accountDetails?.accountId}`}
                                     />
                                 </StyledMenuItem>
                                 <StyledMenuItem>
@@ -304,12 +260,12 @@ const WalletItem = ({
                                         />
                                     </ListItemIcon>
                                     <ListItemText
-                                        primary={`${accountDetails.balance} Ⓝ`}
+                                        primary={`${accountDetails?.balance} Ⓝ`}
                                     />
                                 </StyledMenuItem>
                             </>
                         ) : (
-                            <StyledMenuItem onClick={signIn}>
+                            <StyledMenuItem onClick={() => signIn({request: true})}>
                                 <ListItemIcon>
                                     <SafeIcon
                                         fontSize="small"
@@ -321,8 +277,8 @@ const WalletItem = ({
                         )}
                         <StyledMenuItem
                             onClick={() => {
-                                signOut()
                                 firebase.auth().signOut()
+                                signOut()
                             }}
                         >
                             <ListItemIcon>
@@ -432,7 +388,6 @@ const HorizontalNavigation = ({
     mapView?: boolean
     white: boolean
 }) => {
-
     const classes = useHorizontalStyles()
     return (
         <>
@@ -445,7 +400,7 @@ const HorizontalNavigation = ({
                         <li className={classes.center}>
                             <WalletItem
                                 {...{
-                                    white
+                                    white,
                                 }}
                             />
                         </li>
@@ -616,7 +571,7 @@ const Navigation = ({ loggedIn = false }: { loggedIn: boolean }) => {
                         location.pathname === '/art',
                     white:
                         location.pathname === '/map' ||
-                        location.pathname === '/about'||
+                        location.pathname === '/about' ||
                         location.pathname === '/art',
                 }}
             />
