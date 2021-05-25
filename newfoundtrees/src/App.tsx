@@ -68,7 +68,6 @@ const App = () => {
             await initWallet().then(async (w) => performLogin(w, request).then((details)=> setAccountDetails(details)).catch(() => setLoginRejected(true)))
         } else {
             performLogin(wallet, request).then((details) => setAccountDetails(details)).catch(() => {
-                console.log("Rejecting")
                 setLoginRejected(true)})
         }
     }
@@ -123,13 +122,6 @@ const App = () => {
         return () => unregisterAuthObserver() // Make sure we un-register Firebase observers when the component unmounts.
     }, [])
 
-    // useEffect(() => {
-    //     console.log("why?")
-    //     if (!loginRejected) {
-    //         handleLogin(false)
-    //     }
-    // }, [wallet])
-
     useEffect(() => {
         setAttempts(attempts + 1)
         console.log(attempts)
@@ -183,6 +175,8 @@ const App = () => {
                           backgroundPositionX: 'right -60px',
                           backgroundPositionY: '150px',
                           overflow: 'hidden',
+                          minHeight: '100vh',
+
                       }
                     : location.pathname === '/art' || location.pathname === '/'
                     ? {
