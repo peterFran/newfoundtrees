@@ -1,10 +1,15 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import { Helmet } from 'react-helmet'
-import { fetchUsersTokens, LIST_USERS_TOKENS_QUERY, StoreData, UserVars } from '../../outbound/tokenClient'
+import {
+    fetchUsersTokens,
+    LIST_USERS_TOKENS_QUERY,
+    StoreData,
+    UserVars,
+} from '../../outbound/tokenClient'
 import TreeCardGrid from '../../components/TreeCardGrid'
-import { TreeCardItem } from '../../components/TreeCard'
-import { NewFoundToken } from '../../domain/Token';
+import { TreeCardItemBigger } from '../../components/TreeCard'
+import { NewFoundToken } from '../../domain/Token'
 import { useQuery } from '@apollo/client'
 import AuthContext from '../../context/AuthContext'
 
@@ -18,15 +23,18 @@ const useStyles = makeStyles((theme) => {
 
             alignItems: 'flex-start',
             scrollBehavior: 'smooth',
+            overflow: 'visible',
         },
         contentWrap: {
             display: 'flex',
             height: '100%',
+            width: '100%',
             flex: 1,
             paddingBottom: theme.spacing(20),
+            marginRight: -theme.spacing(40),
             justifyContent: 'flex-start',
             alignItems: 'space-between',
-            flexDirection: 'column',
+            flexDirection: 'row',
         },
 
         row: {
@@ -39,6 +47,17 @@ const useStyles = makeStyles((theme) => {
             justifyContent: 'space-between',
             alignItems: 'space-between',
             flexDirection: 'row',
+        },
+
+        veil: {
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            right: 0,
+            width: '20%',
+            height: '100%',
+            pointerEvents: 'none',
+            background: `linear-gradient(to right, transparent 0%,  ${theme.palette.primary.dark} 100%)` /* W3C */,
         },
 
         heroGif: {
@@ -68,7 +87,9 @@ const useStyles = makeStyles((theme) => {
 
 const WalletScreen = () => {
     const classes = useStyles()
-    const [availableTokens, setAvailableTokens] = React.useState<NewFoundToken[]>([])
+    const [availableTokens, setAvailableTokens] = React.useState<
+        NewFoundToken[]
+    >([])
 
     const { wallet, accountDetails } = React.useContext(AuthContext)
 
@@ -77,14 +98,15 @@ const WalletScreen = () => {
         {
             variables: {
                 store: process.env.REACT_APP_MINTBASE_STORE_NAME || '',
-                user: accountDetails?.accountId || ''
+                user: accountDetails?.accountId || '',
             },
         }
     )
     React.useEffect(() => {
-
-        if(!loading && data?.store && data.store.length > 0){
-            fetchUsersTokens(data.store[0].things).then((tokens) => setAvailableTokens(tokens))
+        if (!loading && data?.store && data.store.length > 0) {
+            fetchUsersTokens(data.store[0].things).then((tokens) =>
+                setAvailableTokens(tokens)
+            )
         }
     }, [loading, data, wallet])
 
@@ -93,14 +115,85 @@ const WalletScreen = () => {
             <Helmet>
                 <title>Tokens</title>
             </Helmet>
-
+            <div className={classes.veil}></div>
             <div className={classes.container}>
                 <div className={classes.contentWrap}>
 
+                    <div style={{width: '80%', marginRight: 50,}}>
+                        <div
+                            style={{
+                                height: 500,
+                                
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column',
+                            }}
+                        >
+                            <div style={{
+                                        
+                                        padding: 40
+                                    }}>
+                                <Typography
+                                    variant="h1"
+                                    color="secondary"
+                                    align="left"
+                                >
+                                    Wallet
+                                </Typography>
+                            </div>
+                            <div>
+                                <Typography
+                                    variant="h5"
+                                    align="left"
+                                    style={{
+                                        color: 'white',
+                                        textTransform: 'none',
+                                        padding: 40
+                                    }}
+                                >
+                                    Your investment into vital projects can make
+                                    a huge impact on our ability to fight
+                                    climate change and restore our natural
+                                    world. So far, you've invested in:
+                                </Typography>
+                            </div>
+                            <div>
+                                <Typography
+                                    variant="h1"
+                                    align="center"
+                                    style={{
+                                        color: 'white',
+                                        textTransform: 'none',
+                                    }}
+                                >
+                                    {availableTokens.length}
+                                </Typography>
+                                <Typography
+                                    variant="h5"
+                                    align="center"
+                                    style={{
+                                        color: 'white',
+                                        textTransform: 'none',
+                                    }}
+                                >
+                                    NewFoundTrees
+                                </Typography>
+                            </div>
+                            <div style={{ padding: 50 }}></div>
+                        </div>
+                    {/* </PlainMegaCard> */}
+                    </div>
                     <TreeCardGrid title="">
                         <>
-                            {!loading && availableTokens.map((thing: NewFoundToken) => {
-                                    return <TreeCardItem token={thing} key={thing.id} />
+                            {!loading &&
+                                availableTokens.map((thing: NewFoundToken) => {
+                                    return (
+                                        <TreeCardItemBigger
+                                            token={thing}
+                                            key={thing.id}
+                                        />
+                                    )
                                 })}
                         </>
                     </TreeCardGrid>

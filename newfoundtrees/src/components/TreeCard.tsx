@@ -150,7 +150,17 @@ const TreeCard = ({ token, showContent = false }: TreeCardProps) => {
 
 export const TreeCardItem = ({ token }: TreeCardProps) => {
     return (
+
         <Grid item xs={12} sm={6} md={3} style={{ height: '520px' }}>
+            <TreeCard token={token} />
+        </Grid>
+    )
+}
+
+export const TreeCardItemBigger = ({ token }: TreeCardProps) => {
+    return (
+        
+        <Grid item xs={9} sm={6} md={4} style={{ height: '520px' }}>
             <TreeCard token={token} />
         </Grid>
     )
