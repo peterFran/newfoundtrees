@@ -7,11 +7,35 @@ import {
     StoreData,
     UserVars,
 } from '../../outbound/tokenClient'
-import TreeCardGrid from '../../components/TreeCardGrid'
-import { TreeCardItemBigger } from '../../components/TreeCard'
+import TreeCard from '../../components/TreeCard'
 import { NewFoundToken } from '../../domain/Token'
 import { useQuery } from '@apollo/client'
 import AuthContext from '../../context/AuthContext'
+import Carousel from 'react-multi-carousel'
+import 'react-multi-carousel/lib/styles.css'
+
+const responsive = {
+    bigdesktop: {
+        breakpoint: { max: 7000, min: 3000 },
+        items: 4,
+        slidesToSlide: 5, // optional, default to 1.
+    },
+    desktop: {
+        breakpoint: { max: 3000, min: 1500 },
+        items: 3,
+        slidesToSlide: 1, // optional, default to 1.
+    },
+    tablet: {
+        breakpoint: { max: 1500, min: 650 },
+        items: 2,
+        // slidesToSlide: 5, // optional, default to 1.
+    },
+    mobile: {
+        breakpoint: { max: 650, min: 0 },
+        items: 1,
+        slidesToSlide: 1, // optional, default to 1.
+    },
+}
 
 const useStyles = makeStyles((theme) => {
     return {
@@ -30,11 +54,19 @@ const useStyles = makeStyles((theme) => {
             height: '100%',
             width: '100%',
             flex: 1,
+            flexDirection: 'column',
             paddingBottom: theme.spacing(20),
-            marginRight: -theme.spacing(40),
+            [theme.breakpoints.up('md')]: {
+                // marginRight: -theme.spacing(40),
+                flexDirection: 'row',
+            },
+            [theme.breakpoints.up('lg')]: {
+                marginRight: -theme.spacing(40),
+                flexDirection: 'row',
+            },
             justifyContent: 'flex-start',
             alignItems: 'space-between',
-            flexDirection: 'row',
+            
         },
 
         row: {
@@ -59,28 +91,25 @@ const useStyles = makeStyles((theme) => {
             pointerEvents: 'none',
             background: `linear-gradient(to right, transparent 0%,  ${theme.palette.primary.dark} 100%)` /* W3C */,
         },
-
-        heroGif: {
-            width: '10pc',
-            height: 'auto',
-            opacity: 0.5,
+        carousel: {
+            width: '100%',
+            [theme.breakpoints.up('md')]: {
+                width: 2000
+            },
+            height: 500,
         },
-
-        sellBanner: {
-            display: 'flex',
-            width: '100vw',
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: '60px',
-            backgroundColor: theme.palette.primary.dark,
-            opacity: 1,
-            zIndex: 3,
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            paddingLeft: theme.spacing(4),
-            paddingRight: theme.spacing(4),
+        carouselWrap: {
+            flex: 1,
+            [theme.breakpoints.up('md')]: {
+                width: '70%'
+            },
+        },
+        infoBanner: {
+            width: '100%',
+            [theme.breakpoints.up('md')]: {
+                width: '30%', 
+                marginRight: 50
+            },
         },
     }
 })
@@ -119,7 +148,7 @@ const WalletScreen = () => {
             <div className={classes.container}>
                 <div className={classes.contentWrap}>
 
-                    <div style={{width: '80%', marginRight: 50,}}>
+                    <div className={classes.infoBanner}>
                         <div
                             style={{
                                 height: 500,
@@ -130,10 +159,11 @@ const WalletScreen = () => {
                                 flexDirection: 'column',
                             }}
                         >
-                            <div style={{
-                                        
-                                        padding: 40
-                                    }}>
+                            <div
+                                style={{
+                                    padding: 40,
+                                }}
+                            >
                                 <Typography
                                     variant="h1"
                                     color="secondary"
@@ -149,7 +179,7 @@ const WalletScreen = () => {
                                     style={{
                                         color: 'white',
                                         textTransform: 'none',
-                                        padding: 40
+                                        padding: 40,
                                     }}
                                 >
                                     Your investment into vital projects can make
@@ -182,9 +212,41 @@ const WalletScreen = () => {
                             </div>
                             <div style={{ padding: 50 }}></div>
                         </div>
-                    {/* </PlainMegaCard> */}
+                        {/* </PlainMegaCard> */}
                     </div>
-                    <TreeCardGrid title="">
+                    <div className={classes.carouselWrap}>
+                        <Carousel
+                            swipeable={true}
+                            draggable={true}
+                            showDots={true}
+                            responsive={responsive}
+                            ssr={false} // means to render carousel on server-side.
+                            infinite={false}
+                            // autoPlay={true}
+                            // autoPlaySpeed={1000}
+                            keyBoardControl={true}
+                            customTransition="all .5"
+                            transitionDuration={1000}
+                            containerClass="carousel-container"
+                            // removeArrowOnDeviceType={['tablet', 'mobile']}
+                            // deviceType={this.props.deviceType}
+                            dotListClass="custom-dot-list-style"
+                            itemClass="carousel-item-padding-40-px"
+                            // className={classes.carousel}
+                        >
+                            {!loading &&
+                                availableTokens.map((thing: NewFoundToken) => {
+                                    return (
+                                        <TreeCard
+                                        fixed={true}
+                                            token={thing}
+                                            key={thing.id}
+                                        />
+                                    )
+                                })}
+                        </Carousel>
+                    </div>
+                    {/* <TreeCardGrid title="">
                         <>
                             {!loading &&
                                 availableTokens.map((thing: NewFoundToken) => {
@@ -196,7 +258,7 @@ const WalletScreen = () => {
                                     )
                                 })}
                         </>
-                    </TreeCardGrid>
+                    </TreeCardGrid> */}
                 </div>
             </div>
         </>

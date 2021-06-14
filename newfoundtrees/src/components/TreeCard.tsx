@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom'
 interface TreeCardProps {
     token: NewFoundToken
     showContent?: boolean
+    fixed?: boolean
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
 
         borderColor: theme.palette.secondary.main,
-        boxShadow: '0px 4px 4px 0px #00000040'
+        boxShadow: '0px 4px 4px 0px #00000040',
     },
     logo: {
         display: 'block',
@@ -70,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-end',
         alignItems: 'flex-end',
         flexDirection: 'column',
-        width: '100%'
+        width: '100%',
     },
     scoreBlockElement: {
         display: 'flex',
@@ -78,38 +79,65 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         flexDirection: 'row',
         width: '100%',
-        marginTop: theme.spacing(2)
-
+        marginTop: theme.spacing(2),
     },
 }))
 
-const TreeCard = ({ token, showContent = false }: TreeCardProps) => {
+const TreeCard = ({
+    token,
+    showContent = false,
+    fixed = false,
+}: TreeCardProps) => {
     const styles = useStyles()
 
     const history = useHistory()
     const handleOnClick = React.useCallback(
-        () => history.push(`/token/${token.id}`),
+        (e) => {
+            if (fixed) {
+                e.preventDefault()
+                e.stopPropagation()
+            } else {
+                history.push(`/token/${token.id}`)
+            }
+        },
+        [history, token.id, fixed]
+    )
+    const handleDoubleClick = React.useCallback(
+        (e) => {
+            console.log(e)
+            history.push(`/token/${token.id}`)
+        },
         [history, token.id]
     )
 
     return (
-        <div className={styles.box} onClick={handleOnClick}>
+        <div
+            className={styles.box}
+            style={
+                fixed
+                    ? {
+                          width: 300,
+                          height: 520,
+                          display: 'inline-flex',
+                          alignSelf: 'center'
+                      }
+                    : {}
+            }
+            onClick={handleOnClick}
+            onDoubleClick={handleDoubleClick}
+        >
             <div className={styles.inner}>
-                <div style={{minHeight: '30%'}}>
+                <div style={{ minHeight: '30%' }}>
                     <Typography
                         variant="h2"
                         color="primary"
                         align="left"
-                        
                         style={{ paddingBottom: 10, fontSize: 27 }}
                     >
                         {token.details.name}
                     </Typography>
                 </div>
                 <div>
-                    
-                    
-
                     <Typography
                         variant="body1"
                         color="textPrimary"
@@ -150,7 +178,6 @@ const TreeCard = ({ token, showContent = false }: TreeCardProps) => {
 
 export const TreeCardItem = ({ token }: TreeCardProps) => {
     return (
-
         <Grid item xs={12} sm={6} md={3} style={{ height: '520px' }}>
             <TreeCard token={token} />
         </Grid>
@@ -159,7 +186,6 @@ export const TreeCardItem = ({ token }: TreeCardProps) => {
 
 export const TreeCardItemBigger = ({ token }: TreeCardProps) => {
     return (
-        
         <Grid item xs={9} sm={6} md={4} style={{ height: '520px' }}>
             <TreeCard token={token} />
         </Grid>
