@@ -104,9 +104,9 @@ const TokenPage = ({ id }: { id: string }) => {
                         </Helmet>
                         <div className={classes.container}>
                             <div className={classes.contentWrap}>
-                                <TreeCardGrid title="🌲 NFT" reverse={true}>
-                                    <PurchaseMegaCard token={token} />
+                                <TreeCardGrid title="🌲 NFT" reverse={false}>
                                     <IDMegaCard token={token} />
+                                    <PurchaseMegaCard token={token} />
                                 </TreeCardGrid>
                             </div>
                         </div>
