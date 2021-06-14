@@ -261,6 +261,18 @@ const About = () => {
                                     their NFT, so you can see the impact your
                                     contribution is making.
                                 </Typography>
+                                <Typography
+                                    variant="h5"
+                                    style={{
+                                        textTransform: 'none',
+                                        color: 'black',
+                                    }}
+                                >
+                                    👣
+                                    <br />
+                                    Using stablecoins on the NEAR network we're able to guarantee both proce stability, 
+                                    and climate neutrality for our projects, as <a href='https://near.org/blog/near-climate-neutral-product/'>attested by the South Pole institute</a>
+                                </Typography>
                             </div>
                         </div>
                     </PlainMegaCard>
