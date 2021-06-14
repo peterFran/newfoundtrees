@@ -66,7 +66,6 @@ const useStyles = makeStyles((theme) => {
             },
             justifyContent: 'flex-start',
             alignItems: 'space-between',
-            
         },
 
         row: {
@@ -94,21 +93,28 @@ const useStyles = makeStyles((theme) => {
         carousel: {
             width: '100%',
             [theme.breakpoints.up('md')]: {
-                width: 2000
+                width: 2000,
             },
             height: 500,
+        },
+        link: {
+            color: '#007bff',
+            "&:hover": {
+                color: "#0056b3",
+                textDecoration: "underline"
+            }
         },
         carouselWrap: {
             flex: 1,
             [theme.breakpoints.up('md')]: {
-                width: '70%'
+                width: '70%',
             },
         },
         infoBanner: {
             width: '100%',
             [theme.breakpoints.up('md')]: {
-                width: '30%', 
-                marginRight: 50
+                width: '30%',
+                marginRight: 50,
             },
         },
     }
@@ -120,7 +126,9 @@ const WalletScreen = () => {
         NewFoundToken[]
     >([])
 
-    const { wallet, accountDetails } = React.useContext(AuthContext)
+    const { wallet, accountDetails, isNearLoggedIn, signIn } = React.useContext(
+        AuthContext
+    )
 
     const { loading, data } = useQuery<StoreData, UserVars>(
         LIST_USERS_TOKENS_QUERY,
@@ -147,12 +155,11 @@ const WalletScreen = () => {
             <div className={classes.veil}></div>
             <div className={classes.container}>
                 <div className={classes.contentWrap}>
-
                     <div className={classes.infoBanner}>
                         <div
                             style={{
                                 height: 500,
-                                
+
                                 width: '100%',
                                 display: 'flex',
                                 justifyContent: 'space-between',
@@ -172,47 +179,74 @@ const WalletScreen = () => {
                                     Wallet
                                 </Typography>
                             </div>
-                            <div>
-                                <Typography
-                                    variant="h5"
-                                    align="left"
-                                    style={{
-                                        color: 'white',
-                                        textTransform: 'none',
-                                        padding: 40,
-                                    }}
-                                >
-                                    Your investment into vital projects can make
-                                    a huge impact on our ability to fight
-                                    climate change and restore our natural
-                                    world. So far, you've invested in:
-                                </Typography>
-                            </div>
-                            <div>
-                                <Typography
-                                    variant="h1"
-                                    align="center"
-                                    style={{
-                                        color: 'white',
-                                        textTransform: 'none',
-                                    }}
-                                >
-                                    {availableTokens.length}
-                                </Typography>
-                                <Typography
-                                    variant="h5"
-                                    align="center"
-                                    style={{
-                                        color: 'white',
-                                        textTransform: 'none',
-                                    }}
-                                >
-                                    NewFoundTrees
-                                </Typography>
-                            </div>
+                            {isNearLoggedIn ? (
+                                <>
+                                    <div>
+                                        <Typography
+                                            variant="h5"
+                                            align="left"
+                                            style={{
+                                                color: 'white',
+                                                textTransform: 'none',
+                                                padding: 40,
+                                            }}
+                                        >
+                                            Your investment into vital projects
+                                            can make a huge impact on our
+                                            ability to fight climate change and
+                                            restore our natural world. So far,
+                                            you've invested in:
+                                        </Typography>
+                                    </div>
+                                    <div>
+                                        <Typography
+                                            variant="h1"
+                                            align="center"
+                                            style={{
+                                                color: 'white',
+                                                textTransform: 'none',
+                                            }}
+                                        >
+                                            {availableTokens.length}
+                                        </Typography>
+                                        <Typography
+                                            variant="h5"
+                                            align="center"
+                                            style={{
+                                                color: 'white',
+                                                textTransform: 'none',
+                                            }}
+                                        >
+                                            NewFoundTrees
+                                        </Typography>
+                                    </div>
+                                </>
+                            ) : (
+                                <div>
+                                    <Typography
+                                        variant="h5"
+                                        align="left"
+                                        style={{
+                                            color: 'white',
+                                            textTransform: 'none',
+                                            padding: 40,
+                                        }}
+                                    >
+                                        To access your NewFoundTrees tokens,
+                                        please{' '}
+                                        <span
+                                            className={classes.link}
+                                            onClick={() =>
+                                                signIn({ request: true })
+                                            }
+                                        >
+                                            Log In
+                                        </span>
+                                    </Typography>
+                                </div>
+                            )}
                             <div style={{ padding: 50 }}></div>
                         </div>
-                        {/* </PlainMegaCard> */}
                     </div>
                     <div className={classes.carouselWrap}>
                         <Carousel
@@ -238,7 +272,7 @@ const WalletScreen = () => {
                                 availableTokens.map((thing: NewFoundToken) => {
                                     return (
                                         <TreeCard
-                                        fixed={true}
+                                            fixed={true}
                                             token={thing}
                                             key={thing.id}
                                         />
