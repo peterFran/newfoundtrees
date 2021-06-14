@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 15,
         borderStyle: 'solid',
         backgroundColor: theme.palette.background.paper,
-
         borderColor: theme.palette.secondary.main,
         boxShadow: '0px 4px 4px 0px #00000040',
     },
@@ -119,9 +118,9 @@ const TreeCard = ({
                           width: 300,
                           height: 520,
                           display: 'inline-flex',
-                          alignSelf: 'center'
+                          alignSelf: 'center',
                       }
-                    : {}
+                    : {minWidth: 250}
             }
             onClick={handleOnClick}
             onDoubleClick={handleDoubleClick}
@@ -178,8 +177,8 @@ const TreeCard = ({
 
 export const TreeCardItem = ({ token }: TreeCardProps) => {
     return (
-        <Grid item xs={12} sm={6} md={3} style={{ height: '520px' }}>
-            <TreeCard token={token} />
+        <Grid item xs={12} sm={6} md={3} style={{ height: '520px'}}>
+            <TreeCard token={token} fixed={false} />
         </Grid>
     )
 }
