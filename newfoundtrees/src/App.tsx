@@ -1,82 +1,160 @@
 import { Container, useTheme } from '@material-ui/core'
-import { Contract, WalletAccount } from 'near-api-js'
-import React from 'react'
+import { Wallet } from 'mintbase'
+import { WalletConfig } from 'mintbase/lib/types'
+import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Route, Switch, useLocation } from 'react-router-dom'
 import './App.css'
 import Navigation from './components/Navigation'
-import { near, nearConfig } from './components/NearConfig'
+import tree from './assets/tokensBackground.png'
+import { mintbaseConfig } from './components/NearConfig'
 import AuthContext from './context/AuthContext'
 import AccountDetails from './domain/AccountDetails'
-import getTokens from './outbound/tokenClient'
-import { getAccountDetails, signIn } from './outbound/walletClient'
 import Home from './screens/About/index'
 import Empty from './screens/Empty'
 import Projects from './screens/Map'
 import TokenPage from './screens/Token'
 import Tokens from './screens/Tokens'
-
+import WalletScreen from './screens/Wallet'
+import { performLogin } from './outbound/login'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
 
 const App = () => {
     const location = useLocation()
 
-    const wallet = React.useMemo(() => new WalletAccount(near, null), [])
+    const [isNearLoggedIn, setIsNearLoggedIn] = useState(false)
+    const [isOAuthLoggedIn, setIsOAuthLoggedIn] = useState(false)
+    const [wallet, setWallet] = useState<Wallet | null>(null)
+    const [loginRejected, setLoginRejected] = useState(false)
+    const [attempts, setAttempts] = useState<number>(0)
+
+    useEffect(() => {
+        initWallet()
+    }, [])
+
     const [
         accountDetails,
         setAccountDetails,
     ] = React.useState<AccountDetails | null>(null)
 
-    const [contract, setContract] = React.useState<Contract | null>(null)
+    const initWallet = async (): Promise<Wallet> => {
+        const { data: walletData, error } = await new Wallet().init(
+            mintbaseConfig as WalletConfig
+        )
+
+        if (error) throw error
+
+        const { wallet, isConnected } = walletData
+
+        if (isConnected) {
+            try {
+                const { data: details } = await wallet.details()
+
+                setAccountDetails(details)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        setWallet(wallet)
+        setIsNearLoggedIn(isConnected)
+        return wallet
+    }
+
+    const handleLogin = async (request: boolean, accountId?: string) => {
+        if (!wallet) {
+            await initWallet().then(async (w) => performLogin(w, request).then((details)=> setAccountDetails(details)).catch(() => setLoginRejected(true)))
+        } else {
+            performLogin(wallet, request).then((details) => setAccountDetails(details)).catch(() => {
+                setLoginRejected(true)})
+        }
+    }
+
+    if (firebase.apps.length === 0) {
+        const config = {
+            apiKey: process.env.REACT_APP_FIREBASE_API_KEY || '',
+            authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || '',
+            projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || '',
+        }
+        firebase.initializeApp(config)
+    }
+
+    React.useEffect(() => {
+        const setFirestoreId = async () => {
+
+            const fired = await firebase
+                .firestore()
+                .collection('near-account')
+                .doc(`${firebase.auth().currentUser?.uid}`)
+                .get()
+
+            if (
+                !!accountDetails?.accountId &&
+                !!firebase.auth().currentUser && (!fired.data()?.id || fired.data()?.id !== accountDetails?.accountId)
+                
+            ) {
+                firebase
+                    .firestore()
+                    .collection('near-account')
+                    .doc(`${firebase.auth().currentUser?.uid}`)
+                    .set({
+                        id: accountDetails.accountId,
+                    })
+                    .then((res) => {
+                        console.log(res)
+                    })
+            }
+        }
+        setFirestoreId()
+
+
+    }, [accountDetails])
+
+    // Listen to the Firebase Auth state and set the local state.
+    React.useEffect(() => {
+        const unregisterAuthObserver = firebase
+            .auth()
+            .onAuthStateChanged((user) => {
+                setIsOAuthLoggedIn(!!user)
+            })
+        return () => unregisterAuthObserver() // Make sure we un-register Firebase observers when the component unmounts.
+    }, [])
+
+    useEffect(() => {
+        setAttempts(attempts + 1)
+        console.log(attempts)
+        if (wallet && isOAuthLoggedIn && !loginRejected && attempts === 1) {
+            if(!wallet.activeAccount){
+                performLogin(wallet, true).then((details) => setAccountDetails(details))
+            }
+        }
+    }, [wallet, isOAuthLoggedIn])
 
     const authContext = React.useMemo(
         () => ({
-            signIn: async (): Promise<AccountDetails> => {
-                return signIn(nearConfig.contract, wallet).then(
-                    (accountDetails) => {
-                        setAccountDetails(accountDetails)
-                        setContract(
-                            new Contract(
-                                wallet.account(),
-                                nearConfig.contract,
-                                {
-                                    viewMethods: [],
-                                    changeMethods: [],
-                                }
-                            )
-                        )
-                        return accountDetails
-                    }
-                )
+            wallet: wallet,
+            signIn: async ({
+                request,
+                accountId,
+            }: {
+                request: boolean
+                accountId?: string
+            }) => {
+                handleLogin(request, accountId)
             },
             signOut: () => {
-                wallet.signOut()
+                wallet?.disconnect()
+                setAttempts(0)
                 setAccountDetails(null)
+                setIsNearLoggedIn(false)
             },
-            contract: null,
-            accountDetails: null,
+            accountDetails: accountDetails,
+            isNearLoggedIn: isNearLoggedIn,
         }),
-        [wallet]
+        [wallet, accountDetails, isNearLoggedIn]
     )
-
-    React.useEffect(() => {
-        const bootstrapAsync = async () => {
-            if (wallet.isSignedIn()) {
-                getAccountDetails(wallet).then((accountDetails) => {
-                    setAccountDetails(accountDetails)
-                    setContract(
-                        new Contract(wallet.account(), nearConfig.contract, {
-                            viewMethods: ['query'],
-                            changeMethods: [],
-                        })
-                    )
-                    return accountDetails
-                })
-            } else {
-                setAccountDetails(null)
-            }
-        }
-        bootstrapAsync()
-    }, [wallet])
 
     const theme = useTheme()
     return (
@@ -86,18 +164,37 @@ const App = () => {
                 location.pathname === '/about'
                     ? {
                           backgroundColor: theme.palette.primary.dark,
-                          background: `linear-gradient(to bottom, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.dark} 55%, #000000 55%,${theme.palette.primary.light} 55%,${theme.palette.primary.light} 100%)`, /* W3C */
+                          background: `linear-gradient(to bottom, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.dark} 55%, #000000 55%,${theme.palette.primary.light} 55%,${theme.palette.primary.light} 100%)` /* W3C */,
                           overflow: 'hidden',
+                      }
+                    : location.pathname === '/tokens' ||
+                      location.pathname === '/'
+                    ? {
+                          backgroundImage: `url(${tree})`,
+                          backgroundRepeat: 'no-repeat',
+                          backgroundPositionX: 'right -60px',
+                          backgroundPositionY: '150px',
+                          overflow: 'hidden',
+                          minHeight: '100vh',
+
+                      }
+                    : location.pathname === '/art' || location.pathname === '/'
+                    ? {
+                          backgroundColor: theme.palette.primary.dark,
+                          overflow: 'hidden',
+                          minHeight: '100vh',
                       }
                     : { overflow: 'hidden' }
             }
         >
             <AuthContext.Provider
                 value={{
+                    wallet: wallet,
                     signIn: authContext.signIn,
-                    contract: contract,
                     signOut: authContext.signOut,
                     accountDetails: accountDetails,
+                    isOAuthLoggedIn: isOAuthLoggedIn,
+                    isNearLoggedIn: isNearLoggedIn,
                 }}
             >
                 <Helmet
@@ -126,6 +223,10 @@ const App = () => {
                             <Projects />
                         </Route>
 
+                        <Route path="/art">
+                            <WalletScreen />
+                        </Route>
+
                         <Route
                             path="/token/:id"
                             render={(
@@ -133,12 +234,7 @@ const App = () => {
                             ): {
                                 props: { match: { params: { id: number } } }
                             } => {
-                                const token = getTokens().find(
-                                    (token) =>
-                                        `${token.id}` === props.match.params.id
-                                )
-                                if (token) return <TokenPage token={token} />
-                                else return <Empty />
+                                return <TokenPage id={props.match.params.id} />
                             }}
                         />
 

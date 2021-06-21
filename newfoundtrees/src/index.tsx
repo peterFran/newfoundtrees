@@ -1,4 +1,4 @@
-import './index.css';
+import './index.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
@@ -7,14 +7,23 @@ import reportWebVitals from './reportWebVitals'
 import { CssBaseline, ThemeProvider } from '@material-ui/core'
 import theme from './theme'
 import { BrowserRouter } from 'react-router-dom'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client/react'
+
+const client = new ApolloClient({
+    uri: process.env.REACT_APP_MINTBASE_GRAPH_ENDPOINT || '',
+    cache: new InMemoryCache(),
+})
 
 ReactDOM.render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
+            <ApolloProvider client={client}>
+                <CssBaseline />
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            </ApolloProvider>
         </ThemeProvider>
     </React.StrictMode>,
     document.getElementById('root')

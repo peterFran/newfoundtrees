@@ -1,11 +1,11 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core'
 import { InfoWindow } from '@react-google-maps/api'
-import { Token } from '../domain/Token'
+import { NewFoundToken } from '../domain/Token'
 import TreeCard from './TreeCard'
 
 interface TokenInfoWindowProps {
-    token: Token
+    token: NewFoundToken
     onCloseClick: () => void
 }
 

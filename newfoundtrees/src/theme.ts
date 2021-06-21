@@ -162,8 +162,8 @@ const theme = createMuiTheme({
                 fontWeight: 'normal',
             },
             contained: {
-                padding: '10px 22px',
-
+                padding: '10px 35px',
+                
                 '&$disabled': {
                     color: '#fff',
                     backgroundColor: COLORS.NFSkin,

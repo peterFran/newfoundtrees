@@ -1,4 +1,4 @@
-name: Deployment
+name: Production Deployment
 on:
   push:
     branches:
@@ -27,10 +27,14 @@ jobs:
         REACT_APP_FIREBASE_API_KEY: ${{ secrets.REACT_APP_FIREBASE_API_KEY }}
         REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}
         REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}
+        REACT_APP_MINTBASE_STORE_NAME: ${{ secrets.REACT_APP_MINTBASE_STORE_NAME }}
+        REACT_APP_MINTBASE_GRAPH_ENDPOINT: ${{ secrets.REACT_APP_MINTBASE_GRAPH_ENDPOINT }}
+        REACT_APP_NEAR_CHAIN: mainnet
+        REACT_APP_MINTBASE_MARKET: null
     - name: Deploy to firebase
       uses: w9jds/firebase-action@master
       with:
-          args: deploy --only hosting
+          args: deploy --only hosting -P default
       env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           PROJECT_PATH: ./newfoundtrees

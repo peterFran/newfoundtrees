@@ -1,103 +1,162 @@
-import { Token, TokenDetails } from '../domain/Token'
+import {
+    NewFoundToken,
+    TokenDetails,
+    Thing,
+    Metadata,
+    Store,
+} from '../domain/Token'
+import { gql } from '@apollo/client'
 
-export default function getTokens(): Token[] {
-    return [
-        {
-            id: 1,
-            details: {
-                name: 'Reforesting London',
-                beneficiaries: [
-                    {
-                        account: 'peterf.near',
-                        proportion: 1,
-                    },
-                ],
-                category: 'reforestation',
-                coordinates: {
-                    latitude: 51.56280727910533,
-                    longitude: -0.06657722663394684,
-                },
-                impactScore: 2,
+export interface StoreData {
+    store: Store[]
+}
 
-                cover:
-                    'https://mossy-prod-assets.s3.eu-central-1.amazonaws.com/IR_default.jpg',
-                content:
-                    'https://bpybatlqkq3w52jsp2wupba64i6xg6glpghikcmx6p65enqjyu7a.arweave.net/C_AQTXBUN27pMn6tR4Qe4j1zeMt5joUJl_P90jYJxT4',
-                description:
-                    'I would like to plant some trees in my garden. Then there will be more birds. I like birds very much. Especially the hawks. They are fearsome creatures',
-            } as TokenDetails,
-            price: 20,
-            batchSize: 3,
-            sold: 1,
-            ownedEditions: [] as number[],
-            updates: [],
-        } as Token,
-        {
-            id: 2,
-            details: {
-                name: 'Eagle Nests in Scotland',
-                beneficiaries: [
-                    {
-                        account: 'peterf.near',
-                        proportion: 1,
-                    },
-                    {
-                        account: 'newfoundtreesearth.near',
-                        proportion: 1,
-                    },
-                ],
-                category: 'rewilding',
-                coordinates: {
-                    latitude: 57.202568248021265,
-                    longitude: -4.191054353571119,
-                },
-                impactScore: 3,
+export interface StoreVars {
+    store: string
+}
 
-                cover:
-                    'https://images.prismic.io/mossyearth/32623040-b3da-4c00-a74e-81aa1bf9a0cc_white-tailed+eagle.png',
-                content:
-                    'https://bpybatlqkq3w52jsp2wupba64i6xg6glpghikcmx6p65enqjyu7a.arweave.net/C_AQTXBUN27pMn6tR4Qe4j1zeMt5joUJl_P90jYJxT4',
-                description:
-                    "By purchasing this token, you are helping to fund a new rewilding project in the Scottish Highlands. \nIn partnership with the Roy Dennis Wildlife Foundation we're building two eagle nest platforms targeting the native golden and white-tailed eagles.",
-            } as TokenDetails,
-            price: 200,
-            batchSize: 10,
-            sold: 5,
-            ownedEditions: [] as number[],
-            updates: [],
-        } as Token,
-        {
-            id: 3,
-            details: {
-                name: 'Building a Namibian Tree Nursery',
-                beneficiaries: [
-                    {
-                        account: 'peterf.near',
-                        proportion: 1,
-                    },
-                    {
-                        account: 'newfoundtreesearth.near',
-                        proportion: 1,
-                    },
-                ],
-                category: 'cultural',
-                coordinates: {
-                    latitude: -21.22119515496362,
-                    longitude: 17.067420321086132,
-                },
-                impactScore: 5,
+export interface UserVars {
+    store: string
+    user: string
+}
 
-                cover:
-                    'https://images.prismic.io/mossyearth/73653848-73de-4da1-b7ed-3c4eb19ab6d1_INVASIVE+TREES.jpg',
-                content:
-                    'https://bpybatlqkq3w52jsp2wupba64i6xg6glpghikcmx6p65enqjyu7a.arweave.net/C_AQTXBUN27pMn6tR4Qe4j1zeMt5joUJl_P90jYJxT4',
-                description:
-                    'The region we will be working in Namibia is characterised by open desert shrubland interspersed by mountainous terrain, wooded ephemeral (intermittent water) and perennial (constant water) river beds, and grassy sand and gravel plains. These habitats are threatened by overgrazing, the spread of non-native Prosopis, climate change and erosion.',
-            } as TokenDetails,
-            price: 20,
-            batchSize: 5,
-            sold: 5,
-            ownedEditions: [1, 3, 4],
-        } as Token,
-    ]
+export const LIST_TOKENS_QUERY = gql`
+    query LIST_TOKENS_QUERY($store: String!) {
+        store(where: { id: { _eq: $store } }) {
+            things {
+                id
+                metaId
+                tokens {
+                    id
+                    mintGroupId
+                    lists(where: { acceptedOfferId: { _is_null: true } }) {
+                        price
+                    }
+                }
+            }
+            id
+            name
+            owner
+        }
+    }
+`
+
+export const LIST_USERS_TOKENS_QUERY = gql`
+    query LIST_USERS_TOKENS_QUERY($store: String!, $user: String!) {
+        store(where: { id: { _eq: $store } }) {
+            things(distinct_on: metaId, where: {tokens: {ownerId: {_eq: $user}, lists: {acceptedOfferId: {_is_null: false}}}}) {
+                id
+                metaId
+                tokens(where: {ownerId: {_eq: $user}, lists: {acceptedOfferId: {_is_null: false}}}) {
+                    id
+                    mintGroupId
+                    lists(where: { acceptedOfferId: { _is_null: false } }) {
+                        price
+                    }
+                }
+            }
+            id
+            name
+            owner
+        }
+    }
+`
+
+export const GET_TOKEN_QUERY = gql`
+    query GET_TOKEN_QUERY($thingId: String!) {
+        thing(where: { id: { _eq: $thingId } }) {
+            id
+            metaId
+            tokens {
+                id
+                mintGroupId
+                lists(where: { acceptedOfferId: { _is_null: true } }) {
+                    price
+                }
+            }
+        }
+    }
+`
+
+export async function fetchTokens(things: Thing[]): Promise<NewFoundToken[]> {
+    return Promise.all(
+        things
+            .filter(
+                (thing) => thing.tokens.some(it => it.lists.length > 0)
+            )
+            .map(async (thing) => {
+                console.log(thing)
+                return await getToken(thing)
+            })
+    ).catch(() => [])
+}
+
+export async function fetchUsersTokens(things: Thing[]): Promise<NewFoundToken[]> {
+    return Promise.all(
+        things
+            .map(async (thing) => {
+                console.log(thing)
+                return await getToken(thing)
+            })
+    ).catch(() => [])
+}
+
+export async function getToken(thing: Thing): Promise<NewFoundToken> {
+    console.log(`I'm getting a token ${thing.metaId}`)
+    console.log(thing)
+    return fetch(`https://arweave.net/${thing.metaId}`)
+        .then((response) => response.json())
+        .then((meta: Metadata) => {
+            return {
+                id: thing.id,
+                edition: thing.tokens[0]?.mintGroupId.split(
+                    ':'
+                )[0],
+                details: {
+                    name: meta.title,
+                    description: meta.description,
+                    content: meta.animation_url,
+                    impactScore: meta.extra.find(
+                        (value: { trait_type: string }) =>
+                            value.trait_type === 'impact'
+                    )?.value,
+                    coordinates: {
+                        longitude: meta.extra.find(
+                            (value: { trait_type: string }) =>
+                                value.trait_type === 'longitude'
+                        )?.value,
+                        latitude: meta.extra.find(
+                            (value: { trait_type: string }) =>
+                                value.trait_type === 'latitude'
+                        )?.value,
+                    } as GeolocationCoordinates,
+                    category: meta.extra.find(
+                        (value: { trait_type: string }) =>
+                            value.trait_type === 'category'
+                    )?.value,
+                    beneficiaries: [],
+                    projectDate: new Date(
+                        meta.extra.find(
+                            (value: { trait_type: string }) =>
+                                value.trait_type === 'Start Date'
+                        )?.value
+                    ),
+                    cover: meta.media,
+                } as TokenDetails,
+                batchSize: meta.copies,
+                sold: 0,
+                price: thing.tokens.some(it => it.lists.length > 0) &&
+                    thing.tokens.length > 0
+                        ? Math.min.apply(
+                              Math,
+                              thing.tokens.filter(it => it.lists.length > 0).map(
+                                  (tok) => tok.lists[0].price
+                              )
+                          )
+                        : null,
+                ownedEditions: [],
+                availableEditions: thing.tokens,
+                updates: [],
+            } as NewFoundToken
+        })
 }

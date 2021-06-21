@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "new-found-trees"
+    "default": "new-found-trees",
+    "staging": "newfoundtrees-staging"
   }
 }

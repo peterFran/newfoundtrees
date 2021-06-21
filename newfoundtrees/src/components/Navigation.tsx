@@ -23,12 +23,11 @@ import {
     ClickAwayListener,
     IconButton,
 } from '@material-ui/core'
-import AccountDetails from '../domain/AccountDetails'
 import LinkIcon from '@material-ui/icons/Link'
 
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import 'firebase/firestore'
+// import 'firebase/firestore'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
 const LABELS = {
@@ -171,65 +170,20 @@ const StyledMenuItem = withStyles((theme) => ({
 }))(MenuItem)
 
 interface WalletItemProps {
-    accountDetails: AccountDetails | null
-    signIn: () => void
-    signOut: () => void
     white: boolean
 }
 
-const WalletItem = ({
-    white,
-    accountDetails,
-    signIn,
-    signOut,
-}: WalletItemProps) => {
+const WalletItem = ({ white }: WalletItemProps) => {
     const classes = useNavItemStyles()
+    const {
+        signIn,
+        signOut,
+        accountDetails,
+        isOAuthLoggedIn,
+        isNearLoggedIn,
+    } = React.useContext(AuthContext)
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-    const [isSignedIn, setIsSignedIn] = React.useState(false) // Local signed-in state.
-
-    if (firebase.apps.length === 0) {
-        const config = {
-            apiKey: process.env.REACT_APP_FIREBASE_API_KEY || '',
-            authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || '',
-            projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || '',
-        }
-        firebase.initializeApp(config)
-    }
-
-    // Listen to the Firebase Auth state and set the local state.
-    React.useEffect(() => {
-        const unregisterAuthObserver = firebase
-            .auth()
-            .onAuthStateChanged((user) => {
-                setIsSignedIn(!!user)
-            })
-        return () => unregisterAuthObserver() // Make sure we un-register Firebase observers when the component unmounts.
-    }, [])
-
-    React.useEffect(() => {
-        console.log()
-        if (
-            !!accountDetails &&
-            !!firebase.auth().currentUser &&
-            !firebase
-                .firestore()
-                .collection('near-account')
-                .doc(`${firebase.auth().currentUser?.uid}`)
-                .get()
-        ) {
-            firebase
-                .firestore()
-                .collection('near-account')
-                .doc(`${firebase.auth().currentUser?.uid}`)
-                .set({
-                    id: accountDetails.accountId,
-                })
-                .then((res) => {
-                    console.log(res)
-                })
-        }
-    }, [accountDetails])
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget)
@@ -247,7 +201,7 @@ const WalletItem = ({
         signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
         callbacks: {
             // Avoid redirects after sign-in.
-            // signInSuccessWithAuthResult: () => false,
+            signInSuccessWithAuthResult: () => false,
         },
     }
 
@@ -270,19 +224,22 @@ const WalletItem = ({
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {isSignedIn ? (
+                {isOAuthLoggedIn ? (
                     <>
                         <StyledMenuItem>
-                            {/* <ListItemIcon>
-                                <ArrowBackIcon fontSize="small"  color="primary"/>
-                            </ListItemIcon> */}
+                            <ListItemIcon>
+                                <ArrowBackIcon
+                                    fontSize="small"
+                                    color="primary"
+                                />
+                            </ListItemIcon>
                             <ListItemText
                                 primary={
                                     firebase.auth()?.currentUser?.displayName
                                 }
                             />
                         </StyledMenuItem>
-                        {accountDetails ? (
+                        {isNearLoggedIn ? (
                             <>
                                 <StyledMenuItem>
                                     <ListItemIcon>
@@ -292,7 +249,7 @@ const WalletItem = ({
                                         />
                                     </ListItemIcon>
                                     <ListItemText
-                                        primary={`${accountDetails.accountId}`}
+                                        primary={`${accountDetails?.accountId}`}
                                     />
                                 </StyledMenuItem>
                                 <StyledMenuItem>
@@ -303,12 +260,12 @@ const WalletItem = ({
                                         />
                                     </ListItemIcon>
                                     <ListItemText
-                                        primary={`${accountDetails.balance.available} Ⓝ`}
+                                        primary={`${accountDetails?.balance} Ⓝ`}
                                     />
                                 </StyledMenuItem>
                             </>
                         ) : (
-                            <StyledMenuItem onClick={signIn}>
+                            <StyledMenuItem onClick={() => signIn({request: true})}>
                                 <ListItemIcon>
                                     <SafeIcon
                                         fontSize="small"
@@ -320,8 +277,8 @@ const WalletItem = ({
                         )}
                         <StyledMenuItem
                             onClick={() => {
-                                signOut()
                                 firebase.auth().signOut()
+                                signOut()
                             }}
                         >
                             <ListItemIcon>
@@ -375,7 +332,7 @@ const useHorizontalStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         justifyContent: 'space-between',
         pointerEvents: 'none',
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: 'transparent',
         paddingTop: theme.spacing(5),
         zIndex: 1,
     },
@@ -431,25 +388,18 @@ const HorizontalNavigation = ({
     mapView?: boolean
     white: boolean
 }) => {
-    const { signIn, signOut, accountDetails } = React.useContext(AuthContext)
-
     const classes = useHorizontalStyles()
     return (
         <>
             <nav className={mapView ? classes.mapRoot : classes.root}>
                 <ul className={classes.navList}>
                     <li>
-                        {/* <Link to="/" target="_blank" rel="noopener noreferrer"> */}
-                            <TitleItem {...{ white }} />
-                        {/* </Link> */}
+                        <TitleItem {...{ white }} />
                     </li>
                     <div className={classes.wrapper}>
                         <li className={classes.center}>
                             <WalletItem
                                 {...{
-                                    accountDetails,
-                                    signIn,
-                                    signOut,
                                     white,
                                 }}
                             />
@@ -558,7 +508,7 @@ const MobileNavigation = ({ mapView }: { mapView: boolean }) => {
                     role={undefined}
                     transition
                     disablePortal
-                    placement='bottom-end'
+                    placement="bottom-end"
                 >
                     {({ TransitionProps, placement }) => (
                         <Grow
@@ -574,22 +524,22 @@ const MobileNavigation = ({ mapView }: { mapView: boolean }) => {
                                         id="menu-list-grow"
                                         onKeyDown={handleListKeyDown}
                                     >
-                                        <Link to='/'>
+                                        <Link to="/">
                                             <MenuItem onClick={handleClose}>
                                                 Tokens
                                             </MenuItem>
                                         </Link>
-                                        <Link to='/map'>
+                                        <Link to="/map">
                                             <MenuItem onClick={handleClose}>
                                                 Map
                                             </MenuItem>
                                         </Link>
-                                        <Link to='/art'>
+                                        <Link to="/art">
                                             <MenuItem onClick={handleClose}>
                                                 Art
                                             </MenuItem>
                                         </Link>
-                                        <Link to='/about'>
+                                        <Link to="/about">
                                             <MenuItem onClick={handleClose}>
                                                 About
                                             </MenuItem>
@@ -615,8 +565,14 @@ const Navigation = ({ loggedIn = false }: { loggedIn: boolean }) => {
             <HorizontalNavigation
                 {...{
                     loggedIn,
-                    mapView: location.pathname === '/map' || location.pathname === '/about',
-                    white: location.pathname === '/map' || location.pathname === '/about',
+                    mapView:
+                        location.pathname === '/map' ||
+                        location.pathname === '/about' ||
+                        location.pathname === '/art',
+                    white:
+                        location.pathname === '/map' ||
+                        location.pathname === '/about' ||
+                        location.pathname === '/art',
                 }}
             />
         )

@@ -1,194 +1,141 @@
-import { IconButton, makeStyles, Typography } from '@material-ui/core'
-import * as React from 'react'
-import { Token } from '../domain/Token'
+import { Button, makeStyles, Typography } from '@material-ui/core'
+import { NewFoundToken } from '../domain/Token'
 import PlainMegaCard from './PlainMegaCard'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import Breadcrumbs from './Breadcrumbs'
+import treeTrunk from '../assets/tokenTree.png'
+import ImageIcon from '@material-ui/icons/Image'
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
+import FsLightbox from 'fslightbox-react'
+import { useState } from 'react'
 
 interface TitledMegaCardProps {
-    token: Token
+    token: NewFoundToken
 }
 
-const CARD_HEIGHT = 670
-const NUMBER_CARDS = 3
+const CARD_HEIGHT = 600
 
 const useStyles = makeStyles((theme) => ({
     veil: {
-        display: 'flex',
         position: 'absolute',
         top: 0,
         bottom: 0,
         left: 0,
         right: 0,
+        backgroundColor: theme.palette.primary.dark,
+        zIndex: 2,
+        borderRadius: 15,
+        height: `${CARD_HEIGHT}px`,
+
+        opacity: 0.8,
+    },
+    image: {
+        position: 'absolute',
+        top: 60,
+        bottom: -60,
+        left: -60,
+        right: 60,
+        background: `url(${treeTrunk})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '100% 100%',
+        overflow: 'visible',
+        borderRadius: 15,
+        height: `${CARD_HEIGHT}px`,
+
+        zIndex: 1,
+    },
+    box: {
+        display: 'flex',
+        padding: theme.spacing(5),
+        paddingTop: theme.spacing(8),
+        paddingBottom: theme.spacing(15),
+        flexDirection: 'column',
+        justifyContent: 'space-between',
         flex: 1,
-        transition: 'top 2s',
-        height: `${CARD_HEIGHT * NUMBER_CARDS + 2}px`,
-        borderRadius: 10,
+        height: `${CARD_HEIGHT}px`,
+        borderRadius: 15,
+        overflow: 'visible',
+    },
+    button: {
+        backgroundColor: 'white',
+        color: theme.palette.primary.main,
         opacity: 1,
-        background: `linear-gradient(${theme.palette.secondary.light} 0%, ${theme.palette.secondary.light} 15%, rgba(255,255,255, 100) 33%, ${theme.palette.primary.dark} 100%)`,
+        margin: 5,
     },
 }))
 
 const IDMegaCard = ({ token }: TitledMegaCardProps) => {
-    const [index, setIndex] = React.useState(0)
     const styles = useStyles()
-    return (
-        <PlainMegaCard>
-            <div
-                className={styles.veil}
-                style={{ top: `${-index * CARD_HEIGHT}px` }}
-            ></div>
-            <div
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    top: `${CARD_HEIGHT - 100}px`,
-                    display: 'flex',
-                    width: '100%',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    zIndex: 100,
-                }}
-            >
-                <IconButton
-                    color="primary"
-                    aria-label="show more"
-                    onClick={() => {
-                        setIndex((index + 1) % NUMBER_CARDS)
-                    }}
-                    component="span"
-                >
-                    <KeyboardArrowDownIcon fontSize="large" />
-                </IconButton>
-                <div style={{ width: '20%', position: 'absolute', right: '10%' }}>
-                    <Breadcrumbs quantity={NUMBER_CARDS} index={index} />
-                </div>
-            </div>
-            <div
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    top: `${-index * CARD_HEIGHT}px`,
-                    display: 'flex',
-                    width: '100%',
-                    height: `${NUMBER_CARDS * CARD_HEIGHT}px`,
-                    transition: 'top 2s',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                }}
-            >
-                <div
-                    style={{
-                        height: `${CARD_HEIGHT}px`,
-                        padding: 25,
+    const [galleryToggler, setGalleryToggler] = useState<boolean>(false)
+    const [videoToggler, setVideoToggler] = useState<boolean>(false)
 
-                        width: '100%',
-                        flexDirection: 'row-reverse',
-                        justifyContent: 'space-between',
-                        display: 'flex',
-                    }}
-                >
-                    <div
-                        style={{
-                            flex: 1,
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                        }}
-                    >
+    return (
+        <>
+            <FsLightbox
+                toggler={galleryToggler}
+                sources={[
+                    token.details.cover
+                ]}
+            />
+            <FsLightbox
+                toggler={videoToggler}
+                sources={[
+                    token.details.content
+                ]}
+            />
+            <PlainMegaCard border={false} overflow={true}>
+                <div className={styles.box}>
+                    <div className={styles.veil}></div>
+                    <div className={styles.image}></div>
+                    <div style={{ zIndex: 5 }}>
                         <Typography
-                            variant="h5"
-                            style={{
-                                writingMode: 'vertical-rl',
-                                textAlign: 'left',
-                                color: 'white',
-                                fontSize: 63,
-                            }}
+                            variant="h1"
+                            color="textSecondary"
+                            align="left"
+                            style={{ color: 'white' }}
                         >
-                            ID
+                            {token.details.name} NFT
+                        </Typography>
+                        <Typography
+                            variant="h1"
+                            color="textSecondary"
+                            align="left"
+                            style={{ color: 'white', fontWeight: 300 }}
+                        >
+                            Ref{token.id.slice(0, 7)}
                         </Typography>
                     </div>
                     <div
                         style={{
-                            height: '100%',
-                            flex: 1,
+                            zIndex: 5,
                             display: 'flex',
-                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
                         }}
                     >
-                        <Typography
-                            variant="h5"
-                            style={{
-                                color: 'white',
-                                writingMode: 'vertical-rl',
-                                textAlign: 'left',
-                                overflow: 'visible',
-                                fontSize: 63,
-                            }}
+                        <Button
+                            variant="contained"
+                            className={styles.button}
+                            onClick={() => setGalleryToggler(!galleryToggler)}
                         >
-                            {token.details.category}
-                        </Typography>
-                        <Typography
-                            variant="h5"
-                            style={{
-                                color: 'white',
-                                writingMode: 'vertical-rl',
-                                textAlign: 'left',
-                                overflow: 'visible',
-                                fontSize: 63,
-                            }}
+                            View Gallery
+                            <ImageIcon
+                                fontSize="small"
+                                style={{ marginLeft: 2 }}
+                            />
+                        </Button>
+                        <Button
+                            variant="contained"
+                            className={styles.button}
+                            onClick={() => setVideoToggler(!videoToggler)}
                         >
-                            NFTREE #{token.id}
-                        </Typography>
+                            Watch Film
+                            <PlayCircleOutlineIcon
+                                fontSize="small"
+                                style={{ marginLeft: 2 }}
+                            />
+                        </Button>
                     </div>
                 </div>
-                <div
-                    style={{
-                        height: `${CARD_HEIGHT}px`,
-                        padding: 25,
-                        paddingTop: 0,
-                        width: '100%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        display: 'flex',
-                    }}
-                >
-                    <img
-                        width="100%"
-                        style={{ borderRadius: '5px' }}
-                        src={`${token.details.cover}`}
-                        height="auto"
-                        alt="cover"
-                    />
-                </div>
-                <div
-                    style={{
-                        height: `${CARD_HEIGHT}px`,
-                        padding: 25,
-                        paddingTop: 0,
-                        width: '100%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        display: 'flex',
-                    }}
-                >
-                    <video
-                        width="100%"
-                        height="auto"
-                        style={{ borderRadius: '5px' }}
-                        controls
-                    >
-                        <source
-                            src={`${token.details.content}`}
-                            type="video/mp4"
-                            // poster="https://www.example.com/poster.png"
-                            // primaryColor="red"
-                            // other props
-                        />
-                    </video>
-                </div>
-            </div>
-        </PlainMegaCard>
+            </PlainMegaCard>
+        </>
     )
 }
 

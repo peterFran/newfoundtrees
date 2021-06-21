@@ -1,0 +1,40 @@
+name: Staging Deployment
+on: 
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    defaults:
+      run:
+        working-directory: ./newfoundtrees
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install Packages
+      run: yarn install
+    - name: Build page
+      run: yarn build
+      env:
+        REACT_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.REACT_APP_GOOGLE_MAPS_API_KEY }}  
+        REACT_APP_FIREBASE_API_KEY: ${{ secrets.REACT_APP_FIREBASE_API_KEY_STAGING }}
+        REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN_STAGING }}
+        REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.REACT_APP_FIREBASE_PROJECT_ID_STAGING }}
+        REACT_APP_MINTBASE_API_KEY: ${{ secrets.REACT_APP_MINTBASE_API_KEY }}
+        REACT_APP_MINTBASE_STORE_NAME: ${{ secrets.REACT_APP_MINTBASE_STORE_NAME_STAGING }}
+        REACT_APP_MINTBASE_GRAPH_ENDPOINT: ${{ secrets.REACT_APP_MINTBASE_GRAPH_ENDPOINT_STAGING }}
+        REACT_APP_NEAR_CHAIN: testnet
+        REACT_APP_MINTBASE_MARKET: market.mintspace2.testnet
+    - name: Deploy to firebase
+      uses: w9jds/firebase-action@master
+      with:
+          args: deploy --only hosting -P staging
+      env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_PATH: ./newfoundtrees

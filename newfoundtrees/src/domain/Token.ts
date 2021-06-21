@@ -1,11 +1,23 @@
-export interface Token {
-    id: number
+export interface NewFoundToken {
+    id: string
+    edition: string
     details: TokenDetails
     batchSize: number
     sold: number,
     price: number,
-    ownedEditions: number[]
+    ownedEditions: string[]
+    availableEditions: Token[]
     updates: TokenUpdate[]
+}
+
+export interface Metadata {
+    copies: number,
+    animation_url: string,
+    description: string,
+    title: string,
+    price: number,
+    media: string,
+    extra: {trait_type: string, value: any}[]
 }
 
 export interface TokenDetails {
@@ -26,4 +38,28 @@ export interface TokenDetails {
 interface TokenUpdate {
     conext: string
     content: string
+}
+
+
+export interface Store {
+    id: string
+    name: string
+    owner: string
+    things: Thing[]
+}
+
+export interface Thing {
+    metaId: string
+    id: string
+    tokens: Token[]
+};
+
+export interface Token {
+    id: string
+    lists: List[] 
+    mintGroupId: string
+}
+
+export interface List {
+    price: number
 }
