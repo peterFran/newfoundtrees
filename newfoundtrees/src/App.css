@@ -28,6 +28,17 @@
   color: #61dafb;
 }
 
+.embla {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+}
+.embla__slide {
+  position: relative;
+  flex: 0 0 100%;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
